@@ -1,0 +1,133 @@
+<section class="winners--wrap" id="winners">
+        <div class="main-title">
+            <h2>Победители</h2>
+        </div>
+        <!-- /.main-title -->
+        <div class="winners main-container" id="winners">
+            <form @submit="FindPhone" class="winners-top">
+                <label for="checktel">Проверить свой номер телефона</label>
+                <input v-model="findPhone" @keyup="FindPhone" type="tel" id="checktel" placeholder="Номер вашего телефона">
+                <input type="submit" value="">
+            </form>
+            <!-- /.winners-top -->
+            <div class="winners-content">
+                <div class="winners-content__top">
+                    <button @click="posts = winners" class="active">Все призы за последнии 30 дней</button>
+                    <!-- <button>джекпот</button> -->
+                </div>
+                <!-- /.winners-content__top -->
+                
+                <table v-show="posts.length>=1" class="winners-content__table">
+                    <thead>
+                        <tr class="winners-content__table-title">
+                            <th>Дата</th>
+                            <th style=" border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">Имя участника</th>
+                            <th>Сумма</th>
+                            <th>Телефон</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr v-for="item in displayedPosts" >
+                            <td class="winners-content__td-left">{{ item.windate }}</td>
+                            <td class="winners-content__td-center">{{ item.name }}</td>
+                            <td class="winners-content__td-center">{{ item.winsum }}</td>
+                            <td class="winners-content__td-left">{{ item.fphone }}</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                <div v-show="posts.length<1"><h4>Номер не найден</h4></div>
+                <!-- /.winners-content__table -->
+                <div class="winners-content__bottom">
+                    <!--<button class="active">1</button>-->
+                    <button type="button"  v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
+
+<!--                    <button type="button"  v-if="page != 1" @click="page--"> << </button>
+                    <button type="button"  v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
+                    <button type="button" @click="page++" v-if="page < pages.length" > >> </button>-->
+                </div>
+                <!-- /.winners-content__bottom -->
+            </div>
+            <!-- /.winners-content -->
+        </div>
+      
+
+        <!-- /.winners -->
+    </section>
+
+<script type="text/javascript">
+    var winners = new Vue({
+        el: '#winners',
+        data: {
+            winners:{},
+            posts: [],
+            page: 1,
+            perPage: 10,
+            pages: [],
+            findPhone:''
+        },
+        created() {
+            this.getwiners();
+        },
+        methods: {
+            FindPhone(e){
+                e.preventDefault();
+                let fp = _.filter(this.winners, (o)=> { 
+                    var strF = new RegExp(this.findPhone,'gi');
+                    var strFn = String(o.phone);
+                    return strFn.search(strF)>-1;
+                    //return o.phone == this.findPhone; 
+                });
+//                this.posts =[];
+                this.posts= fp;
+//                console.log(this.posts);
+            },
+            getwiners() {
+                fetch('/api/checks/getwiners', {
+                    mode: 'cors',
+                    method: 'POST'
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then((json) => {
+                    this.posts = json;
+                    this.winners = json;
+//                    console.log(this.posts);
+                })
+                .catch((error) => {
+//                    this.errors = error;
+                    console.log('FormLogin', error);
+                });
+            },
+           setPages () {
+               this.pages =[];
+                let numberOfPages = Math.ceil(this.posts.length / this.perPage);
+                for (let index = 1; index <= numberOfPages; index++) {
+                  this.pages.push(index);
+                }
+            },
+            paginate(posts) {
+                let page = this.page;
+                let perPage = this.perPage;
+                let from = (page * perPage) - perPage;
+                let to = (page * perPage);
+                return  posts.slice(from, to);
+            }
+        },
+        watch: {
+          posts(){
+            this.setPages();
+          }
+        },
+        computed: {
+            displayedPosts () {
+              return this.paginate(this.posts);
+            }
+        },
+    });
+</script>

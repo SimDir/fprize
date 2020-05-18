@@ -1,0 +1,436 @@
+<style>
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+        opacity: 0;
+    }
+    table thead th{
+        cursor: pointer;
+        background-color: #CCCCCC;
+        padding: 5px;
+    }
+    table tbody th{
+        padding: 5px;
+    }
+</style>
+
+<div id="userlist">
+    <!-- Список пользователей -->
+    
+    <div v-if="state==0" class="card">
+        <!--Card content-->
+        <div  class="card-header d-flex flex-wrap justify-content-between">
+
+            <div class="p-1">
+                <button @click="state=1" type="button" class="btn btn-primary" title="Добавить нового пользователя"><i class="fas fa-user-plus"></i></button>
+                <button @click="setPage(currentPage)" type="button" class="btn btn-success" title="Обновить\Перезагрузить данные таблици"><i class="fas fa-sync"></i></button>
+                <!--<button @click="state=3" type="button" class="btn btn-success" title="Импорт\Экспорт"><i class="fas fa-file-excel"></i></button>-->
+            </div>
+
+            <div class="p-1">
+                <div class="input-group pt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Показать</span>
+                    </div>
+                    <select class="browser-default custom-select" v-model.number="perPage" @change.prevent="setPage(1)">
+                        <option value="3">3</option>
+                        <option value="6">6</option>
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon1">строк</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-1">
+                <div class="btn-group d-flex flex-wrap" role="group">
+                    <div class="btn-group mr-2" role="group">
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(1)"><i class="fas fa-angle-double-left"></i></button>
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(currentPage-1)"><i class="fas fa-angle-left"></i></button>
+                    </div>
+                    <div class="btn-group mr-2" role="group">
+                        <div v-for="p in paginator.pages">
+                            <button type="button" class="btn btn-primary" v-if="currentPage == p" @click.prevent="setPage(p)">{{ p }}</button>
+                            <button type="button" class="btn btn-default" v-else @click.prevent="setPage(p)">{{ p }}</button>
+                        </div>
+                    </div>
+                    <div class="btn-group mr-2" role="group">
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(currentPage+1)"><i class="fas fa-angle-right"></i></button>
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(paginator.count)"><i class="fas fa-angle-double-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="card-body" >
+            <div style="overflow-y: auto;">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <!--<th scope="col" @click="sort('id')"><i class="fas fa-sort"></i> ID</th>-->
+                            <th scope="col" @click="sort('firstname')"><i class="fas fa-sort"></i> Имя</th>
+                            <th scope="col" @click="sort('lastname')"><i class="fas fa-sort"></i> Отчество</th>
+                            <th scope="col" @click="sort('surname')"><i class="fas fa-sort"></i> Фамилия</th>
+                            
+
+                            <th scope="col" @click="sort('email')"><i class="fas fa-sort"></i> E-mail</th>
+                            <th scope="col" @click="sort('phone')"><i class="fas fa-sort"></i> Телефон</th>
+                            <th scope="col" @click="sort('registredatetime')"><i class="fas fa-sort"></i> Регистрация</th>
+                            <th scope="col" @click="sort('lastlogin')"><i class="fas fa-sort"></i> Дата\Время</th>
+                            <th>Инструменты</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="LoadingData">
+                    
+                        <tr v-for="(item, idx) in Data" :key="idx">
+                            <!--<th>{{item.id}}</th>-->
+                            <td>{{item.firstname}}</td>
+                            <td>{{item.lastname}}</td>
+                            <td>{{item.surname}}</td>
+
+                            <td>{{item.email}}</td>
+                            <td>{{item.phone}}</td>
+                            <td>{{item.registredatetime}}</td>
+                            <td>{{item.lastlogin}}</td>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <a title="Изменить пользователя" class="text-success" @click="SetUserEdit(item)"><i class="fas fa-user-edit"></i></a>
+                                    <!--<a title="Показать пользователя на личной странице" class="text-info" @click="ShowUser(item.id)"><i class="fas fa-user-cog"></i></a>-->
+                                    <a title="Удалить пользователя на всегда" class="text-danger" @click="DelUser(item.id)"><i class="fas fa-user-times"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Добавление пользователя -->
+    
+    <div v-else-if="state==1" class="card mb-1">
+        <!--Card content-->
+        <div class="card-header d-flex justify-content-between">
+            <div class="p-1">
+                <button @click="ResetState" type="button" class="btn btn-primary" title="Вернутся"><i class="fas fa-arrow-circle-left"></i></button>
+            </div>
+        </div>
+        <div class="card-body d-flex justify-content-center">
+            <!-- Добавление нового пользователя -->
+
+            <form  class="text-center border border-light p-5" action="/" @submit="AddUserForm" style="width: 500px;">
+                <p class="h4 mb-4">Добавить пользователя</p>
+                <div v-if="errors" class="alert alert-danger" role="alert">
+                    {{errors}}
+                    <button @click="errors=false" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div v-if="success" class="alert alert-success" role="alert">
+                    пользователь с ID{{id}} добален успешно.
+                    <button @click="success=false" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- login -->
+                <input type="text" id="firstname" class="form-control" aria-describedby="LoginHelpBlock" placeholder="Фамилия" v-model="User.surname" required>
+                <small id="LoginHelpBlock" class="form-text text-muted mb-4">
+                    фамилия
+                </small>
+                <div class="form-row mb-4">
+                    <div class="col-6">
+                        <!-- First name -->
+                        <input type="text" id="FirstName" class="form-control" placeholder="Имя" v-model="User.firstname" required>
+                    </div>
+                    <div class="col-6">
+                        <!-- Last name -->
+                        <input type="text" id="LastName" class="form-control" placeholder="Фамилия" v-model="User.lastname" required>
+                    </div>
+                </div>
+
+                <!-- E-mail -->
+                <input type="email" id="Email" class="form-control mb-4" placeholder="E-mail" v-model="User.email" required>
+
+                <!-- Password -->
+                <input type="password" id="Password" class="form-control" placeholder="Пароль" aria-describedby="PasswordHelpBlock" v-model="User.password" required>
+                <small id="PasswordHelpBlock" class="form-text text-muted mb-4">
+                    Пароль от 4 до 64 символов
+                </small>
+
+                <!-- Phone number -->
+                <input type="tel" id="Phone" class="form-control" placeholder="Номер телефона" aria-describedby="PhoneHelpBlock" v-model="User.phone">
+                <small id="PhoneHelpBlock" class="form-text text-muted mb-4">
+                    Номер телефона 
+                </small>
+                <label>Статус пользователя</label>
+                <select class="browser-default custom-select mb-4" v-model.number="User.role">
+                    <option value="50">заблокированный пользователь</option>
+                    <option value="100">Обычный пользователь</option>
+                    <option value="200">Модератор</option>
+                    <option value="300">Редактор</option>
+                    <option value="900">Администратор</option>
+                    <option value="999">Разработчик системы. полные права на всё без проверок.</option>
+                </select>
+
+
+                <!-- Sign up button -->
+                <button class="btn btn-info my-4 btn-block" type="submit">Создать</button>
+
+            </form>
+
+        </div>
+
+    </div>
+    
+    <!-- Редактирование пользователя -->
+    
+    <div v-else-if="state==2" class="card mb-1">
+        <div class="card-header d-flex justify-content-between">
+            <div class="p-1">
+                <button @click="ResetState" type="button" class="btn btn-primary" title="Вернутся"><i class="fas fa-arrow-circle-left"></i></button>
+            </div>
+        </div>
+        <div class="card-body d-flex justify-content-center">
+            <!-- Форма редактирования пользователя -->
+            <form v-if="state==2" class="text-center border border-light p-5" action="/" @submit="EditUserForm" style="width: 500px;">
+
+                <p class="h4 mb-4">Изменить пользователя с ID{{id}}</p>
+                <div v-if="errors" class="alert alert-danger" role="alert">
+                    {{errors}}
+                    <button @click="errors=false" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div v-if="success" class="alert alert-success" role="alert">
+                    пользователь с ID{{id}} изменён успешно.
+                    <button @click="success=false" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- login -->
+                <input type="text" id="firstname" class="form-control" aria-describedby="LoginHelpBlock" placeholder="Фамилия" v-model="User.surname" required>
+                <small id="LoginHelpBlock" class="form-text text-muted mb-4">
+                    Фамилия
+                </small>
+                <div class="form-row mb-4">
+                    <div class="col-6">
+                        <!-- First name -->
+                        <input type="text" id="FirstName" class="form-control" placeholder="Имя" v-model="User.firstname" required>
+                    </div>
+                    <div class="col-6">
+                        <!-- Last name -->
+                        <input type="text" id="LastName" class="form-control" placeholder="Отчество" v-model="User.lastname" required>
+                    </div>
+                </div>
+
+                <!-- E-mail -->
+                <input type="email" id="Email" class="form-control" placeholder="E-mail" aria-describedby="EmailHelpBlock" v-model="User.email" required>
+                <small id="EmailHelpBlock" class="form-text text-muted mb-4">
+                    Почта пользователя                         
+                </small>
+                <!-- Password -->
+                <input type="password" id="Password" class="form-control" placeholder="Пароль" aria-describedby="PasswordHelpBlock" v-model="User.password">
+                <small id="PasswordHelpBlock" class="form-text text-muted mb-4">
+                    Пароль от 4 до 64 символов.<br>
+                    <span class="text-muted">Если не заполнить поля пароля то пароль не будет изменен и останется тем который был изначально</span>
+                </small>
+
+                <!-- Phone number -->
+                <input type="tel" id="Phone" class="form-control" placeholder="Номер телефона" aria-describedby="PhoneHelpBlock" v-model="User.phone">
+                <small id="PhoneHelpBlock" class="form-text text-muted mb-4">
+                    Номер телефона 
+                </small>
+                <label>Статус пользователя</label>
+                <select class="browser-default custom-select mb-4" v-model.number="User.role">
+                    <option value="50">заблокированный пользователь</option>
+                    <option value="100">Обычный пользователь</option>
+                    <option value="200">Модератор</option>
+                    <option value="300">Редактор</option>
+                    <option value="900">Администратор</option>
+                    <option value="999">Разработчик системы. полные права на всё без проверок.</option>
+                </select>
+
+
+                <!-- Sign up button -->
+                <button class="btn btn-info my-4 btn-block" type="submit">Сохранить</button>
+
+            </form>
+        </div>
+    </div>
+    
+    <!-- ексель импорт экспорт -->
+    
+    <div v-else-if="state==3" class="card">
+        <div class="card-header d-flex flex-wrap justify-content-between">
+            <div class="p-1">
+                <button @click="state=0" type="button" class="btn btn-primary" title="Вернутся"><i class="fas fa-arrow-left"></i></button>
+                <!--            </div>
+                            <div class="p-2">-->
+                <a href="/admin/user/getexel" class="btn btn-primary" title="Скачать"><i class="far fa-arrow-alt-circle-down"></i></a>
+            </div>
+        </div>
+        <div class="card-body d-flex flex-wrap justify-content-between">
+            <h3 class="p-2">Експорт файла Excel в базу данных MySQL </h3>
+
+            <div class="p-2">
+                <form action="/admin/user/export" method="post"
+                      name="frmExcelImport" id="frmExcelImport" enctype="multipart/form-data">
+                    <div>
+                        <label>Выбрать Excel фаил</label> 
+                        <input type="file" name="file"
+                               id="file" accept=".xls,.xlsx">
+                        <button type="submit" id="submit" name="import"
+                                class="btn-submit">Выгрузить</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script>
+    var userlist = new Vue({
+        el: '#userlist',
+        mvcrbstore,
+        mixins: [mvcrbmixin],
+        data: {
+            Data: {}, 
+            errors: null, id: null, success: false,
+            User: {id: 0, role: 100},
+            ErrData: {},
+            state: 0
+        },
+        created() {
+            this.setPage(1);
+        },
+
+        methods: {
+            setPage(p) {
+                this.LoadingData = false;
+                if (p > this.paginator.count)
+                    p = this.paginator.count;
+                if (p < 1)
+                    p = 1;
+
+                this.currentPage = p;
+                fetch('/admin/user/list/?AJAX=1', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify({start: (p - 1) * this.perPage, limit: this.perPage, data: this.currentSort, dir: this.currentSortDir})
+                })
+                .then(res => res.json())
+                .then(res => {
+                    this.Data = res.data;
+    //                  if(this.search.length>0){
+    //                      this.TaskCount = res.Scount;
+    //                  }else{
+    //                      this.TaskCount=res.count;
+    //                  }
+
+                    this.Count = res.count;
+                    this.LoadingData = true;
+//                    console.log(res);
+            });
+            },
+            AddUserForm(e) {
+                e.preventDefault();
+                this.success = false;
+                fetch('/admin/user/add/?AJAX=1', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify(this.User)
+                })
+                .then(res => res.json())
+                .then(res => {
+
+                    if (res.Errors) {
+                        this.errors = res.Errors;
+                    } else {
+                        this.errors = null;
+                    }
+                    if (res.success) {
+                        this.success = res.success;
+                        this.id = res.id;
+                    } else {
+                        this.success = false;
+                        this.id = null;
+                    }
+                    console.log(res);
+                });
+
+            },
+            EditUserForm(e) {
+                e.preventDefault();
+                this.User.id = this.id;
+                this.success = false;
+                fetch('/admin/user/edit/?AJAX=1', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify(this.User)
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.Errors) {
+                        this.errors = res.Errors;
+                    } else {
+                        this.errors = null;
+                    }
+                    if (res.success) {
+                        this.success = res.success;
+                        this.id = res.id;
+                    } else {
+                        this.success = false;
+//                        this.id = null;
+                    }
+
+                }).catch((e) => this.errors = 'Запрос серверу отправлен но ответ вернулся ошибочный! ' + e);
+
+            },
+            SetUserEdit(User) {
+                this.User = User;
+                this.id = User.id;
+                this.state = 2;
+            },
+            ResetState() {
+                this.success = false;
+                this.errors = null;
+                this.id = 0;
+                this.state = 0;
+            },
+            DelUser(id) {
+                fetch('/admin/user/delete/?AJAX=1', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify({UserID: id})
+                })
+                .then(res => res.json())
+                .then(res => {
+//                    console.log(res);
+                    this.setPage(1);
+                }).catch((e) => this.errors = 'Запрос серверу отправлен но ответ вернулся ошибочный! ' + e);
+
+            }
+        }
+    });
+</script>

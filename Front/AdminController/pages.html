@@ -1,0 +1,303 @@
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/tinymce.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-easy-tinymce/dist/vue-easy-tinymce.min.js"></script>-->
+<!--
+https://vuejsexamples.com/a-simple-and-powerful-package-for-easy-usage-of-tinymce-in-vue-js-project/
+https://codemirror.net/doc/manual.html
+-->
+<!--<script src="https://cdn.jsdelivr.net/npm/vue-codemirror@4.0.6/dist/vue-codemirror.min.js"></script>-->
+
+
+<div id="pagelist">
+    <div v-if="errors" class="alert alert-danger" role="alert">
+        {{errors}}
+        <button @click="errors=false" type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div v-if="success" class="alert alert-success" role="alert">
+        Страница с ID{{id}} добалена успешно.
+        <button @click="success=false" type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div v-if="state==0" class="card mb-4">
+        <!--Навигатор пагинатор-->
+        <div  class="d-flex flex-wrap justify-content-between">
+
+            <div>
+                <button @click="state=1" type="button" class="btn btn-primary" title="Добавить новую страницу"><i class="far fa-file"></i></button>
+                <button @click="setPage(currentPage)" type="button" class="btn btn-success" title="Обновить\Перезагрузить данные таблици"><i class="fas fa-sync"></i></button>
+
+            </div>
+
+            <div class="p-2">
+                <div class="input-group pt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Показать</span>
+                    </div>
+                    <select class="browser-default custom-select" v-model.number="perPage" @change.prevent="setPage(1)">
+                        <option value="3">3</option>
+                        <option value="6">6</option>
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon1">строк</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2">
+                <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic example">
+                    <div class="btn-group mr-2" role="group">
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(1)"><i class="fas fa-angle-double-left"></i></button>
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(currentPage-1)"><i class="fas fa-angle-left"></i></button>
+                    </div>
+                    <div class="btn-group mr-2" role="group">
+                        <div v-for="p in paginator.pages">
+                            <button type="button" class="btn btn-primary" v-if="currentPage == p" @click.prevent="setPage(p)">{{ p }}</button>
+                            <button type="button" class="btn btn-default" v-else @click.prevent="setPage(p)">{{ p }}</button>
+                        </div>
+                    </div>
+                    <div class="btn-group mr-2" role="group">
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(currentPage+1)"><i class="fas fa-angle-right"></i></button>
+                        <button type="button" class="btn btn-info" @click.prevent="setPage(paginator.count)"><i class="fas fa-angle-double-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="d-flex justify-content-center">
+            <div style="overflow-y: auto;">
+            <table v-if="state==0" class="table table table-hover table-bordered">
+                <thead class="bg-warning">
+                    <tr>
+                        <th style="cursor: pointer;" v-for="(item, index) in Data[0]" @click="sort(index)"><i class="fas fa-sort"></i> {{index}}</th>
+                        <!--<th scope="col" style="cursor: pointer;" @click="sort('id')"><i class="fas fa-sort"></i> ID</th>-->
+                        <th>Инструменты</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in Data">
+                        <th v-for="itemt in item" scope="row">{{itemt}}</th>
+                        <!--<th>{{item.id}}</th>-->
+                        <td>
+                            <div class="d-flex justify-content-between">
+                                <a title="Изменить страницу" class="text-success" :href="'/admin/editor/tinymce/'+item.id"><i class="far fa-edit"></i></a>
+                                <a title="Показать страницу в отдельной страницу" class="text-info" :href="'/page/'+item.name" target="_blank"><i class="far fa-eye"></i></a>
+                                <a title="Удалить страницу навсегда" class="text-danger" @click="DelPage(item.id)"><i class="far fa-trash-alt"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" v-if="state==1">
+        <div class="d-flex justify-content-between">
+            <div>
+                <button @click="ResetState" type="button" class="btn btn-primary" title="Вернутся"><i class="fas fa-arrow-circle-left"></i></button>
+            </div>
+            <form action="/admin/pageadd" @submit="AddPageForm">
+
+                <!--<p class="mb-4">добавление страници</p>-->
+
+                <div class="d-flex justify-content-center flex-wrap">
+                    <div class="p-2">
+                        <!-- First name -->
+                        <input v-model="Page.name" type="text" id="Name" class="form-control" placeholder="Название" required>
+                    </div>
+                    <div class="p-2">
+                        <!-- Last name -->
+                        <input v-model="Page.title" type="text" id="title" class="form-control" placeholder="Заголовок" required>
+                    </div>
+                    <div class="p-2">
+                        <input v-model="Page.metadescription" type="text" id="metadescription" class="form-control mb-4" placeholder="description">
+                    </div>
+                    <div class="p-2">
+                        <input v-model="Page.metakeywords" type="text" id="metatag" class="form-control mb-4" placeholder="keywords">
+                    </div>
+                    <div class="p-2">
+                        <input v-model="Page.metaauthor" type="text" id="metatag" class="form-control mb-4" placeholder="author">
+                    </div>
+                    <div class="p-2">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Тип</span>
+                            </div>
+                            <select v-model="Page.type" class="browser-default custom-select">
+                                <option value="notpublic">Не опубликованно</option>
+                                <option value="page">Страница</option>
+                                <option value="news">Новость</option>
+                                <option value="event">Событие</option>
+                                <option value="article">Статья</option>
+                                <option value="slider">Слайдер</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <button class="btn btn-info btn-sm mr-3" type="submit" >Сохранить</button>
+                    </div> 
+                    <div class="p-2">
+                        <!--<a class="btn btn-success btn-sm" href="/admin/editor/tinymce/">WYSIWYG</a>-->
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#EditorMdl" type="button" >WYSIWYG</button>
+                    </div>
+                </div>
+                
+                
+                    
+            </form>
+            
+        </div>
+        <div class="d-flex justify-content-center">
+            <textarea v-model="Page.content" name="editor" id="editor" class="form-control rounded-0 bg-dark text-light" rows="14"></textarea>
+            <!--<div class="border border-dark" v-html="Page.content"></div>-->
+<!--            <pre class="border border-dark">
+                <code class="html">{{Page.content}}</code>
+            </pre>-->
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div v-if="state==1" class="modal fade" id="EditorMdl" tabindex="-1" >
+        <div class="modal-dialog modal-fluid p-2" role="document">
+            <div class="modal-content">
+                <div class="bg-info" >
+                   
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!--<div class="modal-body">-->
+<!--                <codemirror v-model="Page.content"></codemirror>
+                    <tinymce v-model="Page.content" :plugins="myPlugins" :other="myOtherOptions"></tinymce>-->
+                <!--</div>-->
+<!--                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Сохранить</button>
+                </div>-->
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var pagelist = new Vue({
+        el: '#pagelist',
+
+        data: {
+            Data: {}, Count: 0,
+            errors:null,id:null,success:false,
+            Page: {id:0,content:'hello world',type:'notpublic'},
+            ErrData: {},
+            perPage: 10, currentPage: 1,
+            searchStr: '', currentSortDir: 'asc', currentSort: 'id', state: '0',EdititorMode:1
+        },
+        created() {
+            this.setPage(1);
+        },
+        computed: {
+            paginator() {
+                let p = _.range(1, Math.ceil(this.Count / this.perPage) + 1);
+                let st = this.currentPage - 2;
+                if (st < 1)
+                    st = 0;
+                return {
+                    count: p.length,
+                    currentPage: this.currentPage,
+                    pages: p.slice(st, st + 3)
+                };
+            }
+        },
+        methods: {
+            SetEditor(){
+                this.state=1;                
+            },
+            InitEditor(){
+//                tinymce.init({selector:'#editor',
+//                plugins:'advlist autolink link image lists charmap print preview'});
+            },
+            setPage(p) {
+                if (p > this.paginator.count)
+                    p = this.paginator.count;
+                if (p < 1)
+                    p = 1;
+
+                this.currentPage = p;
+                fetch('/admin/getpagelist/?AJAX=1', {
+                    mode: 'cors',
+                    method: 'POST',
+                    body: JSON.stringify({start: (p - 1) * this.perPage, limit: this.perPage, data: this.currentSort, dir: this.currentSortDir})
+                })
+                .then(res => res.json())
+                .then(res => {
+                    this.Data = res.data;
+                    this.Count = res.count;
+//                    console.log(res);
+                });
+            },
+            sort(s) {
+                if (s === this.currentSort) {
+                    this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
+                }
+                this.currentSort = s;
+                this.setPage(this.currentPage);
+//            console.log(this.currentSortDir,this.currentSort);
+            },
+            AddPageForm(e){
+                e.preventDefault();
+                fetch('/admin/addpage/?AJAX=1', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify(this.Page)
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.Errors){
+                        this.errors = res.Errors;
+                    }else{
+                        this.errors = null;
+                    }
+                    if(res.success){
+                        this.success = res.success;
+                        this.id = res.id;
+                    }else{
+                        this.success = false;
+                        this.id = null;
+                    }
+                    console.log(res);
+                });
+
+            },
+            DelPage(id){
+                fetch('/admin/delpage/?AJAX=1', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify({id:id})
+                })
+                .then(res => res.json())
+                .then(res => {
+                    this.setPage(this.currentPage);
+//                    console.log(res);
+                });
+
+            },
+            ResetState(){
+                this.success = false;
+                this.errors = null;
+                this.id = 0;
+                this.state = 0;
+            }
+        }
+    });
+</script>

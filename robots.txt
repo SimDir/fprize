@@ -1,0 +1,3 @@
+User-agent: Yandex
+Disallow: /user/*
+Sitemap: /sitemap.xml

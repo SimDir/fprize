@@ -1,0 +1,102 @@
+<div id="admin">  
+    <div class="content-title--wrap">
+        <h6 class="content-title">Настройки</h6>
+        <span></span>
+    </div>
+    <div class="d-flex flex-wrap setting-lk--wrap">
+        <div class="form-group setting-lk-item">
+            <label>Время до начала розыгрыша</label>
+            <div class="input-group mb-3 ">
+                <input v-model="DataTime"
+                   type="datetime-local" class="form-control chekstat-statistic-purple-input" style="border: none;">
+                <div class="input-group-append">
+                    <button @click="SaveDateTime" type="button" class="setting-lk-btn" >Задать</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group setting-lk-item">
+            <label>Почта для отправлений</label>
+            <div class="input-group mb-3 ">
+                <input v-model="EmailSend"
+                   type="email" class="form-control chekstat-statistic-purple-input" style="border: none;">
+                <div class="input-group-append">
+                    <button @click="SaveEmailSend" type="button" class="setting-lk-btn" >Задать</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group setting-lk-item">
+            <label>Ключь от яндекс API</label>
+            <div class="input-group mb-3 ">
+                <input v-model="YaMapApiKey"
+                       type="text" class="form-control chekstat-statistic-purple-input" style="border: none;">
+                <div class="input-group-append">
+                    <button @click="YaMapApiKeySend" type="button" class="setting-lk-btn">Задать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"> 
+    var admin = new Vue({
+        el: '#admin',
+        mixins: [mvcrbmixin],
+        data: {
+            DataTime:'<{ raffletime }>',
+            EmailSend:'<{ EmailSend }>',
+            YaMapApiKey:'<{ YaMapApiKey }>'
+        },
+        created() {
+
+        },
+        methods: {
+            SaveDateTime(){
+                console.log(this.DataTime);
+                fetch('/api/setting/setraffletime', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify({datatime: this.DataTime})
+                })
+                .then(res => res.json())
+                .then(res => {
+                    MsgBox('Добавлено');
+                    console.log(res);
+                });
+            },
+            SaveEmailSend(){
+                console.log(this.EmailSend);
+                fetch('/api/setting/setemailsend', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify({EmailSend: this.EmailSend})
+                })
+                .then(res => res.json())
+                .then(res => {
+                    MsgBox('Добавлено');
+                    console.log(res);
+                });
+            },
+            YaMapApiKeySend(){
+                console.log(this.YaMapApiKey);
+                fetch('/api/setting/setyamapapi', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify({YaMapApiKey: this.YaMapApiKey})
+                })
+                .then(res => res.json())
+                .then(res => {
+                    MsgBox('Добавлено');
+                    console.log(res);
+                });
+            }
+        }
+    });
+</script>

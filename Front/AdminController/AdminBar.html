@@ -1,0 +1,163 @@
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/medium-editor@latest/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
+<script src="//cdn.jsdelivr.net/npm/medium-editor@latest/dist/js/medium-editor.min.js"></script>
+<style>
+    div.AdminBar {
+        position: fixed;
+        bottom: 50%;
+        left: 0;
+        width: 50px;
+        height: 50px;
+        border: 3px solid #73AD21;
+        background-color: #ffffff;
+        overflow: hidden;
+        z-index: 9999;
+        /*transition: all 0.5s ease;*/
+        cursor: pointer;
+    }
+    div.AdminBar:hover{
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    }
+    div.AdminBarContent{
+        position: fixed;
+        z-index: 9990;
+        left: 0;
+        bottom: 0;
+        width: 200px;
+        min-height: 80%;
+        /*border: 3px solid #73AD21;*/
+        /*background-color: #ffffff;*/
+        /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);*/
+    }
+    
+    /* The Modal (background) */
+    .modals {
+        /*display: none;*/ 
+        position: fixed; /* Stay in place */
+        z-index: 9999; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modals-content {
+        background-color: #fefefe;
+        margin: 10vw auto; 
+        /*padding: 10px;*/
+        /*border: 1px solid #888;*/
+        width: 90vw; /* Could be more or less, depending on screen size */
+        /*min-height: 75vh;*/
+    }
+    .modals-content textarea{
+        height: auto;
+        background-color: #73AD21;
+    }
+    .scroll-hidden { overflow: hidden }
+</style>
+<div id="AB">
+    <div v-if="!BarShow" @click="BarShow =!BarShow" class="AdminBar">
+        <img src="/public/img/all-seeing-eye.webp" class="img-fluid">
+    </div>
+    <div v-if="BarShow" class="AdminBarContent">
+        <div class="card">
+            <button @click="BarShow =!BarShow" class="btn btn-info btn-sm">Закрыть</button>
+            <p class="text-danger pl-2" >{{ message }}</p>
+            <p class="text-danger pl-2" >Страница ID {{ PageId }}</p>
+        </div>
+        
+        <div class="card mt-3">
+            <button v-if="state==0" @click="StartEdit" class="btn btn-blue-grey btn-sm">Включить режим редактирования<i class="fas far fa-edit pl-1"></i></button>
+            <button v-if="state==1" @click="StopEdit" class="btn btn-danger btn-sm">Выключить режим редактирования<i class="fas far fa-times-circle pl-1"></i></button>
+            <a class="btn btn-elegant btn-sm" href="/page/edit/<{pageid}>" target="_blank">WISIWING редактор</a>  
+            <button v-if="editmode" @click="ShowOptions" class="btn btn-dark-green btn-sm">Дополнительно</button>
+            <button v-if="editmode" @click="SavePage" class="btn btn-dark-green btn-sm">Сохранить страницу</button>
+        </div>
+
+    </div>
+    
+    
+
+<div v-if="Options" class="modals">
+
+
+    <div class="modals-content">
+        <div class="border border-bottom-0 border-primary bg-primary d-flex justify-content-between">
+            <div>
+                <button type="button" class="btn btn-sm btn-success px-3" @click.self="SaveHTML"><i class="fas fa-save"></i></button>
+            </div>
+            <div class="text-white">Редактирование кода HTML текущей страницы {{ PageId }}</div>
+            <div>
+                <button type="button" class="btn btn-sm btn-danger px-3" @click.self="HideOptions"><i class="fas fa-window-close"></i></button>
+            </div>
+        </div>
+        <div class="border">
+
+            <textarea v-model="PageContent" class="form-control" id="TextareaSrc" rows="10"></textarea>
+
+        </div>
+    </div>
+
+</div>
+    
+</div>
+<script>
+    //var editor = new MediumEditor('.editable');
+var app = new Vue({
+  el: '#AB',
+  data: {
+    message: 'Вы вошли как <{login}>',
+    PageId: '<{pageid}>',PageContent:'',
+    editor:null,
+    state:0,BarShow:false,Options:false,editmode:false
+  },
+  methods: {
+    StartEdit() {
+        if(!this.editor){
+            this.editor = new MediumEditor('.editable');
+            this.PageContent = this.editor.getContent();
+        }
+        this.editor.setup();
+        this.state = 1;
+        this.editmode = true;
+        
+    },
+    StopEdit() {
+      this.editor.destroy();
+      this.state = 0;
+      this.editmode = false;
+    },
+    ShowOptions(){
+        this.BarShow= false;
+        this.Options = true;
+//        document.body.style.
+        document.body.classList.add("scroll-hidden");
+        if(this.editor)this.PageContent = this.editor.getContent();
+    },
+    HideOptions(){
+        this.Options = false;
+        document.body.className ='';
+    },
+    SaveHTML(){
+        if(this.editor) this.editor.setContent(this.PageContent);
+    },
+    SavePage(){
+        if(this.editor)this.PageContent = this.editor.getContent();
+        fetch('/page/save/<{pageid}>', {
+            mode: 'cors',
+            method: 'POST',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            body: JSON.stringify({PageId:'<{pageid}>',PageContent:this.PageContent})
+            })
+            .then(res => res.json())
+            .then(res => {
+
+                console.log(res);
+            });
+    }
+  }
+})
+</script>

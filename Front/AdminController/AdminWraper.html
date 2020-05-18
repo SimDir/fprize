@@ -1,0 +1,116 @@
+<!-- Navbar -->
+<nav class="navbar sticky-top navbar-expand-sm navbar-dark unique-color">
+    <div class="container-fluid">
+
+        <!-- Brand -->
+        <a class="navbar-brand waves-effect" href="/" target="_blank">
+            <img src="https://rrdev.ru/public/img/all-seeing-eye.webp" class="rounded-circle z-depth-0" alt="avatar image" height="35">
+        </a>
+<!--        <a class="navbar-brand waves-effect" href="/" target="_blank">
+            <strong class="blue-text">На сайт</strong>
+        </a>-->
+
+        <!-- Collapse -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">Подробнее об MDB</a>
+                </li>
+
+            </ul>
+
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons">
+                <li class="nav-item">
+                    <a href="https://rrdev.ru/" class="nav-link border border-secondary rounded waves-effect" target="_blank">
+                        фреймворк RusBeard на <i class="fab fa-github"></i>GitHub
+                    </a>
+                </li>
+
+
+            </ul>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+<!--                <li class="nav-item avatar">
+                    <a class="nav-link" >
+                        <img src="/public/img/all-seeing-eye.webp" class="rounded-circle z-depth-0" alt="avatar image" height="35">
+                    </a>
+                 
+                </li>-->
+                <li class="nav-item avatar">
+                    <a href="/user/logout" title="Выход" class="nav-link waves-effect waves-light"><i class="fas fa-sign-out-alt"></i></a>
+                    
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+<!-- Navbar -->
+
+<!-- Sidebar -->
+<div id="AdminMenu" class="sidebar-fixed position-fixed stylish-color-dark">
+   
+    <div class="list-group list-group-flush rounded-0">
+        <a v-for="item in Menu" @click.prevent="SetContent(item.src)" :href="item.src" class="list-group-item list-group-item-action waves-effect d-flex justify-content-between">
+            <span>{{item.name}}</span><i :class="item.class"></i>
+        </a>
+    </div>
+</div>
+<script>
+var AdminMenu = new Vue({
+    el: '#AdminMenu',
+    data: {
+      Menu:[]
+    },
+    beforeCreate() {
+        document.addEventListener("DOMContentLoaded", this.ready);
+        fetch('/admin/getmenu/?AJAX=1')
+            .then(res => res.json())
+            .then(res => {this.Menu = res;});
+    },
+    methods: {
+        SetContent(url){
+            element = document.getElementById('admincontent');
+            element.style.display = "none";
+            fetch(url+'?AJAX=1',{
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin'
+                })
+                .then(res => res.json())
+                .then(res => {
+                    
+                    element.innerHTML = res.Content;
+                    
+                    $(document).ready(function () {
+                        execBodyScripts(element);
+                        element.style.display = "block";
+//                        console.log("exec_body_scripts(rel)");
+                    });
+//                    console.log(res);
+            });
+        },
+        ready(){
+            console.log('redi');
+        }
+    }
+});
+</script>
+<!-- Sidebar -->
+
+
+
+<!--Main layout-->
+<main style="width: 100%;">
+
+    <div id="admincontent" class="mr-3 ml-3 mt-3"><{ admincontent }></div>
+
+</main>
+<!--Main layout-->

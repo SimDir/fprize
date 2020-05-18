@@ -1,0 +1,277 @@
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-yandex-maps"></script>
+<!-- production-версия, оптимизированная для размера и скорости 
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+https://vue-yandex-maps.github.io/
+-->
+<style>
+    #YaMapOrderInfo {
+        
+        height: 600px;
+    }
+
+    .ymap-container {
+        height: 100%;
+    }
+    .oveflw{
+        overflow-y:scroll;
+        overflow-x:hidden;
+        height: 595px;
+    }
+    .officelist:hover{
+        border-color: #0044cc;
+    }
+</style>
+<hr><?php 
+if($PVZAddress) {
+    echo $PVZAddress;
+}else{ 
+
+    $PVZAddress=$Region.' '.$City;
+    echo '<p>Проверте адрес доставки!<p>';
+    echo $PVZAddress;
+    echo '<p>Установите адрес! или обновите страницу! Администратор!<p>';
+}
+
+
+?><hr>
+<div id="YaMapOrderInfo" class="container-fluid">
+    <div class="col-sm-12 choice_city">
+        <input v-if="officesShow" type="text" v-on:keyup="findCityKeyPress" v-model="InptCity" class="form-control" >
+        <button v-if="!officesShow" type="button" class="btn btn-default" @click="resetAll">Назад к поиску городов</button>
+    </div>
+    <div class="col-sm-3">
+        <div v-if="officesShow" class="btn-group-vertical  oveflw">
+            <button type="button" class="btn btn-default" v-for="city in cities" @click="showChoosenCity(city)">{{ city.city }}, {{ city.name }}</button>
+        </div>
+        
+        <div v-if="!officesShow && !officesInfoShow" class="list-group  oveflw">
+            <div class="list-group-item officelist" style="cursor:pointer;"  v-for="office in offices" @click="oficeGo(office)"><b>{{ office.type==='dpd' ? 'ДПД' : 'СДЕК' }}</b> {{ office.address }}</div>
+            <div class="list-group-item officelist" style="cursor:pointer;"  v-for="rpoffice in RuPostOffices" @click="rpoficeGo(rpoffice)"><b>Онлайн Посылка</b> {{ rpoffice.address }}</div>
+        </div>
+        <div v-if="officesInfoShow" >
+            <button type="button" class="btn btn-default" @click="officesInfoShow=false">Назад к списку пунктов выдачи заказа</button>
+            <div class="list-group">
+                <div class="list-group-item"> 
+                    <h4 v-if="officesInfo.type" class="list-group-item-heading">{{ officesInfo.title }} {{ officesInfo.type==='dpd' ? 'ДПД' : 'СДЕК' }}</h4>
+                    <h4 v-if="officesInfo.index" class="list-group-item-heading">Почтовое отделение {{ officesInfo.index }}</h4>
+                    <p class="list-group-item-text"><b>Адрес: </b>{{ officesInfo.address }}</p>
+                    <p v-if="officesInfo.descript" class="list-group-item-text"><b>Дополнительная информация: </b>{{ officesInfo.descript }}</p>
+                    <p v-if="officesInfo.address_comment" class="list-group-item-text"><b>Дополнительная информация: </b>{{ officesInfo.address_comment }}</p>
+                    <p v-if="officesInfo.worktime" class="list-group-item-text"><b>Часы работы отделения: </b>{{ officesInfo.worktime }}</p>
+                    <div v-if="officesInfo.images && false" class="media">
+                        <a class="pull-left" v-for="img in officesInfo.images" target="_blank" :href="img">
+                        <img class="media-object" :src="img" :alt="img">
+                        </a>
+                    </div>
+                    <button type="button" @click="setPVZ(officesInfo)" class="btn btn-default">Назначить этот адрес доставки</button>
+                    
+                </div> 
+            </div>
+            
+        </div>
+    </div>
+    <yandex-map class="col-sm-9" @map-was-initialized="initHandler" :settings="settings"
+        :coords="YmapCoords"
+        :zoom="YmapZoom"
+        :controls="['fullscreenControl','geolocationControl','rulerControl','typeSelector','zoomControl']"
+        >
+       
+        <ymap-marker v-if="!officesShow" v-for="rpoffice in RuPostOffices" :key="rpoffice.code"
+            :coords="[rpoffice.latitude,rpoffice.longitude]"
+            marker-id="111"
+            cluster-name="1"
+            :hint-content="'Почта России онлайн '+rpoffice.address"
+            :callbacks="{click(){rpoficeGo(rpoffice)}}"
+            ></ymap-marker>
+        <ymap-marker v-if="!officesShow" v-for="office in offices" :key="office.code"
+            :coords="[office.lat,office.lng]"
+            marker-id="222"
+            :icon="{color: office.type==='dpd' ? 'red' : 'green'}"
+            cluster-name="1"
+            :hint-content="office.address"
+            :callbacks="{click(){oficeGo(office)}}"
+            ></ymap-marker>
+        <ymap-marker :coords="HCoords"
+                :icon="{color: 'green', glyph: 'home'}"
+                marker-id="101"
+                
+            ></ymap-marker>
+                
+        <ymap-marker :coords="PVZCoords"
+                :icon="{color: 'yellow', glyph: 'heart'}"
+                marker-id="102"
+                
+            ></ymap-marker>
+    </yandex-map>
+    
+</div>
+<br>
+<hr>
+<script type="text/javascript">
+new Vue({
+    el: '#YaMapOrderInfo',
+        data: { 
+            settings: {
+                lang: 'ru_RU',
+                apiKey: '16e29733-ba19-4cdc-a7f9-c17b81fb1eae',
+                version: '2.1',
+                coordorder: 'latlong'
+            },
+            YmapCoords: [0, 0],YmapZoom:7,
+            cities:{},
+            InptCity:'<?php echo $City ?>, <?php echo $Region ?>',
+            offices:{},officesShow:true,
+            RuPostOffices:{},
+            officesInfoShow:false,officesInfo:{},
+            firstStart:true,
+            HCoords: [0, 0],PVZCoords: [0, 0]
+            
+  
+        },
+        created() {this.getCitiesList(this.InptCity)},
+        methods: {
+            
+            initHandler (map) {
+                var selfVue = this;
+        ymaps.geocode('<?php echo $City ?>').then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0);
+            var coords = firstGeoObject.geometry.getCoordinates();
+            selfVue.HCoords = [coords[0],coords[1]];
+            
+            //selfVue.YmapZoom=6;
+        });  
+        
+        ymaps.geocode('<?php echo $PVZAddress ?>').then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0);
+            var coords = firstGeoObject.geometry.getCoordinates();
+            selfVue.PVZCoords = [coords[0],coords[1]];
+            if(coords[0]>0){
+                selfVue.YmapCoords = [coords[0],coords[1]];
+                selfVue.InptCity ='<?php echo $PVZAddress ?>';
+            }
+            //selfVue.YmapZoom=6;
+        });  
+            },
+            findCityKeyPress() {
+                this.firstStart = false;
+                let input = this.InptCity;
+                if (input.length >= 3) {
+                    this.getCitiesList(input);
+                    
+                }
+            },
+            getCitiesList(cityName){
+                var formData = new FormData();
+                formData.append('query', cityName);
+                fetch('/?route=module/ruspvz/ajax_get_cities',{ method:'POST', body:formData   })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.text();
+                        } 
+                        throw new Error('Network response was not ok');
+                    })
+                    .then((text) => {
+                        this.cities = JSON.parse(text);
+                        if(this.firstStart){
+                        this.showChoosenCity(this.cities[0].kladr_city_id);}
+                        console.log(this.cities[0]);
+                        //var geo = ymaps.geocode(cityName);
+                        //geo.then((res)=>{
+                        //    var objs = res.geoObjects.toArray();
+                        //        this.YmapCoords = objs[0].geometry.getCoordinates();
+                        //    },
+                        //    function (err) {
+                        //        // Обработка ошибки.
+                        //    }
+                        //);
+                    })
+                    .catch((error) => {console.log(error)});
+            },
+            showChoosenCity(kladr){
+                this.officesShow=false;
+                var formData = new FormData();
+                formData.append('kladr_id', kladr.kladr_city_id);
+                fetch('/?route=ruspvz/delivery_city/ajax_get_offices',{ method:'POST', body:formData   })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then((text) => {
+                    this.offices = JSON.parse(text);
+                    this.firstStart = false;
+                    var geo = ymaps.geocode(kladr.city+', '+kladr.name);
+                        geo.then((res)=>{
+                            var objs = res.geoObjects.toArray();
+                                this.YmapCoords = objs[0].geometry.getCoordinates();
+                            },
+                            function (err) {
+                                // Обработка ошибки.
+                            }
+                        );
+                })
+                .catch((error) => {console.log(error)});
+                fetch('/?route=ruspvz/delivery_city/ajax_get_offices_online',{ method:'POST', body:formData   })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.text();
+                    } 
+                    throw new Error('Network response was not ok');
+                })
+                .then((text) => {this.RuPostOffices = JSON.parse(text)})
+                .catch((error) => {console.log(error)});
+                //ymaps.geocode(this.InptCity).then( (res)=> {
+                //        var firstGeoObject = res.geoObjects.get(0);
+                //        var coords = firstGeoObject.geometry.getCoordinates();
+                //        this.HCoords = [coords[0],coords[1]];
+                //        console.log(coords);
+                //    }); 
+
+            },
+            oficeGo(Ofice){
+                //this.YmapZoom=15;
+                this.YmapCoords = [Ofice.lat,Ofice.lng];
+                this.officesInfo=Ofice;
+                this.officesInfoShow = true;
+            },
+            rpoficeGo(Ofice){
+                //this.YmapZoom=15;
+                this.YmapCoords = [Ofice.latitude,Ofice.longitude];
+                this.officesInfo=Ofice;
+                this.officesInfoShow = true;
+            },
+            setPVZ(term){
+                //console.log(term.index);
+                if(typeof(term.index) != "undefined" && term.index !== null) {
+                    term.index=term.index;
+                }else{
+                    term.index='';
+                }
+                var formData = new FormData();
+                formData.append('PVZAddress', term.address);
+                formData.append('dpdc', term.code);
+                formData.append('index', term.index);
+                fetch('<?php echo $urlSetPVZ ?>',{ method:'POST', body:formData, credentials: 'same-origin', mode: 'cors', cache: 'no-cache'   })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('при отправке запроса на установку адреса ПВЗ произошли ошибки');
+                })
+                .then((json) => {
+                    if(json.ok){
+                        alert(json.PVZAddress+' адрес установлен успешно');
+                    }else{console.log(json);}
+                })
+                .catch((error) => console.log(error));
+            },
+            resetAll(){
+                this.officesShow=true; 
+                this.officesInfoShow=false;
+            }
+        }
+        })
+</script>

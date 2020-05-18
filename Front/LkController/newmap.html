@@ -1,0 +1,175 @@
+<style>
+    #YaMap {
+        height: 600px;
+    width: 100%;
+    }
+    .ymap-container {
+        height: 600px;
+    width: 100%;
+    }
+
+</style>
+
+
+    <div id="YaMap" class="container-fluids">
+        <yandex-map :settings="settings" @map-was-initialized="initHandler"
+            :controls="['geolocationControl','rulerControl','typeSelector','zoomControl']"
+            :coords="latlng"
+            zoom="11"
+            <!--@click="MapClick"-->
+            >
+<!--            <ymap-marker
+                marker-id="123123"
+                :icon="{color: 'green', glyph: 'home'}"
+                :coords="latlng"></ymap-marker>-->
+            <ymap-marker
+                v-for="marker in markers"
+                <!--:key="marker.id"-->
+                :marker-id="marker.id"
+                :hint-content="marker.baloons"
+                :coords="marker.coords"
+                :icon="marker.icon"
+                <!--marker-type="Placemark"-->
+                <!--cluster-name="1"-->
+                <!--:balloon-template="balloonTemplate"-->
+                @click="PartnerShow(marker)"
+                
+<!--                marker-id="111"
+                cluster-name="1"-->
+                ></ymap-marker>
+        </yandex-map>
+        <!-- Modal -->
+        <div class="modal fade" id="YaMapModalCenter" tabindex="-1" role="dialog" aria-labelledby="YaMapModalCenterTitle"
+          aria-hidden="true">
+
+          <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+          <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{ modalPartners.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>{{ modalPartners.address }}</p>
+                {{ modalPartners.desc }}
+              </div>
+        <!--      <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>-->
+            </div>
+          </div>
+        </div>
+<!--        <button type="button" @click="removeLastMarker">
+            Remove last marker
+        </button>-->
+    </div>
+<script>
+var YaMap = new Vue({
+        el: '#YaMap',
+        data: {modalPartners:{name:'',desc:'',address:''},
+            settings: {
+                lang: 'ru_RU',
+                apiKey: '<{ YaMapApiKey }>',
+                version: '2.1',
+                coordorder: 'latlong'
+            },
+            latlng: [54.306784407107926,48.33117284497061],
+            markers: [
+//                {
+//                    id: 1,
+//                    coords: [54.30746670404238, 48.331961414420924],
+//                    icon: {content: 'Точка с водкой'}
+//                }//, {
+//                    id: 2,
+//                    coords: [54.30665735745261, 48.334182283485276],
+//                    icon: {content: 'ЗОЖ'}
+//                }
+            ]
+        },
+        computed: {
+            balloonTemplate() {
+              return `<img class="img-fluid mx-auto d-block" src="https://i.ya-webdesign.com/images/meme-vector-faces-8.png">
+                <h1 class="danger-color">Ну привет</h1>
+                <p class="rgba-lime-light">Вот координаты точки: ${this.latlng}</p>
+                `;
+            }
+        },
+        methods: {
+            PartnerShow(part){
+                this.modalPartners  = part;
+                $('#YaMapModalCenter').modal('show');
+                console.log(part);
+            },
+            initHandler(map) {
+                fetch('/api/lk/getallkkm', {
+                    mode: 'cors',
+                    method: 'POST'//,
+                    //body: JSON.stringify(this.KKM)
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then((json) => {
+                    json.forEach((item, i, arr)=> {
+//                        this.markers.push(tmp);
+                                ymaps.geocode(item.address).then( (res) =>{
+                                    var firstGeoObject = res.geoObjects.get(0);
+//                                    var coords = firstGeoObject.geometry.getCoordinates();
+                                    var tmp = {
+                                        id: i,
+                                        coords: firstGeoObject.geometry.getCoordinates(),
+                                        name: item.name,
+                                        address: item.address,
+                                        desc: item.desc,
+                                        baloons: item.name + ' '+item.address,
+                                        icon: {color: 'violet', glyph: 'Shopping'}
+                                    };
+                                    this.markers.push(tmp);
+                                    console.log(  tmp  );
+
+                                }); 
+                         
+                      });
+//                        console.log(json);
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            },
+            removeLastMarker() {
+                this.markers.pop();
+            },
+            MapClick(e){
+                var coords = e.get('coords');
+                tmp = {
+                    id: 4,
+                    coords: coords,
+                    icon: {content: coords}
+                };
+//                this.latlng=coords;
+//                this.markers.push(tmp);
+                var geo = ymaps.geocode(coords);
+                geo.then((res)=>{
+                    var firstGeoObject = res.geoObjects.get(0);
+                    console.log(firstGeoObject.properties.get('text'));
+                    var objs = res.geoObjects.toArray();
+                        var YmapCoords = objs[0].geometry.getCoordinates();
+                    },
+                    function (err) {
+                        // Обработка ошибки.
+                    }
+                );
+//                console.log(tmp);
+            }
+        }
+    })
+</script>

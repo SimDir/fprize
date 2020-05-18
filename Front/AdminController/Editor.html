@@ -1,0 +1,76 @@
+<script src="https://cdn.tiny.cloud/1/<{apikey}>/tinymce/5/tinymce.min.js"></script>
+
+<style>
+    #wrapper, .tox-tinymce,.mce-stack-layout, .mce-edit-area{
+        display: flex!important;
+        flex-direction: column;
+        flex: 1;
+        align-items:stretch;
+    }
+    .mce-tinymce iframe{
+        flex: 1;
+    }
+</style>
+
+<script>
+    tinymce.init({
+        selector: '#mytextarea',
+        contextmenu_never_use_native: true,
+        height: 700,
+        language: 'ru',
+        language_url: '/public/js/ru.js',
+        menubar: true,
+        plugins: ['save code fullscreen image media insertdatetime media table paste code help wordcount'
+//            'advlist autolink lists link image charmap print preview anchor save',
+//            'searchreplace visualblocks code fullscreen',
+//            'insertdatetime media table paste code help wordcount'
+        ],
+  menu : { // this is the complete default configuration
+    file   : {title : 'File'  , items : 'myMenuItem | save | newdocument | print'}
+//    custom: { title: 'Custom Menu', items: 'undo redo myCustomMenuItem' }
+//    edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall'},
+//    insert : {title : 'Insert', items : 'link media | template hr'},
+//    view   : {title : 'View'  , items : 'visualaid'},
+//    format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
+//    table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
+//    tools  : {title : 'Tools' , items : 'spellchecker code'}
+    },
+        toolbar: 'save | undo redo | formatselect | code' +
+                ' bold italic backcolor | alignleft aligncenter ' +
+                ' alignright alignjustify | bullist numlist outdent indent |' +
+                ' removeformat | help',
+        content_css: [
+            '/public/css/bootstrap.css',
+            '/public/css/style.css'
+        ],
+        save_enablewhendirty: true,
+        save_onsavecallback() {
+            var content = this.getContent({ format: 'html' });
+            fetch('/page/save/<{id}>', {
+                mode: 'cors',
+                method: 'POST',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                body: JSON.stringify({PageId:'<{id}>',PageContent:content})
+                })
+                .then(res => res.json())
+                .then(res => {
+
+                    console.log(res);
+                });
+            
+        },
+        setup: (editor) => {
+        editor.ui.registry.addMenuItem('myMenuItem', {
+          text: 'Закртыть редактор',
+          onAction: () => {
+              window.location.href='/page/<{name}>';
+          }
+        });
+    }
+    });
+
+</script>
+<form method="post" id="wrapper">
+    <textarea id="mytextarea" name="mytextarea"><{ EditorText }></textarea>
+</form>

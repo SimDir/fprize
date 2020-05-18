@@ -1,0 +1,217 @@
+
+<div id="UserForms" >
+    <header class="headerReg">
+        <a href="/">
+            <img src="/public/img/registration/logo.png" alt="logo">
+        </a>
+        <h2 v-show="state==='Login'" class="headerReg-title">Авторизация</h2>
+        <h2 v-show="state==='Registre'" class="headerReg-title">
+            Регистрация
+            <div v-if="usertype==='partner'"> Партнера</div>
+            <div v-else> Клиента</div>
+        </h2>
+    </header>
+    <!-- /.headerReg -->
+    <main v-if="errors" class="mainReg">
+        <h5 class="alert-heading mr-5">Что-то пошло нетак!</h5>
+        <p class="mb-0">{{errors}}</p><br>
+        <button @click="SetError(false)" type="button" class="close">
+            <span aria-hidden="true">закрыть</span>
+        </button>
+        
+
+    </main>
+    <main v-show="state==='Login'" class="mainReg">   
+        <form action="" class="mainAuth-form" @submit="UserLogin">
+            <h6 class="mainAuth-form__title">Введите учетные данные</h6>
+            <label for="" class="mainAuth-for__input--wrap">
+                <span>e-mail</span>
+                <input v-model="CurrentUser.email" type="email">
+            </label> 
+            <!-- /.mainAuth-for__input--wrap -->
+            <label for="" class="mainAuth-for__input--wrap">
+                <span>Пароль</span>
+                <input v-model="CurrentUser.password" type="password">
+            </label> 
+            <!-- /.mainAuth-for__input--wrap -->
+
+            <input type="submit" value="Войти">
+            <a href="/user/forgotpassword" class="mainAuth-form__recovery-btn">Забыли пароль?</a>
+            <!--<a @click.prevent="SetState('Registre')" href="/user/registre/partner" class="mainAuth-form__reg-btn">Регистрация</a>-->
+            <a href="/user/registre/client" class="mainAuth-form__reg-btn">Регистрация</a>
+        </form>
+        <!-- mainAuth-form -->
+    </main>
+    <!-- /.mainReg -->
+
+    <main v-show="state==='Registre'"  class="mainReg">
+        <form action="" class="mainReg-form" @submit="UserRegistre">
+            <h6 class="mainReg-form__title">Личные данные</h6>
+            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
+                <span>Фамилия</span>
+                <input v-model="CurrentUser.surname" type="text">
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
+                <span>Имя</span>
+                <input v-model="CurrentUser.firstname" type="text">
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
+                <span>Отчество</span>
+                <input v-model="CurrentUser.lastname" type="text">
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label for="" class="mainReg-for__input--wrap">
+                <span>Телефон</span>
+                <input v-model="CurrentUser.phone" type="tel" pattern="(\+?\d[- .]*){7,13}" required>
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label for="" class="mainReg-for__input--wrap">
+                <span>E-mail</span>
+                <input v-model="CurrentUser.email" type="email" required>
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label for="" class="mainReg-for__input--wrap">
+                <span>Пароль</span>
+                <input v-model="CurrentUser.password" type="password" required>
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label for="" class="mainReg-for__input--wrap">
+                <span>Подтвердите пароль</span>
+                <input v-model="CurrentUser.fpassword" type="password" required>
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
+                <span>Укажите ваш пол</span>
+                <select v-model="CurrentUser.sex" name="" id="" required>
+                    <option value="male">Мужской</option>
+                    <option value="female">Женский</option>
+                </select>
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
+                <span>Дата рождения</span>
+                <input v-model="CurrentUser.birthday" type="date">
+            </label> 
+            <!-- /.mainReg-iput--wrap -->
+            <input :disabled="CurrentUser.fpassword===''" type="submit" value="Регистрация">
+        </form>
+        <!-- mainReg-form -->
+    </main>
+    <main v-show="state==='Success'"  class="mainReg">
+        <h6 class="mainAuth-form__title">Вы успешно зарегестрированны</h6>
+        <a href="/user/login">Войти</a>
+    </main>
+</div>
+<script type="text/javascript">
+    var UserForms = new Vue({
+        el: '#UserForms',
+        data: {
+            errors: false, Forgot: 1, usertype: "<{usertype}>",
+            CurrentUser: {email: "", password: "", fpassword: "", phone: "", usertype: "<{usertype}>", inn: ''},
+            state: '<{state}>', defstate: '<{state}>', msg: ''
+        },
+        created() {
+            let self = this;
+            window.onpopstate = function (event) {
+                if (event.state != null) {
+                    self.state = event.state;
+                }
+                console.log(event.state);
+            };
+        },
+        methods: {
+            SetState(state) {
+                this.defstate = state;
+                this.state = state;
+                window.history.pushState(state, "Title", "/user/" + state.toLowerCase()+'/partner');
+            },
+            SetError(err) {
+                this.errors = err;
+                this.state = this.defstate;
+            },
+            UserRegistre(e) {
+                e.preventDefault();
+                this.errors = false;
+                this.state = false;
+                if (this.CurrentUser.password !== this.CurrentUser.fpassword) {
+                    this.errors = "В веденные пароли не совпадают";
+                    this.state = 'error';
+                    return false;
+                }
+                fetch('/user/registre', {
+                    mode: 'cors',
+                    method: 'POST',
+                    body: JSON.stringify(this.CurrentUser)
+                })
+                        .then((response) => {
+
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                                return false;
+                            }
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Network response was not ok');
+                        })
+                        .then((json) => {
+                            if (json.Error) {
+                                this.errors = json.Error;
+                                this.state = 'error';
+                            } else if (json.Success !== 0) {
+//                    console.log(json);
+                                this.state = 'Success';
+//                    window.location.href='/user';
+                            }
+
+                            console.log(json);
+
+                        })
+                        .catch((error) => {
+                            this.errors = error;
+                            console.log('FormLogin', error);
+                        });
+//        console.log(this.CurrentUser);
+            },
+            UserLogin(e) {
+                e.preventDefault();
+                this.errors = false;
+                this.state = false;
+                var SendUser = {email: this.CurrentUser.email, password: this.CurrentUser.password};
+                fetch('/user/login', {
+                    mode: 'cors',
+                    method: 'POST',
+                    body: JSON.stringify(SendUser)
+                })
+                        .then((response) => {
+
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                                return false;
+                            }
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Network response was not ok');
+                        })
+                        .then((json) => {
+                            if (json) {
+                                window.location.href = '/lk';
+                            } else {
+                                this.CurrentUser.email = '';
+                                this.CurrentUser.password = '';
+                                this.Forgot = true;
+                                this.errors = 'Неверное имя пользователя или пароль';
+                                this.state = 'error';
+                            }
+                        })
+                        .catch((error) => {
+                            this.errors = error;
+                            console.log('Login', error);
+                        });
+            }
+        }
+    });
+</script>

@@ -1,0 +1,1495 @@
+/* The snackbar - position it at the bottom and in the middle of the screen */
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #9400FF;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 2px #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 10000;
+    left: 50%;
+    top: 30%;
+    font-family: "Museo Sans 900";
+    box-shadow: 0 0 10px #fff;
+}
+
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+
+#snackbar.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 4.5s;
+}
+
+@font-face {
+    font-family: "Museo Sans 300";
+    src: url("../fonts/MuseoSansCyrl_300.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Museo Sans 500";
+    src: url("../fonts/MuseoSansCyrl_500.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Museo Sans 700";
+    src: url("../fonts/MuseoSansCyrl_700.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Museo Sans 900";
+    src: url("../fonts/MuseoSansCyrl_900.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    color: #000;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+}
+
+
+/* .loader {
+    width: calc(100% - 0px);
+    height: calc(100% - 0px);
+    border: 8px solid #162534;
+    border-top: 8px solid #09f;
+    border-radius: 50%;
+    animation: rotate 5s linear infinite;
+} */
+
+
+/* 
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+} */
+
+::selection {
+    color: #fff;
+    background-color: #444;
+}
+
+body::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: #e1e1e1;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #9A9A9A;
+    border-radius: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+button,
+input {
+    outline: none;
+}
+
+#client,
+#partner,
+#Checks,
+#admin,
+#moderator {
+    padding: 20px 50px;
+}
+
+.btn-purple-lk {
+    background-color: #9400FF;
+    font-family: 'Museo Sans 500';
+    color: #fff;
+    border: 1px solid #9400FF;
+    font-size: 16px;
+    line-height: 1em;
+}
+
+.btn-purple-lk:hover {
+    color: #fff;
+}
+
+.btn-purple-lk-main {
+    background-color: #fff;
+    color: #9400FF;
+    border: 1px solid #9400FF;
+    font-size: 14px;
+    line-height: 1em;
+    font-family: 'Museo Sans 900';
+}
+
+.btn-purple-lk-main:hover {
+    color: #9400FF;
+}
+
+.btn-yellow-lk {
+    background-color: #FFD900;
+    color: #000;
+    font-family: 'Museo Sans 500';
+}
+
+.table-lk {
+    font-family: 'Museo Sans 500';
+    color: #000;
+    box-sizing: border-box;
+}
+
+.table-lk thead {
+    background-color: #FFD900;
+    text-transform: uppercase;
+    font-family: 'Museo Sans 900';
+}
+
+.table-lk th {
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.table-lk td {
+    font-size: 13px;
+}
+
+.table-lk .bg-danger,
+.table-lk .bg-success,
+.table-lk .bg-warning {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    font-family: 'Museo Sans 900';
+    padding-right: 2em;
+    white-space: nowrap;
+}
+
+.table-lk .bg-danger {
+    background-color: rgba(202, 0, 25, .2) !important;
+}
+
+.table-lk .bg-success {
+    background-color: rgba(32, 202, 71, .2) !important;
+}
+
+.table-lk .bg-warning {
+    background-color: rgba(255, 202, 71, .2) !important;
+}
+
+.table-lk .bg-danger::before,
+.table-lk .bg-success::before,
+.table-lk .bg-warning::before {
+    content: '';
+    position: absolute;
+    right: 1em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    animation: statusCircle 2s linear infinite;
+}
+
+.table-lk .bg-danger::before {
+    background-color: #CA0019;
+}
+
+.table-lk .bg-success::before {
+    background-color: #20CA47;
+}
+
+.table-lk .bg-warning::before {
+    background-color: #FFCA47;
+}
+
+@keyframes statusCircle {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.7);
+    }
+}
+
+.table-lk th,
+.table-lk td {
+    border: none !important;
+}
+
+.chekstat-statistic {
+    font-family: 'Museo Sans 500';
+    color: #000;
+}
+
+.chekstat-statistic-purple-item {
+    background-color: #9400FF;
+    color: #fff;
+    border: 1px solid #9400FF;
+    font-family: 'Museo Sans 500';
+    font-size: 16px;
+}
+
+.chekstat-statistic-purple-input {
+    border: 1px solid #9400FF;
+    font-family: 'Museo Sans 500';
+    box-sizing: border-box;
+    color: #9400FF;
+    font-size: 16px;
+}
+
+.not-checks-lk {
+    color: #000;
+    font-family: 'Museo Sans 900';
+    text-transform: uppercase;
+    font-size: 2em;
+}
+
+.setting-lk-item {
+    background-color: #9400FF;
+    padding: 10px 15px;
+    border-radius: .5em;
+    margin-right: 15px;
+}
+
+.setting-lk-item label {
+    color: #fff;
+    font-size: 16px;
+    line-height: 1em;
+    font-family: 'Museo Sans 900';
+}
+
+.setting-lk-btn {
+    background-color: #9400FF;
+    color: #fff;
+    border: 2px solid #fff;
+    box-sizing: border-box;
+    border-radius: 0 .5em .5em 0;
+    font-family: 'Museo Sans 500';
+    transition: all .5s;
+    outline: none;
+}
+
+.setting-lk-btn:hover {
+    background-color: #fff;
+    color: #9400FF;
+}
+
+.ca {
+    width: 100%;
+}
+
+.icon-teble-lk {
+    color: #9400FF !important;
+}
+
+.personalAccount-header {
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.personalAccount-header .personalAccount-header__img--wrap {
+    width: 360px;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.personalAccount-header .personalAccount-header__img--wrap img {
+    width: 185px;
+}
+
+.personalAccount-header .personalAccount-header__content {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-info {
+    flex-basis: 30%;
+    background-color: #FFD900;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 40px;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__data {
+    font-family: 'Museo Sans 900';
+    color: #000;
+    font-size: 18px;
+    line-height: 1em;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__username {
+    color: #000;
+    font-family: 'Museo Sans 300';
+    font-size: 20px;
+    line-height: 1em;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__username span {
+    font-family: 'Museo Sans 900';
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs {
+    flex-basis: 30%;
+    background-color: #9400FF;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 40px;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__name {
+    font-family: 'Museo Sans 300';
+    color: #fff;
+    font-size: 20px;
+    line-height: 1.1em;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__name span {
+    font-family: 'Museo Sans 900';
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__period {
+    font-family: 'Museo Sans 300';
+    color: #fff;
+    font-size: 18px;
+    line-height: 1em;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__period span {
+    font-family: 'Museo Sans 900';
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-count {
+    flex-basis: 40%;
+    background-color: #FFD900;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+    padding: 15px 40px;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-title {
+    font-family: 'Museo Sans 300';
+    color: #000;
+    font-size: 20px;
+    line-height: .9em;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-num {
+    font-family: 'Museo Sans 900';
+    color: #000;
+    font-size: 24px;
+    line-height: 1em;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__btn {
+    font-family: 'Museo Sans 700';
+    background-color: #9400FF;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1em;
+    padding: 15px 25px;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid #9400FF;
+    transition: all .6s;
+}
+
+.personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__btn:hover {
+    background-color: #fff;
+    color: #9400FF;
+}
+
+.personalAccount-header .personalAccount-header__exit {
+    width: 200px;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.personalAccount-header .personalAccount-header__exit a {
+    font-family: 'Museo Sans 500';
+    position: relative;
+    color: #9400FF;
+    font-size: 16px;
+    line-height: 16px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    transform: translateX(-15px);
+}
+
+.personalAccount-header .personalAccount-header__exit a::before {
+    content: '';
+    position: absolute;
+    right: -36px;
+    background-image: url(../img/personalAccount/exit.png);
+    background-size: 100% 100%;
+    width: 26px;
+    height: 26px;
+    transition: all .7s ease-in-out;
+}
+
+.personalAccount-header .personalAccount-header__exit a::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #9400FF;
+    transition: all .7s;
+}
+
+.personalAccount-header .personalAccount-header__exit a:hover::after {
+    width: 100%;
+}
+
+.personalAccount-header .personalAccount-header__exit a:hover::before {
+    transform: rotateY(180deg);
+}
+
+.personalAccount-main {
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    display: flex;
+}
+
+.personalAccount-main .partners-navigation {
+    width: 360px;
+    background-color: #9400FF;
+    background-image: url(/public/img/personalAccount/partners-navigation-bgc.png);
+    background-size: 100% 100%;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.personalAccount-main .partners-navigation button {
+    width: 100%;
+    height: 65px;
+    margin-bottom: 10px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background-color: #9400FF;
+    box-shadow: 2px 2px 4px #490093;
+    font-family: "Museo Sans 900";
+    color: #fff;
+    font-size: 18px;
+    line-height: 18px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    z-index: 0;
+    outline: none;
+    transition: all 0.7s ease-in-out;
+}
+
+.personalAccount-main .partners-navigation button::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
+    z-index: -1;
+    transition: all 0.7s ease-in;
+}
+
+.personalAccount-main .partners-navigation button:hover {
+    background-color: transparent;
+}
+
+.personalAccount-main .partners-navigation button:hover::before {
+    width: 250%;
+}
+
+.personalAccount-main .partners-navigation .active {
+    background-color: #FFD900;
+    color: #000;
+}
+
+.personalAccount-main .partners-navigation .active:hover {
+    background-color: #FFD900;
+}
+
+.personalAccount-main .partners-navigation .active:hover::before {
+    width: 100%;
+}
+
+.personalAccount-main .clients-navigation {
+    width: 360px;
+    background-image: url(/public/img/personalAccount/clients-navigation-bgc.png);
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.personalAccount-main .clients-navigation button {
+    width: 100%;
+    height: 65px;
+    margin-bottom: 10px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background-color: #FFD900;
+    box-shadow: 2px 2px 4px #A38D00;
+    font-family: "Museo Sans 900";
+    color: #000;
+    font-size: 18px;
+    line-height: 18px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    z-index: 0;
+    outline: none;
+    transition: all 0.7s ease-in-out;
+}
+
+.personalAccount-main .clients-navigation button::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
+    z-index: -1;
+    transition: all 0.7s ease-in;
+}
+
+.personalAccount-main .clients-navigation button:hover {
+    background-color: transparent;
+}
+
+.personalAccount-main .clients-navigation button:hover::before {
+    width: 250%;
+}
+
+.personalAccount-main .clients-navigation .active {
+    background-color: #9400FF;
+    color: #fff;
+}
+
+.personalAccount-main .clients-navigation .active:hover {
+    background-color: #9400FF;
+}
+
+.personalAccount-main .clients-navigation .active:hover::before {
+    width: 100%;
+}
+
+.personalAccount-main .partners-content-bgc {
+    background-image: url(../img/personalAccount/partners-content-bgc.png);
+}
+
+.personalAccount-main .clients-content-bgc {
+    background-image: url(../img/personalAccount/clients-content-bgc.png);
+}
+
+.personalAccount-main .content {
+    flex-grow: 1;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 100px);
+}
+
+.personalAccount-main .content .content-title--wrap {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 50px;
+}
+
+.personalAccount-main .content .content-title--wrap .content-title {
+    font-family: "Museo Sans 900";
+    color: #000;
+    font-size: 24px;
+    line-height: 24px;
+    margin-right: 25px;
+}
+
+.personalAccount-main .content .content-title--wrap span {
+    flex-grow: 1;
+    position: relative;
+}
+
+.personalAccount-main .content .content-title--wrap span::before {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #9400FF;
+    animation: contentLinePurple 4s linear;
+}
+
+.personalAccount-main .content .content-title--wrap span::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #9400FF;
+    animation: contentLineBlack 4s linear;
+}
+
+.personalAccount-main .content .content-dataChange {
+    display: flex;
+    margin-bottom: 2em;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__titles {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    margin-right: 30px;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__titles span {
+    font-family: "Museo Sans 300";
+    color: #000;
+    font-size: 18px;
+    line-height: 18px;
+    height: 40px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__form {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__form input,
+.personalAccount-main .content .content-dataChange .content-dataChange__form select,
+.personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    border: 2px solid #9400FF;
+    border-radius: 5px;
+    padding: 5px 10px;
+    outline: none;
+    font-family: "Museo Sans 500";
+    color: #9400FF;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+    height: 200px;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__form input::placeholder,
+.personalAccount-main .content .content-dataChange .content-dataChange__form select::placeholder,
+.personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+    color: #777;
+    font-family: "Museo Sans 300";
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__form input[type=submit] {
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    background-image: url(/public/img/personalAccount/save-btn.png);
+    background-size: 100% 100%;
+    width: 335px;
+    height: 122px;
+    text-transform: uppercase;
+    color: #fff;
+    font-family: "Russo One";
+    font-size: 15px;
+    line-height: 15px;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+
+.personalAccount-main .content .content-dataChange .content-dataChange__form input[type=submit]:hover {
+    transform: scale(0.95);
+}
+
+@keyframes contentLinePurple {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes contentLineBlack {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1800px) {
+    .personalAccount-header .personalAccount-header__img--wrap {
+        width: 300px;
+    }
+    .personalAccount-header .personalAccount-header__img--wrap img {
+        width: 160px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info {
+        padding: 12px 30px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__data {
+        font-size: 16px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__username {
+        font-size: 18px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs {
+        padding: 12px 30px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__name {
+        font-size: 18px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__period {
+        font-size: 17px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left {
+        padding: 12px 30px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-title {
+        font-size: 18px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-num {
+        font-size: 22px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__btn {
+        letter-spacing: .4px;
+        font-size: 15px;
+        padding: 13px 20px;
+    }
+    .personalAccount-header .personalAccount-header__exit {
+        width: 170px;
+    }
+    .personalAccount-header .personalAccount-header__exit a {
+        font-size: 14px;
+        line-height: 14px;
+        height: 23px;
+    }
+    .personalAccount-header .personalAccount-header__exit a::before {
+        width: 23px;
+        height: 23px;
+    }
+    .personalAccount-main .partners-navigation {
+        width: 300px;
+    }
+    .personalAccount-main .partners-navigation button {
+        height: 60px;
+        margin-bottom: .6em;
+        font-size: 16px;
+        line-height: 1em;
+        padding: 0 1em;
+    }
+    .personalAccount-main .clients-navigation {
+        width: 300px;
+    }
+    .personalAccount-main .clients-navigation button {
+        height: 60px;
+        margin-bottom: .6em;
+        font-size: 16px;
+        line-height: 1em;
+        padding: 0 1em;
+    }
+    .personalAccount-main .content .content-title--wrap {
+        margin-bottom: 45px;
+    }
+    .personalAccount-main .content .content-title--wrap .content-title {
+        font-size: 22px;
+        line-height: 1em;
+        margin-right: 1em;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles {
+        width: 250px;
+        margin-right: 25px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles span {
+        font-size: 16px;
+        line-height: 1em;
+        height: 38px;
+        margin-bottom: .6em;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form {
+        width: 320px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 38px;
+        margin-bottom: .6em;
+        padding: .4em .8em;
+        font-size: 16px;
+        line-height: 1em;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 180px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        font-size: 16px;
+        line-height: 1em;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input[type=submit] {
+        width: 320px;
+        height: 115px;
+        font-size: 15px;
+        line-height: 1em;
+        letter-spacing: .1em;
+    }
+    #client,
+    #partner,
+    #Checks,
+    #admin,
+    #moderator {
+        padding: 18px 45px;
+    }
+    .table-lk th {
+        white-space: nowrap;
+        font-size: 14px;
+    }
+    .table-lk td {
+        font-size: 13px;
+    }
+    .table-lk .bg-danger::before,
+    .table-lk .bg-success::before,
+    .table-lk .bg-warning::before {
+        width: 6px;
+        height: 6px;
+    }
+    .setting-lk-item {
+        padding: 8px 13px;
+        margin-right: 14px;
+    }
+    .setting-lk-item label {
+        font-size: 14px;
+    }
+    .setting-lk-btn {
+        font-size: 14px;
+        line-height: 1em;
+    }
+}
+
+@media (max-width: 1600px) {
+    .personalAccount-header {
+        height: 85px;
+    }
+    .personalAccount-header .personalAccount-header__img--wrap {
+        width: 250px;
+    }
+    .personalAccount-header .personalAccount-header__img--wrap img {
+        width: 140px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info {
+        padding: 10px 20px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__data {
+        font-size: 14px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__username {
+        font-size: 16px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs {
+        padding: 10px 20px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__name {
+        font-size: 16px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__period {
+        font-size: 15px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left {
+        padding: 10px 20px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-title {
+        font-size: 16px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-num {
+        font-size: 20px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__btn {
+        letter-spacing: .1em;
+        font-size: 14px;
+        padding: .8em 1.2em;
+    }
+    .personalAccount-header .personalAccount-header__exit {
+        width: 140px;
+    }
+    .personalAccount-header .personalAccount-header__exit a {
+        font-size: 13px;
+        line-height: 13px;
+        height: 20px;
+    }
+    .personalAccount-header .personalAccount-header__exit a::before {
+        width: 20px;
+        height: 20px;
+    }
+    .personalAccount-main {
+        min-height: calc(100vh - 85px);
+    }
+    .personalAccount-main .partners-navigation {
+        width: 250px;
+        padding: 8px;
+    }
+    .personalAccount-main .partners-navigation button {
+        height: 50px;
+        font-size: 14px;
+    }
+    .personalAccount-main .clients-navigation {
+        width: 250px;
+        padding: 8px;
+    }
+    .personalAccount-main .clients-navigation button {
+        height: 50px;
+        font-size: 14px;
+    }
+    .personalAccount-main .content {
+        min-height: calc(100vh - 85px);
+    }
+    .personalAccount-main .content .content-title--wrap {
+        margin-bottom: 35px;
+    }
+    .personalAccount-main .content .content-title--wrap .content-title {
+        font-size: 20px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles {
+        width: 230px;
+        margin-right: 20px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles span {
+        font-size: 14px;
+        height: 35px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 35px;
+        font-size: 14px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 140px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        font-size: 14px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input[type=submit] {
+        font-size: 14px;
+    }
+    #client,
+    #partner,
+    #Checks,
+    #admin,
+    #moderator {
+        padding: 15px 35px;
+    }
+    .btn-purple-lk {
+        font-size: 14px;
+    }
+    .btn-purple-lk-main {
+        font-size: 13px;
+    }
+    .table-lk th {
+        font-size: 13px;
+    }
+    .table-lk td {
+        font-size: 12px;
+    }
+    .table-lk .bg-danger::before,
+    .table-lk .bg-success::before,
+    .table-lk .bg-warning::before {
+        width: 5px;
+        height: 5px;
+    }
+    .setting-lk-item {
+        padding: 7px 11px;
+        margin-right: 12px;
+    }
+    .setting-lk-item label {
+        font-size: 13px;
+    }
+    .setting-lk-btn {
+        font-size: 13px;
+    }
+    .chekstat-statistic-purple-item {
+        font-size: 14px;
+    }
+    .chekstat-statistic-purple-input {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .personalAccount-header {
+        height: 75px;
+    }
+    .personalAccount-header .personalAccount-header__img--wrap {
+        width: 220px;
+    }
+    .personalAccount-header .personalAccount-header__img--wrap img {
+        width: 120px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info {
+        padding: 6px 14px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__data {
+        font-size: 12px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__username {
+        font-size: 14px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs {
+        padding: 6px 14px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__name {
+        font-size: 14px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__period {
+        font-size: 13px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left {
+        padding: 6px 14px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-title {
+        font-size: 14px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-num {
+        font-size: 18px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__btn {
+        font-size: 12px;
+    }
+    .personalAccount-header .personalAccount-header__exit {
+        width: 120px;
+    }
+    .personalAccount-header .personalAccount-header__exit a {
+        font-size: 12px;
+        line-height: 12px;
+        height: 18px;
+    }
+    .personalAccount-header .personalAccount-header__exit a::before {
+        width: 18px;
+        height: 18px;
+        right: -25px;
+    }
+    .personalAccount-main {
+        min-height: calc(100vh - 75px);
+    }
+    .personalAccount-main .partners-navigation {
+        width: 220px;
+        padding: 6px;
+    }
+    .personalAccount-main .partners-navigation button {
+        height: 45px;
+        font-size: 12px;
+    }
+    .personalAccount-main .clients-navigation {
+        width: 220px;
+        padding: 6px;
+    }
+    .personalAccount-main .clients-navigation button {
+        height: 45px;
+        font-size: 12px;
+    }
+    .personalAccount-main .content {
+        min-height: calc(100vh - 75px);
+    }
+    .personalAccount-main .content .content-title--wrap {
+        margin-bottom: 25px;
+    }
+    .personalAccount-main .content .content-title--wrap .content-title {
+        font-size: 18px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles {
+        width: 210px;
+        margin-right: 15px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles span {
+        font-size: 12px;
+        height: 30px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form {
+        width: 270px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 30px;
+        font-size: 12px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 100px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        font-size: 12px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input[type=submit] {
+        width: 270px;
+        height: 100px;
+        font-size: 12px;
+    }
+    #client,
+    #partner,
+    #Checks,
+    #admin,
+    #moderator {
+        padding: 12px 25px;
+    }
+    .btn-purple-lk {
+        font-size: 13px;
+    }
+    .btn-purple-lk-main {
+        font-size: 12px;
+    }
+    .table-lk th {
+        font-size: 12px;
+    }
+    .table-lk td {
+        font-size: 11px;
+    }
+    .table-lk .bg-danger::before,
+    .table-lk .bg-success::before,
+    .table-lk .bg-warning::before {
+        width: 4px;
+        height: 4px;
+    }
+    .setting-lk-item {
+        padding: 6px 9px;
+        margin-right: 10px;
+    }
+    .setting-lk-item label {
+        font-size: 12px;
+    }
+    .setting-lk-btn {
+        font-size: 12px;
+    }
+    .chekstat-statistic-purple-item {
+        font-size: 12px;
+    }
+    .chekstat-statistic-purple-input {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .personalAccount-header {
+        height: 65px;
+    }
+    .personalAccount-header .personalAccount-header__img--wrap {
+        width: 180px;
+    }
+    .personalAccount-header .personalAccount-header__img--wrap img {
+        width: 100px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info {
+        padding: 5px 10px;
+        flex-basis: 20%;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__data {
+        font-size: 11px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-info .header__content-info__username {
+        font-size: 12px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs {
+        padding: 5px 10px;
+        font-size: 30%;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__name {
+        font-size: 12px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-tarrifs .header__content-tarrifs__period {
+        font-size: 11px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left {
+        padding: 5px 10px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-title {
+        font-size: 12px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__left .header__content-count__left-num {
+        font-size: 16px;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count {
+        flex-basis: 50%;
+    }
+    .personalAccount-header .personalAccount-header__content .personalAccount-header__content-count .personalAccount-header__content-count__btn {
+        font-size: 11px;
+    }
+    .personalAccount-header .personalAccount-header__exit {
+        width: 100px;
+    }
+    .personalAccount-header .personalAccount-header__exit a {
+        font-size: 11px;
+        line-height: 11px;
+        height: 15px;
+    }
+    .personalAccount-header .personalAccount-header__exit a::before {
+        width: 15px;
+        height: 15px;
+        right: -20px;
+    }
+    .personalAccount-main {
+        min-height: calc(100vh - 65px);
+    }
+    .personalAccount-main .partners-navigation {
+        width: 180px;
+        padding: 5px;
+    }
+    .personalAccount-main .partners-navigation button {
+        height: 40px;
+        font-size: 11px;
+    }
+    .personalAccount-main .clients-navigation {
+        width: 180px;
+        padding: 5px;
+    }
+    .personalAccount-main .clients-navigation button {
+        height: 40px;
+        font-size: 11px;
+    }
+    .personalAccount-main .content {
+        min-height: calc(100vh - 65px);
+    }
+    .personalAccount-main .content .content-title--wrap {
+        margin-bottom: 15px;
+    }
+    .personalAccount-main .content .content-title--wrap .content-title {
+        font-size: 16px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles {
+        width: 190px;
+        margin-right: 10px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__titles span {
+        font-size: 11px;
+        height: 25px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form {
+        width: 240px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 25px;
+        font-size: 11px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        height: 80px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form select::placeholder,
+    .personalAccount-main .content .content-dataChange .content-dataChange__form textarea {
+        font-size: 11px;
+    }
+    .personalAccount-main .content .content-dataChange .content-dataChange__form input[type=submit] {
+        width: 240px;
+        height: 85px;
+        font-size: 11px;
+    }
+    #client,
+    #partner,
+    #Checks,
+    #admin,
+    #moderator {
+        padding: 10px;
+    }
+    .btn-purple-lk {
+        font-size: 11px;
+    }
+    .btn-purple-lk-main {
+        font-size: 11px;
+    }
+    .table-lk th {
+        font-size: 11px;
+    }
+    .table-lk td {
+        font-size: 10px;
+    }
+    .table-lk .bg-danger::before,
+    .table-lk .bg-success::before,
+    .table-lk .bg-warning::before {
+        width: 3px;
+        height: 3px;
+    }
+    .setting-lk-item {
+        padding: 5px 8px;
+        margin-right: 9px;
+    }
+    .setting-lk-item label {
+        font-size: 11px;
+    }
+    .setting-lk-btn {
+        font-size: 11px;
+    }
+    .chekstat-statistic-purple-item {
+        font-size: 11px;
+    }
+    .chekstat-statistic-purple-input {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 1000px) {
+    body {
+        overflow-x: scroll;
+    }
+    .personalAccount-header,
+    .personalAccount-main {
+        width: 1000px;
+    }
+}
+
+.manybaloon {
+    background-color: #9400FF;
+    width: 100%;
+    padding: 1em;
+    color: #fff;
+}
+
+.manybaloon h4 {
+    font-family: 'Museo Sans 900';
+    font-size: 24px;
+    line-height: 1.2em;
+}
+
+.manybaloon ul {
+    list-style-type: none;
+    font-style: italic;
+    font-family: 'Museo Sans 500';
+}
+
+.manybaloon li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 16px;
+    line-height: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+.manybaloon li::before {
+    content: '-';
+    position: absolute;
+    left: 0;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.2em;
+}
+
+ymaps [class$="balloon__layout"] {
+    background-color: #9400FF;
+}
+
+ymaps [class$="balloon__content"] {
+    background-color: #9400FF;
+}
+
+ymaps [class$="balloon__tail"]::after {
+    background-color: #9400FF;
+}
+
+ymaps [class$="balloon__close-button"] {
+    background-image: url(/public/img/ymap-cross.png);
+    opacity: 1;
+    background-size: 25px 25px;
+    background-position: left center;
+}

@@ -1,0 +1,74 @@
+<div id="app">
+    <div>Access Token = {{ AccessToken }}</div>
+    <div>
+    <input v-model="user.email" placeholder="email">
+    <input v-model="user.password" placeholder="password">
+    <button v-on:click="GetAccessToken">Get Access Token</button>
+    </div>
+    <div>
+        <input v-model="QrCodeString" placeholder="Qr Code String">
+        <button v-on:click="SetCheck">SetQrCodeString</button>
+    </div>
+</div>
+
+<script>
+var app = new Vue({
+    el: '#app',
+    data: {
+        AccessToken: '',
+        user:{email:'',password:''},
+        QrCodeString:''
+    },
+    methods: {
+    GetAccessToken() {
+        fetch( '/api/user/GetAccessToken',{
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify(this.user)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok');
+            })
+            .then((json) => {
+                if(json.hasOwnProperty('AccessToken')){
+                    this.AccessToken=json.AccessToken;
+                }else{
+                    console.log(json);
+                }
+
+            })
+            .catch((error) => {
+
+                console.log('FormLogin', error);
+            });
+        },
+    SetCheck() {
+        fetch( '/api/user/SetQrCodeString',{
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify({AccessToken:this.AccessToken,QrCodeString:this.QrCodeString})
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok');
+            })
+            .then((json) => {
+//                if(json.hasOwnProperty('AccessToken')){
+//                    this.AccessToken=json.AccessToken;
+//                }else{
+                    console.log(json);
+//                }
+
+            })
+            .catch((error) => {
+                console.log('FormLogin', error);
+            });
+        }
+    }
+});
+</script>
