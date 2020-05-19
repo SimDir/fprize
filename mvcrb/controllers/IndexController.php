@@ -15,7 +15,7 @@ class IndexController extends Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->View->AddCss('/public/css/style.css');
+//        $this->View->AddCss('/public/css/style.css');
         $this->View->AddCss('/public/css/style.min.css');
     }
     public function IndexAction() {

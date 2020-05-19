@@ -122,7 +122,7 @@ class CheckModel extends Model {
     public function AddUserCheck($UserId=0,$UserQrCod='') {
         $Ret = $this->findAll($this->TableName, '(qr = :qr)', [':qr' => $UserQrCod]);
         if($Ret){
-            return ['Error'=>'Check is added'];
+            return ['Error'=>'check has already been added. Такой чек уже добавлен'];
         }
         $User = $this->load( 'user' ,$UserId);
 

@@ -54,7 +54,7 @@ class LkController extends Controller {
         $this->View->checkcount = (1000-$cmodel->CheckCount($curUser['id']));
 //        dd($this->View->checkcount);
         $this->View->AddCss('/public/css/style_personalAccount.css');
-//        $this->View->AddCss('/public/css/style.css');
+        $this->View->AddCss('/public/css/style.min.css');
     }
     public function DocsAction() {
         $this->View->admincontent = $this->View->execute('docs.html');
@@ -177,6 +177,12 @@ class LkController extends Controller {
         return $this->View->execute('index.html', TEMPLATE_DIR);
     }
     public function QrkodrederAction() {
+        $curUser = $this->User->GetCurrentUser();
+        //if($curUser['token']){
+            $curUser['token']=$this->User->GenerateAccessToken($curUser['id']);
+        //}
+        $this->View->token = $curUser['token'];
+        
         $this->View->admincontent = $this->View->execute('qrider.html');
         if ($this->POST) {
             return ['Content' => $this->View->admincontent];
@@ -202,12 +208,14 @@ class LkController extends Controller {
         if ($curUser['role'] == 100) {
             $Data = [
                 ['id' => '1', 'parent' => '0', 'name' => 'КАРТОЧКА УЧАСТНИКА', 'src' => '/lk', 'class' => 'fas fa-home'],
+                
 //                ['id' => '2', 'parent' => '0', 'name' => 'ЗАГРУЖЕННЫЕ ЧЕКИ', 'src' => '/lk/youchecs', 'class' => 'fas fa-users-cog'],
                 ['id' => '3', 'parent' => '0', 'name' => 'СТАТИСТИКА РОЗЫГРЫШЕЙ', 'src' => '/lk/statistic', 'class' => 'far fa-file'],
 //                ['id' => '4', 'parent' => '0', 'name' => 'ДЕЙСТВУЮЩИЕ АКЦИИ', 'src' => '/lk/curaktions', 'class' => 'far fa-file'],
 //                ['id' => '5', 'parent' => '0', 'name' => 'Qr код сканер', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
                 ['id' => '6', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
-                ['id' => '7', 'parent' => '0', 'name' => 'Правила участия', 'src' => '/lk/helps', 'class' => 'fas fa-calculator']
+                ['id' => '7', 'parent' => '0', 'name' => 'Правила участия', 'src' => '/lk/helps', 'class' => 'fas fa-calculator'],
+                ['id' => '8', 'parent' => '0', 'name' => 'Сканер кода', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
 //                ['id' => '8', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
 //                ['id' => '9', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator']
             ];
@@ -239,10 +247,11 @@ class LkController extends Controller {
                 ['id' => '0', 'parent' => '0', 'name' => 'Настройки', 'src' => '/lk/', 'class' => 'fas fa-home'],
                 ['id' => '1', 'parent' => '0', 'name' => 'Пользователь', 'src' => '/lk/user', 'class' => 'fas fa-home'],
                 ['id' => '2', 'parent' => '0', 'name' => 'Партнер', 'src' => '/lk/partner', 'class' => 'fas fa-home'],
-                ['id' => '2', 'parent' => '0', 'name' => 'Партнер ККМ', 'src' => '/lk/kkm', 'class' => 'fas fa-home'],
-                ['id' => '3', 'parent' => '0', 'name' => 'Управление партнерами', 'src' => '/lk/moderator', 'class' => 'fas fa-home'],
-                ['id' => '4', 'parent' => '0', 'name' => 'Чеки', 'src' => '/lk/checkspartner', 'class' => 'fas fa-home'],
+                ['id' => '3', 'parent' => '0', 'name' => 'Партнер ККМ', 'src' => '/lk/kkm', 'class' => 'fas fa-home'],
+                ['id' => '4', 'parent' => '0', 'name' => 'Управление партнерами', 'src' => '/lk/moderator', 'class' => 'fas fa-home'],
+                ['id' => '5', 'parent' => '0', 'name' => 'Чеки', 'src' => '/lk/checkspartner', 'class' => 'fas fa-home'],
                 ['id' => '6', 'parent' => '0', 'name' => 'Карта партнёров', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
+                ['id' => '7', 'parent' => '0', 'name' => 'Сканер кода', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
             ];
             return $Data;
         }
