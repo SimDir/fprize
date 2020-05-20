@@ -1,23 +1,26 @@
 <section class="winners" id="winners">
-        <div class="title">
-            <span class="container title_text">Найди себя среди победителей</span>
-        </div>
-        <!-- /.main-title -->
-        <div class="winners__container container" id="winnersw">
-            <div class="winners__header">
-                <div class="winners__header__btn_wrap">
-<!--                    <button class="winners__header__btn">за сегодня</button>
-                    <button class="winners__header__btn">за неделю</button>-->
-                    <button  @click="posts = winners" class="winners__header__btn">за месяц</button>
-                </div>
-                <form @submit="FindPhone" class="winners__header__form form-winners">
-                    <!--<input type="date" value="2020-04-10">-->
-                    <div class="form-winners__search">
-                        <input v-model="findPhone" @keyup="FindPhone" type="tel" placeholder="Проверить статус по номеру телефона...">
-                        <input type="submit" value="">
-                    </div>
-                </form>
-            </div>
+    <div class="title">
+        <h4 class="title">
+         <span class="container title_text">Найди себя среди победителей</span>
+     </h4>
+
+ </div>
+ <!-- /.main-title -->
+ <div class="winners__container container" id="winnersw">
+    <div class="winners__header">
+        <div class="winners__header__btn_wrap">
+            <button class="winners__header__btn">за сегодня</button>
+            <button class="winners__header__btn">за неделю</button>
+    <button  @click="posts = winners" class="winners__header__btn">за месяц</button>
+</div>
+<form @submit="FindPhone" class="winners__header__form form-winners">
+    <!--<input type="date" value="2020-04-10">-->
+    <div class="form-winners__search">
+        <input v-model="findPhone" @keyup="FindPhone" type="tel" placeholder="Проверить статус по номеру телефона...">
+        <input type="submit" value="">
+    </div>
+</form>
+</div>
 <!--            <form @submit="FindPhone" class="winners-top">
                 <label for="checktel">Проверить свой номер телефона</label>
                 <input v-model="findPhone" @keyup="FindPhone" type="tel" id="checktel" placeholder="Номер вашего телефона">
@@ -28,10 +31,10 @@
 <!--                <div class="winners-content__top">
                     <button @click="posts = winners" class="active">Все призы за последнии 30 дней</button>
                      <button>джекпот</button> 
-                </div>-->
-                <!-- /.winners-content__top -->
-                
-                <table v-show="posts.length>=1" class="table-winners">
+                 </div>-->
+                 <!-- /.winners-content__top -->
+
+                 <table v-show="posts.length>=1" class="table-winners">
 <!--                    <thead>
                         <tr class="table-winners__title">
                             <th>Дата</th>
@@ -42,25 +45,25 @@
                     </thead>-->
                     <tbody>
                         <tr class="table-winners__title">
-                            <th>Дата</th>
-                            <th style=" border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">Имя участника</th>
-                            <th>Сумма</th>
-                            <th>Телефон</th>
+                            <th><h5>Дата</h5></th>
+                            <th style=" border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;"><h5>Имя участника</h5></th>
+                            <th><h5>Сумма</h5></th>
+                            <th><h5>Телефон</h5></th>
                         </tr>
                         <tr v-for="item in displayedPosts" >
-                            <td class="winners-content__td-left">{{ item.windate }}</td>
-                            <td class="winners-content__td-center">{{ item.name }}</td>
-                            <td class="winners-content__td-center">{{ item.winsum }}</td>
-                            <td class="winners-content__td-left">{{ item.fphone }}</td>
+                            <td class="alert alert-light"><h5>{{ item.windate }}</h5></td>
+                            <td class="alert alert-light"><h5>{{ item.name }}</h5></td>
+                            <td class="alert alert-light"><h5>{{ item.winsum }}</h5></td>
+                            <td class="alert alert-light"><h5>{{ item.fphone }}</h5></td>
                         </tr>
                         
                     </tbody>
                 </table>
                 <div v-show="posts.length<1"><h4>Номер не найден</h4></div>
                 <!-- /.winners-content__table -->
-                <div class="winners__paginations">
+                <div class="pt-5 winners__paginations">
                     <!--<button class="active">1</button>-->
-                    <button class="winners__paginations__item" type="button"  v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
+                    <button class="btn btn-ligth br-0 btn-lg pt-0 mt-0 winners__paginations__item" type="button"  v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
 
 <!--                    <button type="button"  v-if="page != 1" @click="page--"> << </button>
                     <button type="button"  v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
@@ -70,83 +73,83 @@
             </div>
             <!-- /.winners-content -->
         </div>
-      
+
 
         <!-- /.winners -->
     </section>
 
-<script type="text/javascript">
-    var winners = new Vue({
-        el: '#winners',
-        data: {
-            winners:{},
-            posts: [],
-            page: 1,
-            perPage: 10,
-            pages: [],
-            findPhone:''
-        },
-        created() {
-            this.getwiners();
-        },
-        methods: {
-            FindPhone(e){
-                e.preventDefault();
-                let fp = _.filter(this.winners, (o)=> { 
-                    var strF = new RegExp(this.findPhone,'gi');
-                    var strFn = String(o.phone);
-                    return strFn.search(strF)>-1;
+    <script type="text/javascript">
+        var winners = new Vue({
+            el: '#winners',
+            data: {
+                winners:{},
+                posts: [],
+                page: 1,
+                perPage: 10,
+                pages: [],
+                findPhone:''
+            },
+            created() {
+                this.getwiners();
+            },
+            methods: {
+                FindPhone(e){
+                    e.preventDefault();
+                    let fp = _.filter(this.winners, (o)=> { 
+                        var strF = new RegExp(this.findPhone,'gi');
+                        var strFn = String(o.phone);
+                        return strFn.search(strF)>-1;
                     //return o.phone == this.findPhone; 
                 });
 //                this.posts =[];
-                this.posts= fp;
+this.posts= fp;
 //                console.log(this.posts);
-            },
-            getwiners() {
-                fetch('/api/checks/getwiners', {
-                    mode: 'cors',
-                    method: 'POST'
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    this.posts = json;
-                    this.winners = json;
+},
+getwiners() {
+    fetch('/api/checks/getwiners', {
+        mode: 'cors',
+        method: 'POST'
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok');
+    })
+    .then((json) => {
+        this.posts = json;
+        this.winners = json;
 //                    console.log(this.posts);
-                })
-                .catch((error) => {
+})
+    .catch((error) => {
 //                    this.errors = error;
-                    console.log('FormLogin', error);
-                });
-            },
-           setPages () {
-               this.pages =[];
-                let numberOfPages = Math.ceil(this.posts.length / this.perPage);
-                for (let index = 1; index <= numberOfPages; index++) {
-                  this.pages.push(index);
-                }
-            },
-            paginate(posts) {
-                let page = this.page;
-                let perPage = this.perPage;
-                let from = (page * perPage) - perPage;
-                let to = (page * perPage);
-                return  posts.slice(from, to);
-            }
-        },
-        watch: {
-          posts(){
-            this.setPages();
-          }
-        },
-        computed: {
-            displayedPosts () {
-              return this.paginate(this.posts);
-            }
-        },
-    });
+console.log('FormLogin', error);
+});
+},
+setPages () {
+ this.pages =[];
+ let numberOfPages = Math.ceil(this.posts.length / this.perPage);
+ for (let index = 1; index <= numberOfPages; index++) {
+  this.pages.push(index);
+}
+},
+paginate(posts) {
+    let page = this.page;
+    let perPage = this.perPage;
+    let from = (page * perPage) - perPage;
+    let to = (page * perPage);
+    return  posts.slice(from, to);
+}
+},
+watch: {
+  posts(){
+    this.setPages();
+}
+},
+computed: {
+    displayedPosts () {
+      return this.paginate(this.posts);
+  }
+},
+});
 </script>
