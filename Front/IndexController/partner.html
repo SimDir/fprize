@@ -1,46 +1,13 @@
 <header class="header">
-<!--    <div class="header--wrap">
-        <a href="/" class="header-logo--wrap">
-            <img src="/public/img/header/header-logo.png" alt="header-logo">
-        </a>
-         /.header-logo--wrap 
-        <nav class="header-nav">
-            <a href="#howworking" class="header-nav__link active">Как это работает</a>
-             /.header-nav__link 
-            <a href="#tarrifs" class="header-nav__link">Тарифы</a>
-             /.header-nav__link 
-            <a href="#questions" class="header-nav__link">Частые вопросы</a>
-             /.header-nav__link 
-            <a href="#footer" class="header-nav__link">Контакты</a>
-             /.header-nav__link 
-        </nav>
-         /.header-nav 
-        <div class="header-right">
-            <a href="/user/login" class="header-right__link link--auth">
-                Вход в личный кабинет
-            </a>
-             /.header-right__link 
-            <a href="/user/registre/partner" class="header-right__link link--reg">
-                Регистрация
-            </a>  /.header-right__link 
-        </div>
-         /.header-right 
-        <div class="header-burger">
-            <span class="header-burger__line"></span>
-            <span class="header-burger__line"></span>
-            <span class="header-burger__line"></span>
-        </div>
-         /.header-burger 
-    </div>-->
         <div class="container-main header__container">
             <a href="/" class="header__logo-wrap">
                 <img src="/public/img/logo/logo.png" alt="" class="header__logo logo">
             </a>
             <nav class="header__nav nav">
-                <a href="#" class="nav__link">Как это работает</a>
-                <a href="#" class="nav__link">Тарифы</a>
-                <a href="#" class="nav__link">Частые вопросы</a>
-                <a href="#" class="nav__link">Контакты</a>
+                <a href="#howorks" class="nav__link">Как это работает</a>
+                <a href="#tarifs" class="nav__link">Тарифы</a>
+                <a href="#faq" class="nav__link">Частые вопросы</a>
+                <a href="#parthermaps" class="nav__link">Наши партнёры</a>
             </nav>
             <div class="header__link_wrap">
                 <a href="/user/login" class="header__link link-login">Вход в личный кабинет</a>
@@ -181,7 +148,7 @@
 
         <section class="become-partner">
             <h4 class="title">
-                <span class="container-main title_text">Как стать партнером?</span>
+                <span class="container-main title_text">Как стать партнёром?</span>
             </h4>
 
             <div class="become-partner__container container-main">
@@ -234,7 +201,7 @@
             </div>
         </section>
 
-        <section class="how-working">
+        <section class="how-working" id="howorks">
             <h4 class="title">
                 <span class="container-main title_text">Как работает "Призовая молния"</span>
             </h4>
@@ -284,7 +251,7 @@
             </div>
         </section>
 
-        <section class="cost">
+        <section class="cost" id="tarifs">
             <h4 class="title">
                 <span class="container-main title_text">Стоимость</span>
             </h4>
@@ -308,7 +275,7 @@
                             <td style="color: #7e01fc; border-bottom: 1px solid #818181; border-top: 1px solid #818181;"><h5>до 30 тыс</h5></td>
                         </tr>
                         <tr>
-                            <th style="border-right: 1px solid #818181; border-bottom: 1px solid #818181;"><h5>Стоимость 1 чека<br>с учетом коэффицента</h5></th>
+                            <th style="border-right: 1px solid #818181; border-bottom: 1px solid #818181;"><h5>Стоимость 1 чека<br>с учетом коэффициента</h5></th>
                             <td style="border-right: 1px solid #818181; border-bottom: 1px solid #818181;"><h5>3,00₽</h5></td>
                             <td style="border-right: 1px solid #818181; border-bottom: 1px solid #818181;"><h5>2,00₽</h5></td>
                             <td style="border-right: 1px solid #818181; border-bottom: 1px solid #818181;"><h5>1,50₽</h5></td>
@@ -350,7 +317,7 @@
             </div>
         </section>
 
-        <section class="frequent-requests">
+        <section class="frequent-requests" id="faq">
             <h4 class="title">
                 <span class="container-main title_text">Частые вопросы</span>
             </h4>
@@ -416,9 +383,9 @@
             </div>
         </section>
 
-        <section class="our-partners">
+        <section class="our-partners" id="parthermaps">
             <h4 class="title">
-                <span class="container title_text">Наши партенры</span>
+                <span class="container title_text">Наши партнёры</span>
             </h4>
             <{ View(/LkController/map.html) }>
         </section>
