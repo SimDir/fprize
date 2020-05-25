@@ -1764,6 +1764,7 @@ template {
     letter-spacing: 0.03em;
     padding: 0.8em 1.7em;
     border-radius: 2em;
+    line-height: 1.2em;
     transition: all 0.2s;
 }
 .btn_bg-color_orange {
@@ -2029,7 +2030,7 @@ template {
     align-items: center;
 }
 .cost__container {
-    font-size: 1.6em;
+    font-size: 1.6em !important;
     padding: 6em 0;
 }
 .cost__content {
@@ -2058,6 +2059,7 @@ template {
 .cost__table td,
 .cost__table th {
     padding: 1.5em 1em;
+    font-size: inherit;
 }
 .eTimer {
     width: 540px;
@@ -2106,9 +2108,7 @@ template {
     justify-content: space-between;
     align-items: center;
 }
-.form-winners {
-    width: 50%;
-}
+
 .form-winners input[type="date"] {
     border: none;
     outline-color: #7e01fc;
@@ -3222,6 +3222,7 @@ template {
     padding: 0.8em 0;
     color: #2b2a29;
     font-family: Museo Sans\500;
+    font-size: inherit !important;
 }
 .table-winners td {
     border-bottom: 2px solid #b0b0b0;
@@ -3405,7 +3406,7 @@ body {
     width: 100vw;
     min-height: 100vh;
     text-rendering: optimizeSpeed;
-    line-height: 1.2;
+    line-height: 1.2 !important;
     color: #000;
     overflow-x: hidden;
     font-family: Museo Sans\700;
@@ -6180,4 +6181,65 @@ section {
     .main-user-content__btn {
         min-width: 180px;
     }
+}
+
+
+
+
+/* YAMAP */
+
+.manybaloon {
+    background-color: #9400FF;
+    width: 100%;
+    padding: 1em;
+    color: #fff;
+}
+
+.manybaloon h4 {
+    font-family: 'Museo Sans 900';
+    font-size: 24px;
+    line-height: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+.manybaloon ul {
+    list-style-type: none;
+    font-style: italic;
+    font-family: 'Museo Sans 500';
+}
+
+.manybaloon li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 16px;
+    line-height: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+.manybaloon li::before {
+    content: '-';
+    position: absolute;
+    left: 0;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.2em;
+}
+
+ymaps [class$="balloon__layout"] {
+    background-color: #9400FF;
+}
+
+ymaps [class$="balloon__content"] {
+    background-color: #9400FF;
+}
+
+ymaps [class$="balloon__tail"]::after {
+    background-color: #9400FF;
+}
+
+ymaps [class$="balloon__close-button"] {
+    background-image: url(/public/img/ymap-cross.png);
+    opacity: 1;
+    background-size: 25px 25px;
+    background-position: left center;
 }

@@ -131,6 +131,7 @@ var YaMap = new Vue({
                 console.log(part);
             },
             initHandler(map) {
+                map.behaviors.disable('scrollZoom');
                 fetch('/api/lk/getallkkm', {
                     mode: 'cors',
                     method: 'POST'//,
