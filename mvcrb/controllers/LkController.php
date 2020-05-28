@@ -215,7 +215,7 @@ class LkController extends Controller {
 //                ['id' => '5', 'parent' => '0', 'name' => 'Qr код сканер', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
                 ['id' => '6', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
                 ['id' => '7', 'parent' => '0', 'name' => 'Правила участия', 'src' => '/lk/helps', 'class' => 'fas fa-calculator'],
-                ['id' => '8', 'parent' => '0', 'name' => 'Сканер кода', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
+//                ['id' => '8', 'parent' => '0', 'name' => 'Сканер кода', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
 //                ['id' => '8', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
 //                ['id' => '9', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator']
             ];

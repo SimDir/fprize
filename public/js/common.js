@@ -140,14 +140,14 @@ var mvcrbmixin = {
         paginator() {
             let p = _.range(1, Math.ceil(this.Count / this.perPage) + 1);
             let st = this.currentPage - 1;
-            if (st < 1)
-                st = 1;
-            if (st > (p.length-2))
-                st = p.length-2;
+            if (st < 2)
+                st = 2;
+            if (st > (p.length-3))
+                st = p.length-3;
             return {
                 count: p.length,
                 currentPage: this.currentPage,
-                pages: p.slice(st-1, st +2)
+                pages: p.slice(st-2, st +3)
             };
         }
     }

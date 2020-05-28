@@ -1,13 +1,7 @@
-<section class="winners" id="winners">
-    <div class="title">
-        <h4 class="title">
-            <span class="container-main title_text">Найди себя среди победителей</span>
-        </h4>
+<section id="winners">
 
-    </div>
-    <!-- /.main-title -->
-    <div class="winners__container container-main" id="winnersw">
-        <div class="winners__header">
+    <div id="winnersw">
+        <div class="winners__header winners__header-lk">
             <div class="winners__header__btn_wrap">
                 <button class="winners__header__btn">за сегодня</button>
                 <button class="winners__header__btn">за неделю</button>
@@ -17,7 +11,7 @@
                 <!--<input type="date" value="2020-04-10">-->
                 <div class="form-winners__search">
                     <input v-model="findPhone" @keyup="FindPhone" type="tel"
-                        placeholder="Проверить статус по номеру телефона...">
+                           placeholder="Проверить статус по номеру телефона...">
                     <input type="submit" value="">
                 </div>
             </form>
@@ -28,7 +22,7 @@
                 <input type="submit" value="">
             </form>-->
         <!-- /.winners-top -->
-        <div class="winners__content">
+        <div class="winners__content winners__content-lk">
             <!--                <div class="winners-content__top">
                     <button @click="posts = winners" class="active">Все призы за последнии 30 дней</button>
                      <button>джекпот</button> 
@@ -54,12 +48,12 @@
                             Сумма
                         </th>
                         <th>
-                           Телефон
+                            Телефон
                         </th>
                     </tr>
                     <tr v-for="item in displayedPosts">
                         <td style="border-right: 1px solid #B2B2B2; ">
-                           {{ item.windate }}
+                            {{ item.windate }}
                         </td>
                         <td style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
                             {{ item.name }}
@@ -78,13 +72,13 @@
                 <h4>Номер не найден</h4>
             </div>
             <!-- /.winners-content__table -->
-            
+
         </div>
         <!-- /.winners-content -->
         <div class="winners__paginations">
             <!--<button class="active">1</button>-->
             <button class=" winners__paginations__item" type="button"
-                v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
+                    v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
 
             <!--                    <button type="button"  v-if="page != 1" @click="page--"> << </button>
                 <button type="button"  v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
@@ -129,21 +123,21 @@
                     mode: 'cors',
                     method: 'POST'
                 })
-                    .then((response) => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw new Error('Network response was not ok');
-                    })
-                    .then((json) => {
-                        this.posts = json;
-                        this.winners = json;
-                        //                    console.log(this.posts);
-                    })
-                    .catch((error) => {
-                        //                    this.errors = error;
-                        console.log('FormLogin', error);
-                    });
+                        .then((response) => {
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Network response was not ok');
+                        })
+                        .then((json) => {
+                            this.posts = json;
+                            this.winners = json;
+                            //                    console.log(this.posts);
+                        })
+                        .catch((error) => {
+                            //                    this.errors = error;
+                            console.log('FormLogin', error);
+                        });
             },
             setPages() {
                 this.pages = [];
