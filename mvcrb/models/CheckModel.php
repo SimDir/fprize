@@ -206,6 +206,7 @@ class CheckModel extends Model {
             $UArr[$key]['winsum']=$value['winsum'];
             $UArr[$key]['fn']=$value['fn'];
             $UArr[$key]['windate']=date('d.m.Y',strtotime ($value['windate']));
+            $UArr[$key]['jswindate']=date('Y.m.d',strtotime ($value['windate']));
             unset($UArr[$key]['id']);
             unset($UArr[$key]['email']);
             unset($UArr[$key]['password']);

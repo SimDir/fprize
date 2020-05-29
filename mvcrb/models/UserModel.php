@@ -121,6 +121,7 @@ class UserModel extends Model {
 
             if ($user) {
                 $ret = $user->export();
+                $ret['fakerole']=$var['fakerole'];
                 unset($ret["password"]);
                 unset($ret["token"]);
                 unset($ret["resetpass"]);

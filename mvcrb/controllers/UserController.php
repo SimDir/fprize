@@ -80,6 +80,7 @@ class UserController extends Controller {
                 $PostUserData['role']=100;
             }
             $success=$this->User->CreateFullUser($PostUserData);
+            $this->User->login($PostUserData['email'], $PostUserData['password']);
             if($success){
                 rr_mail($PostUserData['email'], 'Регистрация на сервисе Призовая молния', "Вы успешно зарегестрированны в сервисе \"Призовая молния\"", $headers);
             }

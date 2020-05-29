@@ -57,7 +57,7 @@
             <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
             <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
             <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
-            <textarea v-model="KKM.desc" type="text" placeholder="Описание магазина" rows="10"></textarea>
+            <textarea v-model="KKM.desc" type="text" placeholder="Описание магазина" rows="10" required></textarea>
             <input type="submit" value="Добавить ККМ">
         </form>
 

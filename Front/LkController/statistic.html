@@ -3,9 +3,10 @@
     <div id="winnersw">
         <div class="winners__header winners__header-lk">
             <div class="winners__header__btn_wrap">
-                <button class="winners__header__btn">за сегодня</button>
-                <button class="winners__header__btn">за неделю</button>
+                <button @click="FilterWinersNow" class="winners__header__btn">за сегодня</button>
+                <button @click="FilterWinersWeek" class="winners__header__btn">за неделю</button>
                 <button @click="posts = winners" class="winners__header__btn">за месяц</button>
+                <!--<button class="winners__header__btn">все</button>-->
             </div>
             <form @submit="FindPhone" class="winners__header__form form-winners">
                 <!--<input type="date" value="2020-04-10">-->
@@ -106,6 +107,38 @@
             this.getwiners();
         },
         methods: {
+            FilterWinersWeek(){
+                //e.preventDefault();
+                var now = new Date();
+                now.setDate(now.getDate() - 7);
+                var nd = now.valueOf();
+                let fp = _.filter(this.winners, (o) => {
+                    var fday = new Date(o.jswindate);
+//                    console.log(fday,o.jswindate);
+                    if (fday.valueOf() > nd) { 
+                        return o;
+                    }
+                    //return o.phone == this.findPhone; 
+                });
+                //                this.posts =[];
+                this.posts = fp;
+            },
+            FilterWinersNow(e){
+                e.preventDefault();
+                var now = new Date();
+//                now.setDate(now.getDate() - 7);
+                var nd = now.valueOf();
+                let fp = _.filter(this.winners, (o) => {
+                    var fday = new Date(o.jswindate);
+//                    console.log(fday,o.jswindate);
+                    if (fday.valueOf() > nd) { 
+                        return o;
+                    }
+                    //return o.phone == this.findPhone; 
+                });
+                //                this.posts =[];
+                this.posts = fp;
+            },
             FindPhone(e) {
                 e.preventDefault();
                 let fp = _.filter(this.winners, (o) => {
@@ -132,7 +165,8 @@
                         .then((json) => {
                             this.posts = json;
                             this.winners = json;
-                            //                    console.log(this.posts);
+                            this.FilterWinersWeek();
+                            console.log(this.posts);
                         })
                         .catch((error) => {
                             //                    this.errors = error;

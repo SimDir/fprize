@@ -32,7 +32,7 @@
         <!-- /.content-dataChange__titles -->
         <form @submit="SaveIm" class="content-dataChange__form">
             <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
-            <input v-model="CurrentUser.inn" :minlength="10" :maxlength="10" type="text" placeholder="7731347089" required>
+            <input v-model="CurrentUser.inn" :minlength="12" :maxlength="10" type="text" placeholder="7731347089" required>
             <input v-model="CurrentUser.kpp" :minlength="9" :maxlength="9" type="text" placeholder="7731347089">
             <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="13" type="text" placeholder="1177746126040" required>
             <input v-model="CurrentUser.juraddress" type="text" placeholder="Ленина 9" required>

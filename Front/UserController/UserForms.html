@@ -12,19 +12,14 @@
         </h2>
     </header>
     <!-- /.headerReg -->
-    <div class="d-flex justify-content-center">
-        <main v-if="errors" class="alert alert-danger" style="width: 500px;">
-        <strong>Ошибка!</strong> {{errors}}
-<!--        <h5 class="alert-heading mr-5">Что-то пошло не так!</h5>
-        <p class="mb-0">{{errors}}</p><br>-->
-<!--        <button @click="SetError(false)" type="button" class="close">
-            <span aria-hidden="true">Закрыть</span>
-        </button>-->
-        <button @click="SetError(false)" type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+    <div class="d-flex justify-content-center position-absolute">
+        <main v-if="errors" class="alert alert-danger mt-5" style="width: 500px;">
+            <strong>Ошибка!</strong> {{errors}}
+            <button @click="SetError(false)" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
 
-    </main>
+        </main>
     </div>
     <main v-show="state==='Login'" class="mainReg">   
         <form action="" class="mainAuth-form" @submit="UserLogin">
@@ -53,8 +48,8 @@
         <form action="" class="mainReg-form" @submit="UserRegistre">
             <h6 class="mainReg-form__title">Личные данные</h6>
             <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
-                <span>Фамилия</span>
-                <input v-model="CurrentUser.surname" type="text">
+                <span>Фамилия *</span>
+                <input v-model="CurrentUser.surname" type="text" required>
             </label> 
             <!-- /.mainReg-iput--wrap -->
             <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
@@ -62,46 +57,52 @@
                 <input v-model="CurrentUser.firstname" type="text">
             </label> 
             <!-- /.mainReg-iput--wrap -->
-            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
+<!--            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
                 <span>Отчество</span>
                 <input v-model="CurrentUser.lastname" type="text">
-            </label> 
+            </label> -->
             <!-- /.mainReg-iput--wrap -->
             <label for="" class="mainReg-for__input--wrap">
-                <span>Телефон</span>
+                <span>Телефон *</span>
                 <input v-model="CurrentUser.phone" type="tel" pattern="(\+?\d[- .]*){7,13}" required placeholder="+79998887777">
             </label> 
             <!-- /.mainReg-iput--wrap -->
             <label for="" class="mainReg-for__input--wrap">
-                <span>E-mail</span>
+                <span>E-mail *</span>
                 <input v-model="CurrentUser.email" type="email" required placeholder="name@server.com">
             </label> 
             <!-- /.mainReg-iput--wrap -->
             <label for="" class="mainReg-for__input--wrap">
-                <span>Пароль</span>
+                <span>Пароль *</span>
                 <input v-model="CurrentUser.password" type="password" required>
             </label> 
             <!-- /.mainReg-iput--wrap -->
             <label for="" class="mainReg-for__input--wrap">
-                <span>Подтвердите пароль</span>
+                <span>Подтвердите пароль *</span>
                 <input v-model="CurrentUser.fpassword" type="password" required>
             </label> 
             <!-- /.mainReg-iput--wrap -->
-            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
-                <span>Укажите ваш пол</span>
+<!--            <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
+                <span>Укажите ваш пол *</span>
                 <select v-model="CurrentUser.sex" name="" id="" required>
                     <option value="male">Мужской</option>
                     <option value="female">Женский</option>
                 </select>
-            </label> 
+            </label> -->
+
             <!-- /.mainReg-iput--wrap -->
             <label v-if="usertype=='client'" for="" class="mainReg-for__input--wrap">
                 <span>Дата рождения</span>
                 <input v-model="CurrentUser.birthday" type="date">
             </label> 
+            <div class="text-left">
+                <h5>* обязательные поля</h5>
+            </div>
+            
             <!-- /.mainReg-iput--wrap -->
             <input :disabled="CurrentUser.fpassword===''" type="submit" value="Регистрация">
         </form>
+        
         <!-- mainReg-form -->
     </main>
     <div class="d-flex justify-content-center">
@@ -136,15 +137,15 @@
             },
             SetError(err) {
                 this.errors = err;
-                this.state = this.defstate;
+//                this.state = this.defstate;
             },
             UserRegistre(e) {
                 e.preventDefault();
                 this.errors = false;
-                this.state = false;
+//                this.state = false;
                 if (this.CurrentUser.password !== this.CurrentUser.fpassword) {
                     this.errors = "В веденные пароли не совпадают";
-                    this.state = 'error';
+//                    this.state = 'error';
                     return false;
                 }
                 fetch('/user/registre', {
@@ -165,7 +166,7 @@
                         .then((json) => {
                             if (json.Error) {
                                 this.errors = json.Error;
-                                this.state = 'error';
+//                                this.state = 'error';
                                 setTimeout(() => {
                                     this.state = this.defstate;
                                     this.errors =false;
@@ -173,7 +174,10 @@
                             } else if (json.Success !== 0) {
 //                    console.log(json);
                                 this.state = 'Success';
-//                    window.location.href='/user';
+                                setTimeout(() => {
+                                    window.location.href='/lk';
+                                }, 3000);
+                    
                             }
 
                             console.log(json);
@@ -188,7 +192,7 @@
             UserLogin(e) {
                 e.preventDefault();
                 this.errors = false;
-                this.state = false;
+//                this.state = false;
                 var SendUser = {email: this.CurrentUser.email, password: this.CurrentUser.password};
                 fetch('/user/login', {
                     mode: 'cors',
@@ -214,7 +218,11 @@
                                 this.CurrentUser.password = '';
                                 this.Forgot = true;
                                 this.errors = 'Неверное имя пользователя или пароль';
-                                this.state = 'error';
+//                                this.state = 'error';
+                                setTimeout(() => {
+                                    this.state = this.defstate;
+                                    this.errors =false;
+                                }, 3000);
                             }
                         })
                         .catch((error) => {

@@ -139,11 +139,25 @@ class LkController extends Controller {
         $this->View->content = $this->View->execute('AdminWraper.html');
         return $this->View->execute('index.html', TEMPLATE_DIR);
     } 
+    public function ClientlkAction() {
+        Session::init();
+        $curUser = $this->User->GetCurrentUser();
+        $curUser['fakerole']=!$curUser['fakerole'];
+        Session::set('LoggedUser', $curUser);
+        
+        $curUser = $this->User->GetCurrentUser();
+        
+//        dd($curUser);
+//        $this->View->admincontent = $this->View->execute('statistic.html');
+//        $this->View->content = $this->View->execute('AdminWraper.html');
+//        return $this->View->execute('index.html', TEMPLATE_DIR);
+        return mvcrb::Redirect('/lk');
+    }
     public function IndexAction() {
         $curUser = $this->User->GetCurrentUser();
 //        dd($this->View);
         if($curUser['role']==100){
-            $this->View->admincontent = $this->View->execute('client.html');
+            $this->View->admincontent = $this->View->execute('statistic.html');
         }elseif($curUser['role']==300){
             $this->View->admincontent = $this->View->execute('partner.html');
         }elseif($curUser['role']==500){
@@ -207,10 +221,11 @@ class LkController extends Controller {
         $curUser = $this->User->GetCurrentUser();
         if ($curUser['role'] == 100) {
             $Data = [
-                ['id' => '1', 'parent' => '0', 'name' => 'КАРТОЧКА УЧАСТНИКА', 'src' => '/lk', 'class' => 'fas fa-home'],
+                ['id' => '1', 'parent' => '0', 'name' => 'СТАТИСТИКА РОЗЫГРЫШЕЙ', 'src' => '/lk/statistic', 'class' => 'far fa-file'],
+                ['id' => '3', 'parent' => '0', 'name' => 'КАРТОЧКА УЧАСТНИКА', 'src' => '/lk/user', 'class' => 'fas fa-home'],
                 
 //                ['id' => '2', 'parent' => '0', 'name' => 'ЗАГРУЖЕННЫЕ ЧЕКИ', 'src' => '/lk/youchecs', 'class' => 'fas fa-users-cog'],
-                ['id' => '3', 'parent' => '0', 'name' => 'СТАТИСТИКА РОЗЫГРЫШЕЙ', 'src' => '/lk/statistic', 'class' => 'far fa-file'],
+                
 //                ['id' => '4', 'parent' => '0', 'name' => 'ДЕЙСТВУЮЩИЕ АКЦИИ', 'src' => '/lk/curaktions', 'class' => 'far fa-file'],
 //                ['id' => '5', 'parent' => '0', 'name' => 'Qr код сканер', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
                 ['id' => '6', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
@@ -226,14 +241,24 @@ class LkController extends Controller {
                 ['id' => '2', 'parent' => '0', 'name' => 'Карточка партнёра', 'src' => '/lk/', 'class' => 'fas fa-users-cog'],
                 ['id' => '3', 'parent' => '0', 'name' => 'Точки продаж и ККМ', 'src' => '/lk/kkm', 'class' => 'far fa-file'],
                 ['id' => '4', 'parent' => '0', 'name' => 'Статистика по чекам', 'src' => '/lk/checkspartner', 'class' => 'fas fa-home'],
-//                ['id' => '4', 'parent' => '0', 'name' => 'Карта партнёров', 'src' => '/lk/map', 'class' => 'far fa-file'],
+                ['id' => '4', 'parent' => '0', 'name' => 'Карта партнёров', 'src' => '/lk/map', 'class' => 'far fa-file'],
 //                ['id' => '5', 'parent' => '0', 'name' => 'СТАТИСТИКА ПО ЧЕКАМ', 'src' => '/lk/chekstat', 'class' => 'fas fa-calculator'],
-//                ['id' => '6', 'parent' => '0', 'name' => 'ПОБЕДИТЕЛИ', 'src' => '/lk/winers', 'class' => 'fas fa-calculator'],
+                ['id' => '6', 'parent' => '0', 'name' => 'ПОБЕДИТЕЛИ', 'src' => '/lk/statistic', 'class' => 'fas fa-calculator'],
 //                ['id' => '7', 'parent' => '0', 'name' => 'ПАКЕТЫ ЧЕКОВ', 'src' => '/lk/cheks', 'class' => 'fas fa-calculator'],
 //                ['id' => '8', 'parent' => '0', 'name' => 'АКЦИИ', 'src' => '/lk/akci', 'class' => 'fas fa-calculator'],
 //                ['id' => '9', 'parent' => '0', 'name' => 'УЧАСТНИКИ','src'=>'/lk/users','class'=>'fas fa-calculator'],
                 ['id' => '10', 'parent' => '0', 'name' => 'КАРТА ПАРТНЕРОВ','src'=>'/lk/map','class'=>'fas fa-calculator']
             ];
+            if($curUser['fakerole']){
+//            $fData = [                
+//                
+//                ];
+            $Data= [['id' => '1', 'parent' => '0', 'name' => 'СТАТИСТИКА РОЗЫГРЫШЕЙ', 'src' => '/lk/statistic', 'class' => 'far fa-file'],
+                ['id' => '3', 'parent' => '0', 'name' => 'КАРТОЧКА УЧАСТНИКА', 'src' => '/lk/user', 'class' => 'fas fa-home'],
+                ['id' => '6', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
+                ['id' => '7', 'parent' => '0', 'name' => 'Правила участия', 'src' => '/lk/helps', 'class' => 'fas fa-calculator']];
+            }
+            
             return $Data;
         } elseif ($curUser['role'] == 500) {
             $Data = [
@@ -252,6 +277,7 @@ class LkController extends Controller {
                 ['id' => '5', 'parent' => '0', 'name' => 'Чеки', 'src' => '/lk/checkspartner', 'class' => 'fas fa-home'],
                 ['id' => '6', 'parent' => '0', 'name' => 'Карта партнёров', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
                 ['id' => '7', 'parent' => '0', 'name' => 'Сканер кода', 'src' => '/lk/qrkodreder', 'class' => 'fas fa-calculator'],
+                ['id' => '8', 'parent' => '0', 'name' => 'Победители', 'src' => '/lk/statistic', 'class' => 'far fa-file']
             ];
             return $Data;
         }
