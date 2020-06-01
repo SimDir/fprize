@@ -15,7 +15,15 @@ class LkController extends Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->User = new UserModel();
+        Session::init();
+        $var = Session::get('LoggedUser');
+//        dd($var);
+        if($var['role'] < 300){
+            $this->User = new ClientModel();
+        }else{
+            $this->User = new UserModel();
+        }
+//        $this->User = new UserModel();
         if ($this->User->GetCurrentUser()['role'] < 100) {
             if ($this->POST) {
                 if (!headers_sent()) {
