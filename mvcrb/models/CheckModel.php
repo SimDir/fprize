@@ -194,10 +194,21 @@ class CheckModel extends Model {
         $time = strtotime(date('Y-m-d'));
         $final = date("Y-m-d", strtotime("-30 day", $time));
         $retC = file_get_contents('http://mylightning.ru/admin/m_request.php?reg=get&table=checks&win=1&windate:left='.$final.'&windate:right='.date('Y-m-d').'&ORDER=-windate&key='.$ret["key"].'&user='.$ret["id"]);
+        if(!$retC){
+            $MyTable = $this->findAll('winers');
+            $MyUArr=[];
+            foreach ($MyTable as $key => $value) {
+                $MyUArr[]=$value;
+                
+            }
+            return $MyUArr;
+        }
+//        dd($retC);
+        
         $retC = str_replace('ok:','',$retC);
         
         $retC = json_decode($retC, true, 512, JSON_BIGINT_AS_STRING)["result"];
-        dd($retC);
+        
         $UArr=[];
         foreach ($retC as $key => $value) {
             $retL = file_get_contents('http://mylightning.ru/admin/m_request.php?key=' . $ret["key"] . '&reg=get&table=users&id='.$value['parent_users'].'&user=' . $ret["id"]);
@@ -219,16 +230,18 @@ class CheckModel extends Model {
             unset($UArr[$key]['birthday']);
             unset($UArr[$key]['party_name']);
             
-//            dd($retL);
+//            dd($value);
+//            $this->wipe('winers');
 //            $Table = $this->Dispense('winers');
 //            $Table->name = $retL["name"];
 //            $Table->phone = $retL["phone"];
 //            $Table->winsum = $value["winsum"];
+//            $Table->qr = $value["qr"];
 //            $Table->fn = $value["fn"];
 //            $Table->windate = date('d.m.Y',strtotime ($value['windate']));
 //            $Table->jswindate = date('Y.m.d',strtotime ($value['windate']));
 //            $Table->createdatetime = date('Y-m-d H:i:s');
-//        
+//            $Table->fphone ='+7*****'.substr($UArr[$key]['phone'],-4);
 //            $this->store($Table);
 
             $UArr[$key]['fphone']='+7*****'.substr($UArr[$key]['phone'],-4);
