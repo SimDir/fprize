@@ -8,7 +8,7 @@
         <div class="content-dataChange__titles">
             <span>Фамилия</span>
             <span>Имя</span>
-            <!--<span>Отчество</span>-->
+            <span>Отчество</span>
             <span>Телефон</span>
             <span>e-mail</span>
             <span>Укажите Ваш пол</span>
@@ -18,7 +18,7 @@
         <form @submit="SaveIm" class="content-dataChange__form">
             <input v-model="CurrentUser.surname" type="text" placeholder="Красильников">
             <input v-model="CurrentUser.firstname" type="text" placeholder="Константин">
-            <!--<input v-model="CurrentUser.lastname" type="text" placeholder="Сергеевич">-->
+            <input v-model="CurrentUser.lastname" type="text" placeholder="Сергеевич">
             <input v-model="CurrentUser.phone" type="tel" placeholder="+7(999) 999 99 99">
             <input v-model="CurrentUser.email" type="email" placeholder="example@email.com">
             <select v-model="CurrentUser.sex" name="" id="">
@@ -48,7 +48,7 @@
         },
         methods: {
             UserGetIm() {
-                fetch('/client/api/get', {
+                fetch('/user/api/get', {
                     mode: 'cors',
                     method: 'POST'
                 })
@@ -69,7 +69,7 @@
             },
             SaveIm(e) {
                 e.preventDefault();
-                fetch('/client/api/save', {
+                fetch('/user/api/save', {
                     mode: 'cors',
                     method: 'POST',
                     body: JSON.stringify(this.CurrentUser)

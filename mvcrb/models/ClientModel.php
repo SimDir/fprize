@@ -56,7 +56,7 @@ class ClientModel extends Model {
     public function GetPartnerList($PostData = null) {
         $start = $PostData->start ? $PostData->start : 0;
         $limit = $PostData->limit ? $PostData->limit : 10;
-        $List['count'] = $this->count($this->TableName,'WHERE role = 300');
+        $List['count'] = $this->count($this->TableName,'WHERE role = 100');
         if (isset($PostData->data) && $PostData->data !== '') {
             $order['data'] = $PostData->data;
             $order['dir'] = $PostData->dir;
@@ -65,9 +65,9 @@ class ClientModel extends Model {
         }
 
         if (is_array($order)) {
-            $tempbean = $this->findAll($this->TableName, 'WHERE role = 300 ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
+            $tempbean = $this->findAll($this->TableName, 'WHERE role = 100 ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
         } else {
-            $tempbean = $this->findAll($this->TableName, 'WHERE role = 300 LIMIT ' . $start . ', ' . $limit);
+            $tempbean = $this->findAll($this->TableName, 'WHERE role = 100 LIMIT ' . $start . ', ' . $limit);
         }
 
         if ($tempbean) {

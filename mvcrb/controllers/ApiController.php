@@ -94,8 +94,15 @@ class ApiController extends Controller{
         if(!$func){
             return ['Error' => "method not set"];
         }
-        
-        $User = new UserModel();
+        Session::init();
+        $var = Session::get('LoggedUser');
+//        dd($var);
+        if ($var['role'] < 300) {
+            $User = new ClientModel();
+        } else {
+            $User = new UserModel();
+        }
+//        $User = new UserModel();
         $PostData = json_decode($this->REQUEST,true);
         switch ($func) {
             case 'GetAccessToken':

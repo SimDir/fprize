@@ -22,7 +22,7 @@ class CheckModel extends Model {
     public function Temp() {
         // Временная функция просто подогнал старые данные под новый формат. 
 //        $tempbean = $this->getAll('SELECT * FROM `check` WHERE user_id IS NULL');
-        $tempbean = $this->findAll($this->TableName,'WHERE user_id IS NULL');
+        $tempbean = $this->findAll($this->TableName,'WHERE client_id IS NULL');
         foreach ($tempbean as $value) {
             preg_match("/fn=(\w+)/", $value->qr, $fn);
             $value->fn = $fn[1];
@@ -44,11 +44,11 @@ class CheckModel extends Model {
         }
 
         if (is_array($order)) {
-            $tempbean = $this->getAll('SELECT `user`.id,`user`.surname,`user`.firstname,`user`.lastname,`check`.user_id,`check`.fn,`check`.qr,`check`.createdatetime FROM `user`,`check` WHERE `user`.id = `check`.user_id ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
+            $tempbean = $this->getAll('SELECT `user`.id,`user`.surname,`user`.firstname,`user`.lastname,`check`.client_id,`check`.fn,`check`.qr,`check`.createdatetime FROM `user`,`check` WHERE `user`.id = `check`.client_id ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
 //            dd($tempbean);
             //$tempbean = $this->findAll($this->TableName, ' ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
         } else {
-            $tempbean = $this->getAll('SELECT `user`.id,`user`.surname,`user`.firstname,`user`.lastname,`check`.user_id,`check`.fn,`check`.qr,`check`.createdatetime FROM `user`,`check` WHERE `user`.id = `check`.user_id LIMIT '. $start . ', ' . $limit);
+            $tempbean = $this->getAll('SELECT `user`.id,`user`.surname,`user`.firstname,`user`.lastname,`check`.client_id,`check`.fn,`check`.qr,`check`.createdatetime FROM `user`,`check` WHERE `user`.id = `check`.client_id LIMIT '. $start . ', ' . $limit);
             //$tempbean = $this->findAll($this->TableName, ' LIMIT ' . $start . ', ' . $limit);
         }
 //        dd($tempbean);
@@ -72,9 +72,9 @@ class CheckModel extends Model {
             $order = null;
         }
         if (is_array($order)) {
-            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`user_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`user_id`='.$id.' ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
+            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`client_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`client_id`='.$id.' ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
         } else {
-            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`user_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`user_id`='.$id.' LIMIT ' . $start . ', ' . $limit);
+            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`client_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`client_id`='.$id.' LIMIT ' . $start . ', ' . $limit);
         }
         if ($tempbean) {
             $List['data'] = $tempbean;
@@ -84,7 +84,7 @@ class CheckModel extends Model {
         return FALSE;
     }
     public function CheckCount(int$id = 0) {
-        return $this->getAll('SELECT count(*) as CheckCount FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`user_id`=' . $id)[0]['CheckCount'];
+        return $this->getAll('SELECT count(*) as CheckCount FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`client_id`=' . $id)[0]['CheckCount'];
     }
 
     public function Add($Data = null) {
@@ -124,7 +124,7 @@ class CheckModel extends Model {
         if($Ret){
             return ['Error'=>'check has already been added. Такой чек уже добавлен'];
         }
-        $User = $this->load( 'user' ,$UserId);
+        $User = $this->load( 'client' ,$UserId);
 
         $Table = $this->Dispense($this->TableName);
 //        $Table->userid = $UserId;

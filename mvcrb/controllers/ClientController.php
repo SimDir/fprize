@@ -168,10 +168,10 @@ class ClientController extends Controller {
                 $curUserId = $User->ChangeDataUser($User->GetCurrentUser()['id'],json_decode($this->REQUEST,true));
                 return ['success'=>$curUserId];
             case 'getpartner': 
-                $cu = $User->GetCurrentUser();
-                if ($cu['role'] < 500) {
-                    return ['error' => 'access denied for user'];
-                }
+//                $cu = $User->GetCurrentUser();
+//                if ($cu['role'] < 500) {
+//                    return ['error' => 'access denied for user'];
+//                }
                 return $User->GetPartnerList(json_decode($this->REQUEST));
             case 'sendmailbyparner': 
                 $cu = $User->GetCurrentUser();
