@@ -18,8 +18,8 @@
     <div class="content-dataChange">
         
         <!--<button @click="state=0" type="button" class="btn btn-secondary">Личные данные</button>-->
-        <button @click="state=1" type="button" class="btn btn-purple-lk">Список ваших ККМ</button>
-        <button @click="state=2" type="button" class="btn btn-purple-lk">Добавить ККМ</button>
+        <button @click="state=1" type="button" class="btn btn-purple-lk btn-kkm">Список ваших ККМ</button>
+        <button @click="state=2" type="button" class="btn btn-purple-lk btn-kkm">Добавить ККМ</button>
     </div>
     <div v-if="state==1" class="content-dataChange">
         <table class="table table-lk">
@@ -34,8 +34,8 @@
             <tbody>
                 <tr v-for="item in KkmList">
                     <th scope="row table-row-lk-kkm">
-                        <button @click="setEditKkm(item)" type="button" title="Изменить" class="btn btn-purple-lk"><i class="far fa-edit"></i></button>
-                        <button @click="DelKkm(item.id)" type="button" title="Удалить" class="btn btn-yellow-lk"><i class="far fa-trash-alt"></i></button>
+                        <button @click="setEditKkm(item)" type="button" title="Изменить" class="btn btn-purple-lk btn-kkm-table"><i class="far fa-edit"></i></button>
+                        <button @click="DelKkm(item.id)" type="button" title="Удалить" class="btn btn-yellow-lk btn-kkm-table"><i class="far fa-trash-alt"></i></button>
                     </th>
                     <td>{{ item.address }}</td>
                     <td>{{ item.name }}</td>

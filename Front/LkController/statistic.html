@@ -1,100 +1,96 @@
-<section id="winners">
 
-    <div id="winnersw">
-        <div class="winners__header winners__header-lk">
-            <div class="winners__header__btn_wrap">
-                <button @click="FilterWinersNow" class="winners__header__btn">за сегодня</button>
-                <button @click="FilterWinersWeek" class="winners__header__btn">за неделю</button>
-                <button @click="posts = winners" class="winners__header__btn">за месяц</button>
-                <!--<button class="winners__header__btn">все</button>-->
-            </div>
-            <form @submit="FindPhone" class="winners__header__form form-winners">
-                <!--<input type="date" value="2020-04-10">-->
-                <div class="form-winners__search">
-                    <input v-model="findPhone" @keyup="FindPhone" type="tel"
-                           placeholder="Проверить статус по номеру телефона...">
-                    <input type="submit" value="">
+        <div id="winnersw" class="winners">
+            <div class="winners__header winners__header-lk">
+                <div class="winners__header__btn_wrap">
+                    <button @click="FilterWinersNow" class="winners__header__btn">за сегодня</button>
+                    <button @click="FilterWinersWeek" class="winners__header__btn">за неделю</button>
+                    <button @click="posts = winners" class="winners__header__btn">за месяц</button>
+                    <!--<button class="winners__header__btn">все</button>-->
                 </div>
-            </form>
-        </div>
-        <!--            <form @submit="FindPhone" class="winners-top">
-                <label for="checktel">Проверить свой номер телефона</label>
-                <input v-model="findPhone" @keyup="FindPhone" type="tel" id="checktel" placeholder="Номер вашего телефона">
-                <input type="submit" value="">
-            </form>-->
-        <!-- /.winners-top -->
-        <div class="winners__content winners__content-lk">
-            <!--                <div class="winners-content__top">
-                    <button @click="posts = winners" class="active">Все призы за последнии 30 дней</button>
-                     <button>джекпот</button> 
-                 </div>-->
-            <!-- /.winners-content__top -->
-
-            <table v-show="posts.length>=1" class="table-winners">
-                <!--                    <thead>
+                <form @submit="FindPhone" class="winners__header__form form-winners">
+                    <!--<input type="date" value="2020-04-10">-->
+                    <div class="form-winners__search">
+                        <input v-model="findPhone" @keyup="FindPhone" type="tel"
+                               placeholder="Проверить статус по номеру телефона...">
+                        <input type="submit" value="">
+                    </div>
+                </form>
+            </div>
+            <!--            <form @submit="FindPhone" class="winners-top">
+                    <label for="checktel">Проверить свой номер телефона</label>
+                    <input v-model="findPhone" @keyup="FindPhone" type="tel" id="checktel" placeholder="Номер вашего телефона">
+                    <input type="submit" value="">
+                </form>-->
+            <!-- /.winners-top -->
+            <div class="winners__content winners__content-lk">
+                <!--                <div class="winners-content__top">
+                        <button @click="posts = winners" class="active">Все призы за последнии 30 дней</button>
+                         <button>джекпот</button> 
+                     </div>-->
+                <!-- /.winners-content__top -->
+    
+                <table v-show="posts.length>=1" class="table-winners">
+                    <!--                    <thead>
+                            <tr class="table-winners__title">
+                                <th>Дата</th>
+                                <th style=" border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">Имя участника</th>
+                                <th>Сумма</th>
+                                <th>Телефон</th>
+                            </tr>
+                        </thead>-->
+                    <tbody>
                         <tr class="table-winners__title">
                             <th>Дата</th>
-                            <th style=" border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">Имя участника</th>
-                            <th>Сумма</th>
-                            <th>Телефон</th>
+                            <th style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
+                                Имя участника
+                            </th>
+                            <th style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
+                                Сумма
+                            </th>
+                            <th>
+                                Телефон
+                            </th>
                         </tr>
-                    </thead>-->
-                <tbody>
-                    <tr class="table-winners__title">
-                        <th>Дата</th>
-                        <th style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
-                            Имя участника
-                        </th>
-                        <th style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
-                            Сумма
-                        </th>
-                        <th>
-                            Телефон
-                        </th>
-                    </tr>
-                    <tr v-for="item in displayedPosts">
-                        <td style="border-right: 1px solid #B2B2B2; ">
-                            {{ item.windate }}
-                        </td>
-                        <td style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
-                            {{ item.name }}
-                        </td>
-                        <td style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
-                            {{ item.winsum }}
-                        </td>
-                        <td style=" border-left: 1px solid #B2B2B2;">
-                            {{ item.fphone }}
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-            <div v-show="posts.length<1">
-                <h4>Номер не найден</h4>
+                        <tr v-for="item in displayedPosts">
+                            <td style="border-right: 1px solid #B2B2B2; ">
+                                {{ item.windate }}
+                            </td>
+                            <td style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
+                                {{ item.name }}
+                            </td>
+                            <td style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
+                                {{ item.winsum }}
+                            </td>
+                            <td style=" border-left: 1px solid #B2B2B2;">
+                                {{ item.fphone }}
+                            </td>
+                        </tr>
+    
+                    </tbody>
+                </table>
+                <div v-show="posts.length<1">
+                    <h4>Номер не найден</h4>
+                </div>
+                <!-- /.winners-content__table -->
+    
             </div>
-            <!-- /.winners-content__table -->
-
+            <!-- /.winners-content -->
+            <div class="winners__paginations">
+                <!--<button class="active">1</button>-->
+                <button class=" winners__paginations__item" type="button"
+                        v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
+    
+                <!--                    <button type="button"  v-if="page != 1" @click="page--"> << </button>
+                    <button type="button"  v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
+                    <button type="button" @click="page++" v-if="page < pages.length" > >> </button>-->
+            </div>
+            <!-- /.winners-content__bottom -->
         </div>
-        <!-- /.winners-content -->
-        <div class="winners__paginations">
-            <!--<button class="active">1</button>-->
-            <button class=" winners__paginations__item" type="button"
-                    v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
-
-            <!--                    <button type="button"  v-if="page != 1" @click="page--"> << </button>
-                <button type="button"  v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
-                <button type="button" @click="page++" v-if="page < pages.length" > >> </button>-->
-        </div>
-        <!-- /.winners-content__bottom -->
-    </div>
-
-
-    <!-- /.winners -->
-</section>
+   
 
 <script type="text/javascript">
     var winners = new Vue({
-        el: '#winners',
+        el: '#winnersw',
         data: {
             winners: {},
             posts: [],
