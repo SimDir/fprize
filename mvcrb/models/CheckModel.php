@@ -72,9 +72,9 @@ class CheckModel extends Model {
             $order = null;
         }
         if (is_array($order)) {
-            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`client_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`client_id`='.$id.' ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
+            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`client_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`user_id`='.$id.' ORDER BY ' . $order['data'] . ' ' . $order['dir'] . ' LIMIT ' . $start . ', ' . $limit);
         } else {
-            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`client_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`client_id`='.$id.' LIMIT ' . $start . ', ' . $limit);
+            $tempbean = $this->getAll('SELECT `check`.`createdatetime`,`check`.`qr`,`check`.`fn`,`check`.`client_id`,`kkm`.`id` FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`user_id`='.$id.' LIMIT ' . $start . ', ' . $limit);
         }
         if ($tempbean) {
             $List['data'] = $tempbean;
@@ -84,7 +84,7 @@ class CheckModel extends Model {
         return FALSE;
     }
     public function CheckCount(int$id = 0) {
-        return $this->getAll('SELECT count(*) as CheckCount FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`client_id`=' . $id)[0]['CheckCount'];
+        return $this->getAll('SELECT count(*) as CheckCount FROM `check` INNER JOIN `kkm` WHERE `check`.`fn`=`kkm`.`fn` AND `kkm`.`user_id`=' . $id)[0]['CheckCount'];
     }
 
     public function Add($Data = null) {
@@ -183,17 +183,21 @@ class CheckModel extends Model {
         ];
     }
     public function GetWiners() {
-        $client = new Client();
-        $response = $client->request('GET',
-                'http://mylightning.ru/admin/m_request.php?reg=login&name=AGATECH&password=G1mnSB', ['http_errors' => false]);
-//        $ret = '{'.file_get_contents('http://mylightning.ru/admin/m_request.php?reg=login&name=AGATECH&password=G1mnSB').'}';
-        $b = $response->getBody();
-        $ret = str_replace('ok:','',$b->getContents());
-        
-        $ret = json_decode($ret, true, 512, JSON_BIGINT_AS_STRING)["result"];
-        $time = strtotime(date('Y-m-d'));
+//        $client = new Client();
+//        $response = $client->request('GET',
+//                'http://mylightning.ru/admin/m_request.php?reg=login&name=AGATECH&password=G1mnSB', ['http_errors' => false]);
+////        $ret = '{'.file_get_contents('http://mylightning.ru/admin/m_request.php?reg=login&name=AGATECH&password=G1mnSB').'}';
+//        $b = $response->getBody();
+//        $ret = str_replace('ok:','',$b->getContents());
+//        
+//        $ret = json_decode($ret, true, 512, JSON_BIGINT_AS_STRING)["result"];
+//        $time = strtotime(date('Y-m-d'));
         $final = date("Y-m-d", strtotime("-30 day", $time));
-        $retC = file_get_contents('http://mylightning.ru/admin/m_request.php?reg=get&table=checks&win=1&windate:left='.$final.'&windate:right='.date('Y-m-d').'&ORDER=-windate&key='.$ret["key"].'&user='.$ret["id"]);
+//        $retC = file_get_contents('http://mylightning.ru/admin/m_request.php?reg=get&table=checks&win=1&windate:left='.$final.'&windate:right='.date('Y-m-d').'&ORDER=-windate&key='.$ret["key"].'&user='.$ret["id"]);
+        
+        // мега кастыль для того что бы брать победителей с сервера Опланет раскоментировать строки выше
+        $retC = false; // а эту закоментировать
+        
         if(!$retC){
             $MyTable = $this->findAll('winers',' WHERE windate > :windate',[ ':windate' => $final ]);
             $MyUArr=[];
@@ -259,10 +263,24 @@ class CheckModel extends Model {
         $Table->winsum = $param["winsum"];
         $Table->qr = $param["qr"];
         $Table->fn = $param["fn"];
-        $Table->windate = date('d.m.Y',strtotime ($param['windate']));
+        $Table->windate = date('Y-m-d',strtotime ($param['windate']));
         $Table->jswindate = date('Y.m.d',strtotime ($param['windate']));
         $Table->createdatetime = date('Y-m-d H:i:s');
         $Table->fphone ='+7*****'.substr($param['phone'],-4);
+        return $this->store($Table);
+    }
+    
+    public function AddTakedChek($param) {
+        $Table = $this->Dispense('takedchek');
+        $Table->name = $param["name"];
+        $Table->phone = $param["phone"];
+        $Table->winsum = $param["winsum"];
+        $Table->qr = $param["qr"];
+        $Table->fn = $param["fn"];
+        $Table->givindate = date('Y-m-d',strtotime ($param['givindate']));
+        $Table->jswindate = date('Y.m.d',strtotime ($param['windate']));
+        $Table->createdatetime = date('Y-m-d H:i:s');
+        //$Table->fphone ='+7*****'.substr($param['phone'],-4);
         return $this->store($Table);
     }
 }

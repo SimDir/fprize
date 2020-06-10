@@ -117,20 +117,20 @@
             <span>Фамилия</span>
             <span>Имя</span>
             <span>Отчество</span>
-            <span>Наименование</span>
+<!--            <span>Наименование</span>
             <span>ИНН</span>
             <span>КПП</span>
             <span>ОГРН</span>
             <span>Юридический адрес</span>
-            <span>Почтовый адрес</span>
+            <span>Почтовый адрес</span>-->
             <span>Телефон</span>
-            <span>Расчетный счет</span>
+<!--            <span>Расчетный счет</span>
             <span>Корреспондентский счет</span>
             <span>БИК банка</span>
-            <span>Банк</span>
+            <span>Банк</span>-->
             <span>E-mail</span>
-            <span>Должность</span>
-            <span>Директор</span>
+<!--            <span>Должность</span>
+            <span>Директор</span>-->
             <span>Статус</span>
         </div>
         <!-- /.content-dataChange__titles -->
@@ -138,24 +138,24 @@
             <input v-model="CurrentUser.surname" type="text" placeholder="Красильников">
             <input v-model="CurrentUser.firstname" type="text" placeholder="Константин">
             <input v-model="CurrentUser.lastname" type="text" placeholder="Сергеевич">
-            <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
+<!--            <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
             <input v-model="CurrentUser.inn" :minlength="10" :maxlength="10" type="text" placeholder="7731347089" required>
             <input v-model="CurrentUser.kpp" :minlength="9" :maxlength="9" type="text" placeholder="7731347089">
             <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="13" type="text" placeholder="1177746126040">
             <input v-model="CurrentUser.juraddress" type="text" placeholder="Ленина 9" required>
-            <input v-model="CurrentUser.postaddress" type="text" placeholder="Ленина 9">
+            <input v-model="CurrentUser.postaddress" type="text" placeholder="Ленина 9">-->
             <input v-model="CurrentUser.phone" :maxlength="13" pattern="(\+?\d[- .]*){7,13}" type="tel" placeholder="+7(999) 999 99 99" required>
-            <input v-model="CurrentUser.schet" :minlength="20" :maxlength="20" type="text" placeholder="40817810099910004312" required>
+<!--            <input v-model="CurrentUser.schet" :minlength="20" :maxlength="20" type="text" placeholder="40817810099910004312" required>
             <input v-model="CurrentUser.corschet" :minlength="20" :maxlength="20" type="text" placeholder="30101643600000000957" required>
             <input v-model="CurrentUser.bik" :minlength="9" :maxlength="9" type="text" placeholder="044583972">
-            <input v-model="CurrentUser.bankname" type="text" placeholder="Сбербанк" required>
+            <input v-model="CurrentUser.bankname" type="text" placeholder="Сбербанк" required>-->
             <input v-model="CurrentUser.email" minlength="5" type="email" placeholder="example@email.com" required>
-            <select v-model="CurrentUser.bosstype" name="" id="" required>
+<!--            <select v-model="CurrentUser.bosstype" name="" id="" required>
                 <option value="ip">ИП</option>
                 <option value="boss">Директор</option>
                 <option value="bigboss">Ген. директор</option>
             </select>
-            <input v-model="CurrentUser.bossname" type="text" placeholder="Красильников Константин Сергеевич" required>
+            <input v-model="CurrentUser.bossname" type="text" placeholder="Красильников Константин Сергеевич" required>-->
             <select v-model="CurrentUser.status" name="" id="" required>
                 <option value="bloked">Заблокирован</option>
                 <option value="noverefid">Не проверен</option>

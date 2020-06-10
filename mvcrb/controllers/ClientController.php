@@ -65,6 +65,7 @@ class ClientController extends Controller {
                     'X-Mailer: PHP/' . phpversion();
             
             $PostUserData = json_decode($this->REQUEST,true);
+//            file_put_contents(SITE_DIR.'log.txt', $this->REQUEST);
             if($this->User->ChekUserPhone($PostUserData['phone'])){
                 return ['Error'=>'Телефон уже используется'];
             }
@@ -72,13 +73,9 @@ class ClientController extends Controller {
                 return ['Error'=>'email уже занят'];
             }
             
-            if ($PostUserData['usertype']=='partner') {
-                $message = 'Зарегестрировался новый партнер с маил адресом ' . $PostUserData['email'] . PHP_EOL;
-                $PostUserData['role']=300;
-            } else {
-                $message = 'Зарегестрировался новый участник с маил адресом ' . $PostUserData['email'] . PHP_EOL;
+            $message = 'Зарегестрировался новый участник с маил адресом ' . $PostUserData['email'] . PHP_EOL;
                 $PostUserData['role']=100;
-            }
+            
             //http://194.58.100.110/admin/m_request.php?reg=reg&name=Test7373&password=123&email=serg-r73@ttttt.ru&phone=88888888888&gender=male&birthday=1990-06-14
             
             $client = new Client();

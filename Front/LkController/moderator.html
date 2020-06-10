@@ -129,9 +129,11 @@
             <span>БИК банка</span>
             <span>Банк</span>
             <span>E-mail</span>
+            <span>Колличество Чеков</span>
             <span>Должность</span>
             <span>Директор</span>
             <span>Статус</span>
+            
         </div>
         <!-- /.content-dataChange__titles -->
         <form @submit="SaveIm" class="content-dataChange__form">
@@ -150,6 +152,7 @@
             <input v-model="CurrentUser.bik" :minlength="9" :maxlength="9" type="text" placeholder="044583972">
             <input v-model="CurrentUser.bankname" type="text" placeholder="Сбербанк" required>
             <input v-model="CurrentUser.email" minlength="5" type="email" placeholder="example@email.com" required>
+            <input v-model="CurrentUser.kountchek" minlength="3" type="number" placeholder="50000" required>
             <select v-model="CurrentUser.bosstype" name="" id="" required>
                 <option value="ip">ИП</option>
                 <option value="boss">Директор</option>
@@ -163,6 +166,7 @@
                 <!--<option value="blue">Синий</option>-->
             </select>
             <input type="submit" value="Сохранить">
+            
             <input @click="state=0" type="button" value="Назад">
         </form>
     </div>

@@ -4,11 +4,9 @@
         <a href="/">
             <img src="/public/img/registration/logo.png" alt="logo">
         </a>
-        <h2 v-show="state==='Login'" class="headerReg-title">Авторизация</h2>
+        <h2 v-show="state==='Login'" class="headerReg-title">Авторизация Клиента</h2>
         <h2 v-show="state==='Registre'" class="headerReg-title">
-            Регистрация
-            <div v-if="usertype==='partner'"> Партнёра</div>
-            <div v-else> Клиента</div>
+            Регистрация Клиента
         </h2>
     </header>
     <!-- /.headerReg -->
@@ -117,7 +115,7 @@
         el: '#UserForms',
         data: {
             errors: false, Forgot: 1, usertype: "<{usertype}>",
-            CurrentUser: {email: "", password: "", fpassword: "", phone: "", usertype: "<{usertype}>", inn: ''},
+            CurrentUser: {surname:"",firstname:"", email: "", password: "", fpassword: "", phone: "", birthday: ""},
             state: '<{state}>', defstate: '<{state}>', msg: ''
         },
         created() {

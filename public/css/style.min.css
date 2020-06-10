@@ -1634,6 +1634,10 @@ template {
 .app-store {
     background: url(/public/img/app-store/app-store.png) 50% / contain no-repeat;
 }
+.app-store:hover{
+    /*box-shadow: 0 0 10px rgba(0,0,0,0.5);*/
+    border-radius: 30%;
+}
 .become-partner {
     width: 100%;
     display: flex;
@@ -2335,6 +2339,10 @@ template {
 }
 .google-play {
     background: url(/public/img/google-play/google-play.png) 50% / contain no-repeat;
+}
+.google-play:hover{
+    /*box-shadow: 0 0 10px rgba(0,0,0,0.5);*/
+    border-radius: 30%;
 }
 .frequent-requests {
     width: 100%;

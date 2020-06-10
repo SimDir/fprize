@@ -59,7 +59,7 @@ class LkController extends Controller {
         $this->View->useremail = $curUser['email'];
         $this->View->userrole=$curUser['role'];
         $cmodel = new CheckModel();
-        $this->View->checkcount = (1000-$cmodel->CheckCount($curUser['id']));
+        $this->View->checkcount = ($curUser['kountchek']-$cmodel->CheckCount($curUser['id']));
 //        dd($this->View->checkcount);
         $this->View->AddCss('/public/css/style_personalAccount.css');
         $this->View->AddCss('/public/css/style.min.css');
@@ -266,7 +266,7 @@ class LkController extends Controller {
 //                ['id' => '7', 'parent' => '0', 'name' => 'ПАКЕТЫ ЧЕКОВ', 'src' => '/lk/cheks', 'class' => 'fas fa-calculator'],
 //                ['id' => '8', 'parent' => '0', 'name' => 'АКЦИИ', 'src' => '/lk/akci', 'class' => 'fas fa-calculator'],
 //                ['id' => '9', 'parent' => '0', 'name' => 'УЧАСТНИКИ','src'=>'/lk/users','class'=>'fas fa-calculator'],
-                ['id' => '10', 'parent' => '0', 'name' => 'КАРТА ПАРТНЕРОВ','src'=>'/lk/map','class'=>'fas fa-calculator']
+//                ['id' => '10', 'parent' => '0', 'name' => 'КАРТА ПАРТНЕРОВ','src'=>'/lk/map','class'=>'fas fa-calculator']
             ];
             if($curUser['fakerole']){
 //            $fData = [                
