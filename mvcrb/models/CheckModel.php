@@ -195,7 +195,7 @@ class CheckModel extends Model {
         $final = date("Y-m-d", strtotime("-30 day", $time));
         $retC = file_get_contents('http://mylightning.ru/admin/m_request.php?reg=get&table=checks&win=1&windate:left='.$final.'&windate:right='.date('Y-m-d').'&ORDER=-windate&key='.$ret["key"].'&user='.$ret["id"]);
         if(!$retC){
-            $MyTable = $this->findAll('winers');
+            $MyTable = $this->findAll('winers',' WHERE windate > :windate',[ ':windate' => $final ]);
             $MyUArr=[];
             foreach ($MyTable as $key => $value) {
                 $MyUArr[]=$value;
@@ -238,7 +238,7 @@ class CheckModel extends Model {
 //            $Table->winsum = $value["winsum"];
 //            $Table->qr = $value["qr"];
 //            $Table->fn = $value["fn"];
-//            $Table->windate = date('d.m.Y',strtotime ($value['windate']));
+//            $Table->windate = date('Y-m-d',strtotime ($value['windate']));
 //            $Table->jswindate = date('Y.m.d',strtotime ($value['windate']));
 //            $Table->createdatetime = date('Y-m-d H:i:s');
 //            $Table->fphone ='+7*****'.substr($UArr[$key]['phone'],-4);
@@ -250,5 +250,19 @@ class CheckModel extends Model {
         
         
         return $UArr;
+    }
+    
+    public function AddWiners($param) {
+        $Table = $this->Dispense('winers');
+        $Table->name = $param["name"];
+        $Table->phone = $param["phone"];
+        $Table->winsum = $param["winsum"];
+        $Table->qr = $param["qr"];
+        $Table->fn = $param["fn"];
+        $Table->windate = date('d.m.Y',strtotime ($param['windate']));
+        $Table->jswindate = date('Y.m.d',strtotime ($param['windate']));
+        $Table->createdatetime = date('Y-m-d H:i:s');
+        $Table->fphone ='+7*****'.substr($param['phone'],-4);
+        return $this->store($Table);
     }
 }

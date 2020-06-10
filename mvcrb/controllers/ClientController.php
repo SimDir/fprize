@@ -3,7 +3,7 @@
 namespace mvcrb;
 
 defined('ROOT') OR die('No direct script access.');
-
+use GuzzleHttp\Client;
 /**
  * Description of UserController
  *  
@@ -79,6 +79,13 @@ class ClientController extends Controller {
                 $message = 'Зарегестрировался новый участник с маил адресом ' . $PostUserData['email'] . PHP_EOL;
                 $PostUserData['role']=100;
             }
+            //http://194.58.100.110/admin/m_request.php?reg=reg&name=Test7373&password=123&email=serg-r73@ttttt.ru&phone=88888888888&gender=male&birthday=1990-06-14
+            
+            $client = new Client();
+            $response = $client->request('GET',
+                'http://194.58.100.110/admin/m_request.php?reg=reg&name='.$PostUserData['email'].'&password='.$PostUserData['password'].'&email='.$PostUserData['email'].'&phone='.$PostUserData['phone'].'&gender=male&birthday='.$PostUserData['birthday'], ['http_errors' => false]);
+            $b = $response->getBody();
+            
             $success=$this->User->CreateFullUser($PostUserData);
             $this->User->login($PostUserData['email'], $PostUserData['password']);
             if($success){
@@ -94,7 +101,8 @@ class ClientController extends Controller {
             if (!$success) {
                 $success = error_get_last()['message'];
             }
-            return ['Success'=>$success];
+            return ['Success'=>$success,'oplanetResp'=>$b->getContents()];
+//            return ['Success'=>$success];
         }
         $this->View->title = 'Регистрация пользователя';
         $this->View->state = 'Registre';

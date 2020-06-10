@@ -1,13 +1,25 @@
 <div id="app">
     <div>Access Token = {{ AccessToken }}</div>
     <div>
-    <input v-model="user.email" placeholder="email">
-    <input v-model="user.password" placeholder="password">
-    <button v-on:click="GetAccessToken">Get Access Token</button>
+        <input v-model="user.email" placeholder="email">
+        <input v-model="user.password" placeholder="password">
+        <button v-on:click="GetAccessToken">Get Access Token</button>
     </div>
+    <hr>
     <div>
         <input v-model="QrCodeString" placeholder="Qr Code String">
         <button v-on:click="SetCheck">SetQrCodeString</button>
+    </div>
+    <hr>
+    <div>
+        <input v-model="Winers.email" placeholder="email"><br>
+        <input v-model="Winers.name" placeholder="name"><br>
+        <input v-model="Winers.qr" placeholder="qr"><br>
+        <input v-model="Winers.fn" placeholder="fn"><br>
+        <input v-model="Winers.phone" placeholder="phone"><br>
+        <input v-model="Winers.winsum" placeholder="winsum"><br>
+        <input type="date" v-model="Winers.windate" placeholder="windate"><br>
+        <button v-on:click="addWiners">addWiners</button>
     </div>
 </div>
 
@@ -17,7 +29,16 @@ var app = new Vue({
     data: {
         AccessToken: '',
         user:{email:'',password:''},
-        QrCodeString:''
+        QrCodeString:'',
+        Winers: {
+            email: "test@test.ru", 
+            name: "Test", 
+            qr: "t=20200220T1303&s=40.00&fn=9286000100218530&i=102188&fp=1269212860&n=1", 
+            fn: "9286000100218530", 
+            phone: "89372796383",
+            winsum: "999",
+            windate: "2020-06-11"
+        }
     },
     methods: {
     GetAccessToken() {
@@ -64,6 +85,25 @@ var app = new Vue({
                     console.log(json);
 //                }
 
+            })
+            .catch((error) => {
+                console.log('FormLogin', error);
+            });
+        },
+    addWiners(){
+        fetch( '/api/AddWiners',{
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify({AccessToken:this.AccessToken,winers:this.Winers})
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok');
+            })
+            .then((json) => {
+                console.log(json);
             })
             .catch((error) => {
                 console.log('FormLogin', error);
