@@ -163,7 +163,8 @@ class ApiController extends Controller{
 
     public function AddWinersAction($param=null) {
         $PostData = json_decode($this->REQUEST,true);
-        $AccessToken = '37d2178f9790ba259beff4e04cbf2fab8f3a712877388c0f91c9c3cd28e6cfe8';
+        $Config = new ConfigModel();
+        $AccessToken = $Config->GetSetting('MasterAdminToken');//'37d2178f9790ba259beff4e04cbf2fab8f3a712877388c0f91c9c3cd28e6cfe8';
         if($PostData['AccessToken']!==$AccessToken){
             return ['Error' => "Wrong Access Token"];
         }
@@ -173,7 +174,8 @@ class ApiController extends Controller{
     
     public function AddTakedChekAction($param=null) {
         $PostData = json_decode($this->REQUEST,true);
-        $AccessToken = '37d2178f9790ba259beff4e04cbf2fab8f3a712877388c0f91c9c3cd28e6cfe8';
+        $Config = new ConfigModel();
+        $AccessToken = $Config->GetSetting('MasterAdminToken');// '37d2178f9790ba259beff4e04cbf2fab8f3a712877388c0f91c9c3cd28e6cfe8';
         if($PostData['AccessToken']!==$AccessToken){
             return ['Error' => "Wrong Access Token"];
         }
