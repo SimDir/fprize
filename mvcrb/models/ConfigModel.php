@@ -24,8 +24,8 @@ class ConfigModel extends Model {
     public function GetSetting($name = false) {
         
         $tempbean = $this->findOne($this->TableName, "(name = :name)", [':name' => $name]);
-        
-        return $tempbean->export()['value'];
+        if($tempbean) return $tempbean->export()['value'];
+        return false;
     }
 
     public function AddSetting($Data = null) {

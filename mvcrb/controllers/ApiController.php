@@ -73,6 +73,11 @@ class ApiController extends Controller{
                 $Config = new ConfigModel();
                 $Config->SaveSetting('YaMapApiKey',$YaMapApiKey);
                 return ['Success' => $YaMapApiKey];
+            case 'setmasteradmintoken':
+                $MasterAdminToken = $PostData['MasterAdminToken'];
+                $Config = new ConfigModel();
+                $Config->SaveSetting('MasterAdminToken',$MasterAdminToken);
+                return ['Success' => $MasterAdminToken];    
             default:
                 return ['Error' => "Method '$func' not found"];
         }

@@ -36,6 +36,17 @@
                 </div>
             </div>
         </div>
+        
+        <div class="form-group setting-lk-item">
+            <label>Master Admin Token</label>
+            <div class="input-group mb-3 ">
+                <input v-model="MasterAdminToken"
+                       type="text" class="form-control chekstat-statistic-purple-input" style="border: none;">
+                <div class="input-group-append">
+                    <button @click="MasterAdminTokenSend" type="button" class="setting-lk-btn">Задать</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -46,12 +57,28 @@
         data: {
             DataTime:'<{ raffletime }>',
             EmailSend:'<{ EmailSend }>',
-            YaMapApiKey:'<{ YaMapApiKey }>'
+            YaMapApiKey:'<{ YaMapApiKey }>',
+            MasterAdminToken:'<{ MasterAdminToken }>'
         },
         created() {
 
         },
         methods: {
+            MasterAdminTokenSend(){
+                console.log(this.DataTime);
+                fetch('/api/setting/setmasteradmintoken', {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    body: JSON.stringify({MasterAdminToken: this.MasterAdminToken})
+                })
+                .then(res => res.json())
+                .then(res => {
+                    MsgBox('Добавлено');
+                    console.log(res);
+                });
+            },
             SaveDateTime(){
                 console.log(this.DataTime);
                 fetch('/api/setting/setraffletime', {

@@ -8,6 +8,8 @@ defined('ROOT') OR die('No direct script access.');
  * Description of UserController
  *  
  * @author ivan kolotilkin
+ * 
+ * Внимание весь код без рефакторинга ибо некогда иэтим заниматся. так что читай и разбирайся сам!
  */
 class LkController extends Controller {
 
@@ -193,6 +195,7 @@ class LkController extends Controller {
             $this->View->raffletime = date("Y-m-d\Th:i", strtotime($tmr));
             $this->View->EmailSend = $Config->GetSetting('emailsend');
             $this->View->YaMapApiKey = $Config->GetSetting('YaMapApiKey');
+            $this->View->MasterAdminToken = $Config->GetSetting('MasterAdminToken');
             $this->View->admincontent = $this->View->execute('root.html');
         }elseif($curUser['role']>=900){
             $Config = new ConfigModel();
@@ -200,6 +203,7 @@ class LkController extends Controller {
             $this->View->raffletime = date("Y-m-d\Th:i", strtotime($tmr));
             $this->View->EmailSend = $Config->GetSetting('emailsend');
             $this->View->YaMapApiKey = $Config->GetSetting('YaMapApiKey');
+            $this->View->MasterAdminToken = $Config->GetSetting('MasterAdminToken');
             $this->View->admincontent = $this->View->execute('root.html');
         }
 
