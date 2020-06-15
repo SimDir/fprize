@@ -32,6 +32,10 @@ class CheckModel extends Model {
         }
         return $tempbean;
     }
+    public function GetMyList($UserID = null) {
+        $tempbean = $this->getAll('SELECT * FROM `check` WHERE `client_id`='.(int)$UserID);
+        return $tempbean;
+    }
     public function wList($PostData = null) {
         $start = $PostData->start ? $PostData->start : 0;
         $limit = $PostData->limit ? $PostData->limit : 10;
@@ -186,7 +190,6 @@ class CheckModel extends Model {
 //        $client = new Client();
 //        $response = $client->request('GET',
 //                'http://mylightning.ru/admin/m_request.php?reg=login&name=AGATECH&password=G1mnSB', ['http_errors' => false]);
-////        $ret = '{'.file_get_contents('http://mylightning.ru/admin/m_request.php?reg=login&name=AGATECH&password=G1mnSB').'}';
 //        $b = $response->getBody();
 //        $ret = str_replace('ok:','',$b->getContents());
 //        
@@ -255,13 +258,23 @@ class CheckModel extends Model {
         
         return $UArr;
     }
-    
+    public function SetUserWinCheck($qr='') {
+        $tempbean = $this->findOne($this->TableName,' qr = :qr', [ ':qr' => $qr ]);
+        if($tempbean){
+            $tempbean->winer = true;
+            $tempbean->windate = date('Y-m-d H:i:s');
+            return $this->store($tempbean);
+        }
+//        dd($tempbean);
+        return false;
+    }
     public function AddWiners($param) {
         $Table = $this->Dispense('winers');
         $Table->name = $param["name"];
         $Table->phone = $param["phone"];
         $Table->winsum = $param["winsum"];
         $Table->qr = $param["qr"];
+        $this->SetUserWinCheck($param["qr"]);
         $Table->fn = $param["fn"];
         $Table->windate = date('Y-m-d',strtotime ($param['windate']));
         $Table->jswindate = date('Y.m.d',strtotime ($param['windate']));
@@ -269,13 +282,23 @@ class CheckModel extends Model {
         $Table->fphone ='+7*****'.substr($param['phone'],-4);
         return $this->store($Table);
     }
-    
+    public function SetUserTakedCheck($qr='') {
+        $tempbean = $this->findOne($this->TableName,' qr = :qr', [ ':qr' => $qr ]);
+        if($tempbean){
+            $tempbean->taked = true;
+            $tempbean->takeddate = date('Y-m-d H:i:s');
+            return $this->store($tempbean);
+        }
+//        dd($tempbean);
+        return false;
+    }
     public function AddTakedChek($param) {
         $Table = $this->Dispense('takedchek');
         $Table->name = $param["name"];
         $Table->phone = $param["phone"];
         $Table->winsum = $param["winsum"];
         $Table->qr = $param["qr"];
+        $this->SetUserTakedCheck($param["qr"]);
         $Table->fn = $param["fn"];
         $Table->givindate = date('Y-m-d',strtotime ($param['givindate']));
         $Table->jswindate = date('Y.m.d',strtotime ($param['windate']));

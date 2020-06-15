@@ -156,6 +156,32 @@ class ApiController extends Controller{
                     return $model->wList($PostData);
                 case 'getwiners':
                     return $model->GetWiners();
+                case 'getmy':
+                    $User = new ClientModel();
+                    $UserVars = $User->GetCurrentUser();
+                    return $model->GetMyList($UserVars['id']);
+                case 'getqrimg':
+                    $requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+                    $qrStr = str_replace('/api/checks/getqrimg?', '', $requestURI);
+//                    return $requestURI;
+                    $qrCode = new \Endroid\QrCode\QrCode($qrStr);
+                    $qrCode->setSize(500);
+//                    $qrCode->setForegroundColor(['r' => 130, 'g' => 130, 'b' => 130, 'a' => 0]);
+//                    $qrCode->setBackgroundColor(['r' => 0, 'g' => 0, 'b' => 255, 'a' => 0]);
+//                    $qrCode->setLogoPath(SITE_DIR.'mstile-150x150.png');
+//                    $qrCode->setLogoSize(100, 100);
+//                    $qrCode->setValidateResult(false);
+//                    $qrCode->setRoundBlockSize(true);
+//                    $qrCode->setMargin(10);
+                    header('Content-Type: '.$qrCode->getContentType());
+                    echo $qrCode->writeString();
+                    die();
+//                    return $qrCode->writeDataUri();  
+                    
+//                case 'testapi':
+//                    $requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+//                    $qrStr = str_replace('/api/checks/testapi?', '', $requestURI);
+//                    return $model->SetUserTakedCheck($qrStr);
             }
             return $CollCom;
         }return [];

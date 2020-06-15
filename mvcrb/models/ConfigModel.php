@@ -22,7 +22,7 @@ class ConfigModel extends Model {
         return $this->count($this->TableName);
     }
     public function GetSetting($name = false) {
-        
+        if(!$name) return false;
         $tempbean = $this->findOne($this->TableName, "(name = :name)", [':name' => $name]);
         if($tempbean) return $tempbean->export()['value'];
         return false;

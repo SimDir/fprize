@@ -168,6 +168,16 @@ class LkController extends Controller {
         $this->View->content = $this->View->execute('AdminWraper.html');
         return $this->View->execute('index.html', TEMPLATE_DIR);
     } 
+    
+    public function ClientcheckAction() {
+
+        $this->View->admincontent = $this->View->execute('clientchecks.html');
+        if ($this->POST) {
+            return ['Content' => $this->View->admincontent];
+        }
+        $this->View->content = $this->View->execute('AdminWraper.html');
+        return $this->View->execute('index.html', TEMPLATE_DIR);
+    }
     public function ClientlkAction() {
         Session::init();
         $curUser = $this->User->GetCurrentUser();
@@ -256,6 +266,7 @@ class LkController extends Controller {
                 ['id' => '3', 'parent' => '0', 'name' => 'КАРТОЧКА УЧАСТНИКА', 'src' => '/lk/user', 'class' => 'fas fa-home'],
                 ['id' => '6', 'parent' => '0', 'name' => 'Партнёры на карте', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
                 ['id' => '7', 'parent' => '0', 'name' => 'Правила участия', 'src' => '/lk/helps', 'class' => 'fas fa-calculator'],
+                ['id' => '8', 'parent' => '0', 'name' => 'Ваши чеки', 'src' => '/lk/clientcheck', 'class' => 'fas fa-calculator'],
            ];
             return $Data;
         } elseif ($curUser['role'] == 300) {
