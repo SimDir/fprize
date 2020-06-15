@@ -8,6 +8,7 @@
         "php-http/message": "^1.8",
         "swiftmailer/swiftmailer": "^6.0",
         "symfony/var-dumper": "^5.0",
-        "phpoffice/phpspreadsheet": "^1.11"
+        "phpoffice/phpspreadsheet": "^1.11",
+        "endroid/qr-code": "^3.8"
     }
 }
