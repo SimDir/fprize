@@ -1,0 +1,69 @@
+<div id="qrcodelist">
+
+    <div class="d-flex flex-wrap">
+        <div v-for="item in QrList" :key="item.id" class="border m-3" style="width: 500px;">
+            <p>Чек добавлен {{ item.createdatetime }}</p>
+            
+            <img class="img-fluid" :src="'/api/checks/getqrimg?'+item.qr">
+            
+            <p v-if="item.winer" class="text-danger">Этот чек победил {{ item.windate }}</p>
+            <p v-if="item.taked" class="text-success">Приз забрали {{ item.takeddate }}</p>
+        </div>
+    </div>    
+</div>
+<script type="text/javascript">
+    var qrcodelist = new Vue({
+        el: '#qrcodelist',
+        data: {
+            errors:0,
+            QrList:[]
+        },
+        created() {
+            this.UserGetMayQr();
+        },
+        methods: {
+            UserGetMayQr() {
+                fetch('/api/checks/getmy', {
+                    mode: 'cors',
+                    method: 'POST'
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then((json) => {
+                    this.QrList = json;
+                    console.log(this.QrList);
+                })
+                .catch((error) => {
+                    this.errors = error;
+                    console.log('FormLogin', error);
+                });
+            },
+            SaveIm(e) {
+                e.preventDefault();
+                fetch('/client/api/save', {
+                    mode: 'cors',
+                    method: 'POST',
+                    body: JSON.stringify(this.CurrentUser)
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then((json) => {
+                    MsgBox('Сохранено успешно');
+                    console.log(json);
+                })
+                .catch((error) => {
+                    this.errors = error;
+                    console.log('FormLogin', error);
+                });
+            }
+        }
+    });
+</script>
