@@ -166,7 +166,7 @@ class ErrorHandler {
     public function display(\Exception $exception) {
         // display Whoops
 
-        dd($exception);
+//        dd($exception);
         die('This site is temporarily unavailable. Please, visit the page later.');
     }
 

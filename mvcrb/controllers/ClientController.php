@@ -166,6 +166,7 @@ class ClientController extends Controller {
 //        if (!$this->POST) return ['Error'=>"Only POST"];
         $MethodName = mb_strtolower($Method);
         $User = $this->User;
+        $moderator = new UserModel();
         switch ($MethodName) {
             case 'get': 
                 return $User->GetCurrentUser();
@@ -220,7 +221,8 @@ class ClientController extends Controller {
                 return ['SendStatus' => $success, 'SendTO' => $to];
 //                return $message;    
             case 'savepartner': 
-                $cu = $User->GetCurrentUser();
+                
+                $cu = $moderator->GetCurrentUser();
                 if($cu['role']<500){
                     return ['error'=>'access denied for user'];
                 }

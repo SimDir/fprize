@@ -9,6 +9,9 @@ defined('ROOT') OR die('No direct script access.');
  *  
  * @author ivan kolotilkin
  */
+
+use GuzzleHttp\Client;
+
 class UserController extends Controller {
 
     private $User;
@@ -155,7 +158,27 @@ class UserController extends Controller {
         $this->View->content = $this->View->execute('forgotpassword.html');
         return $this->View->execute('index.html', TEMPLATE_DIR);
     }
-
+    public function ApitestAction($param) {
+        $User = $this->User;
+        $SendUserId = $User->GetUserID((int)$param);
+        return $this->sendOplanet($SendUserId);
+    }
+    private function sendOplanet($partnerData) {
+        $client = new Client();
+        $response = $client->request('GET',
+                'http://mylightning.ru/admin/m_request.php?reg=login&name=agatech_api&password=p8hpxf', ['http_errors' => false]);
+        $b = $response->getBody();
+        $ret = str_replace('ok:','',$b->getContents());
+        $ret = json_decode($ret, true, 512, JSON_BIGINT_AS_STRING)["result"];
+        $jsondata = json_encode($partnerData,JSON_UNESCAPED_UNICODE);
+//        return 'strjs = '.$jsondata;
+        $responseKey = $client->request('GET',
+                'http://mylightning.ru/admin/m_request.php?user='.$ret['id'].'&key='.$ret['key'].'&reg=addpartie&data='.$jsondata, ['http_errors' => false]);
+        
+        $bk = $responseKey->getBody();
+//        http://mylightning.ru/admin/m_request.php?user=4285&key=2243&reg=addpartie&data=<json>
+        return $bk->getContents();
+    }
     public function ApiAction($Method=null) {
         if(!$Method) return ['Error'=>"API: Parameter not specified"];
 //        if (!$this->POST) return ['Error'=>"Only POST"];
@@ -212,7 +235,9 @@ class UserController extends Controller {
                 if (!$success) {
                     $success = error_get_last()['message'];
                 }
-                return ['SendStatus' => $success, 'SendTO' => $to];
+//                file_put_contents(SITE_DIR.'test.json', json_encode($SendUserId));
+//                $this->sendOplanet($SendUserId);
+                return ['SendStatus' => $success, 'SendTO' => $to,'perterdataOplanet' => $this->sendOplanet($SendUserId)];
 //                return $message;    
             case 'savepartner': 
                 $cu = $User->GetCurrentUser();

@@ -208,4 +208,15 @@ class ApiController extends Controller{
         $Chek = new CheckModel();
         return ['Success' => $Chek->AddTakedChek($PostData['data'])]; 
     }
+    
+//    public function SetpartnerchekcountAction($param=null) {
+//        $PostData = json_decode($this->REQUEST,true);
+//        $Config = new ConfigModel();
+//        $AccessToken = $Config->GetSetting('MasterAdminToken');// '37d2178f9790ba259beff4e04cbf2fab8f3a712877388c0f91c9c3cd28e6cfe8';
+//        if($PostData['AccessToken']!==$AccessToken){
+//            return ['Error' => "Wrong Access Token"];
+//        }
+////        $Chek = new UserModel();
+//        return ['Success' => $PostData]; 
+//    }
 }

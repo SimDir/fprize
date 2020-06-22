@@ -1,7 +1,7 @@
 <div id="qrcodelist">
 
     <div class="d-flex flex-wrap">
-        <div v-for="item in QrList" :key="item.id" class="border m-3" style="width: 500px;">
+        <div v-for="item in QrList" :key="item.id" class="border m-3" style="width: 400px;">
             <p>Чек добавлен {{ item.createdatetime }}</p>
             
             <img class="img-fluid" :src="'/api/checks/getqrimg?'+item.qr">
@@ -41,29 +41,8 @@
                     this.errors = error;
                     console.log('FormLogin', error);
                 });
-            },
-            SaveIm(e) {
-                e.preventDefault();
-                fetch('/client/api/save', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.CurrentUser)
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    MsgBox('Сохранено успешно');
-                    console.log(json);
-                })
-                .catch((error) => {
-                    this.errors = error;
-                    console.log('FormLogin', error);
-                });
             }
+          
         }
     });
 </script>
