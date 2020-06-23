@@ -298,7 +298,7 @@ class LkController extends Controller {
             $Data = [
                 ['id' => '0', 'parent' => '0', 'name' => 'Настройки', 'src' => '/lk/', 'class' => 'fas fa-home'],
                 ['id' => '1', 'parent' => '0', 'name' => 'Управление партнерами', 'src' => '/lk/moderator', 'class' => 'fas fa-home'],
-                ['id' => '2', 'parent' => '0', 'name' => 'Управление клиентами', 'src' => '/lk/moderatorclient', 'class' => 'fas fa-home'],
+//                ['id' => '2', 'parent' => '0', 'name' => 'Управление клиентами', 'src' => '/lk/moderatorclient', 'class' => 'fas fa-home'],
                 ['id' => '6', 'parent' => '0', 'name' => 'Карта партнёров', 'src' => '/lk/map', 'class' => 'fas fa-calculator'],
             ];
             return $Data;

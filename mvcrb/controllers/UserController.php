@@ -237,6 +237,8 @@ class UserController extends Controller {
                 }
 //                file_put_contents(SITE_DIR.'test.json', json_encode($SendUserId));
 //                $this->sendOplanet($SendUserId);
+                $uKKm = new KkmModel();
+                $SendUserId['kkmdata']=$uKKm->getUserKkm($SendUserId['id']);
                 return ['SendStatus' => $success, 'SendTO' => $to,'perterdataOplanet' => $this->sendOplanet($SendUserId)];
 //                return $message;    
             case 'savepartner': 
