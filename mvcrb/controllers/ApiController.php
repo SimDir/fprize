@@ -89,7 +89,17 @@ class ApiController extends Controller{
         switch ($MethodName) {
             case 'getallkkm': 
                 $kkm = new KkmModel();
-                return $kkm->GetAllKkm();
+                $dkkm = $kkm->GetAllKkm();
+                foreach ($dkkm as &$value) {
+                    unset($value['user']);
+                    unset($value['createdatetime']);
+                    unset($value['editdatetime']);
+                    unset($value['user_id']);
+                    unset($value['fn']);
+//                    dd($value);
+                }
+//                dd($dkkm);
+                return $dkkm;
             default:
                 return ['Error'=>"Method $method not found"];    
             }
