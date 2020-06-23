@@ -61,7 +61,21 @@ class LkController extends Controller {
         $this->View->useremail = $curUser['email'];
         $this->View->userrole=$curUser['role'];
         $cmodel = new CheckModel();
-        $this->View->checkcount = ($curUser['kountchek']-$cmodel->CheckCount($curUser['id']));
+        $UserCheckCount = (int)($curUser['kountchek']-$cmodel->CheckCount($curUser['id']));
+        if($UserCheckCount<=0){
+            $this->User->SetStstus($curUser['id'],'noverefid');
+            $headers = 'From: admin@agatech.ru' . "\r\n" .
+//                        'Reply-To: support@agatech.ru' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+            $Config = new ConfigModel();
+            $to = $Config->GetSetting('emailsend'); //'komdir@agatech.ru';
+            $subject = 'Сообщение для модератора.';
+            $message = 'У партнера с ID='.$curUser['id'].PHP_EOL;
+            $message .= 'ФИО парнера '.$curUser['firstname'] .' '.$curUser['lastname'].PHP_EOL;
+            $message .= 'закончились чеки! проверьте статус';
+            rr_mail($to, $subject, $message, $headers);
+        }
+        $this->View->checkcount = $UserCheckCount;
 //        dd($this->View->checkcount);
         $this->View->AddCss('/public/css/style_personalAccount.css');
         $this->View->AddCss('/public/css/style.min.css');

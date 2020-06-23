@@ -200,6 +200,11 @@ class UserModel extends Model {
 
         return $this->store($user);
     }
+    public function SetStstus($id=0,$status='noverefid') {
+        $user = $this->findOne($this->TableName, 'id = ?', array($id));
+        $user->status = $status;
+        return $this->store($user);
+    }
     public function EditUser($email, $password, $login, $role = 100, $firstname = '', $lastname = '', $phone = '', $id = 0) {
 
 //        $user = $this->dispense($this->TableName);
