@@ -72,6 +72,7 @@ class LkController extends Controller {
             $subject = 'Сообщение для модератора.';
             $message = 'У партнера с ID='.$curUser['id'].PHP_EOL;
             $message .= 'ФИО парнера '.$curUser['firstname'] .' '.$curUser['lastname'].PHP_EOL;
+            $message .= 'Организация парнера '.$curUser['kompany'] .' ИНН '.$curUser['inn'].PHP_EOL;
             $message .= 'закончились чеки! проверьте статус';
             rr_mail($to, $subject, $message, $headers);
         }

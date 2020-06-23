@@ -2,6 +2,7 @@
     <div class="content-title--wrap">
         <h6 class="content-title">Ваша организация "{{ CurrentUser.kompany }}" 
             <b class="text-success" v-if="CurrentUser.status==='verefid'">Проверен активен</b>
+            <b class="text-warning" v-if="CurrentUser.status==='noverefid'">Не проверен и не активен</b>
             <b class="text-danger" v-if="CurrentUser.status==='bloked'">Заблокирован</b>
         </h6>
         <span>{{ msg }}</span>
@@ -18,7 +19,7 @@
             <span>Наименование</span>
             <span>ИНН</span>
             <span>КПП</span>
-            <span>ОГРН</span>
+            <span>ОГРН или ОГРНИП</span>
             <span>Юридический адрес</span>
             <span>Почтовый адрес</span>
             <span>Телефон</span>
@@ -34,7 +35,7 @@
             <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
             <input v-model="CurrentUser.inn" :minlength="12" :maxlength="10" type="text" placeholder="7731347089" required>
             <input v-model="CurrentUser.kpp" :minlength="9" :maxlength="9" type="text" placeholder="7731347089">
-            <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="13" type="text" placeholder="1177746126040" required>
+            <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="15" type="text" placeholder="1177746126040" required>
             <input v-model="CurrentUser.juraddress" type="text" placeholder="Ленина 9" required>
             <input v-model="CurrentUser.postaddress" type="text" placeholder="Ленина 9">
             <input v-model="CurrentUser.phone" type="tel" placeholder="+7(999) 999 99 99" required>
