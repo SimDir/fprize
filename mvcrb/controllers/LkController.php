@@ -43,40 +43,47 @@ class LkController extends Controller {
             $this->View->title = 'Личный кабинет участника проекта';
             $this->View->MnuCssClass = 'clients-navigation';
             $this->View->ContentCssClass = 'clients-content-bgc';
+            $this->View->mnuindex = 0;
         } elseif ($curUser['role'] == 300) {
             $this->View->title = 'Личный кабинет партнера';
             $this->View->MnuCssClass = 'partners-navigation';
             $this->View->ContentCssClass = 'partners-content-bgc';
+            $this->View->mnuindex = 1;
         } elseif ($curUser['role'] == 500) {
             $this->View->title = 'Модератор';
             $this->View->MnuCssClass = 'partners-navigation';
             $this->View->ContentCssClass = 'clients-content-bgc';
+            $this->View->mnuindex = 0;
         } elseif ($curUser['role'] >= 900) {
             $this->View->title = 'Администратор';
             $this->View->MnuCssClass = 'partners-navigation';
             $this->View->ContentCssClass = 'clients-content-bgc';
+            $this->View->mnuindex = 0;
         }
         $this->View->username = $curUser['firstname'] .' '.$curUser['lastname'];
         $this->View->userphone = $curUser['phone'];
         $this->View->useremail = $curUser['email'];
         $this->View->userrole=$curUser['role'];
-        $cmodel = new CheckModel();
-        $UserCheckCount = (int)($curUser['kountchek']-$cmodel->CheckCount($curUser['id']));
-        if($UserCheckCount<=0){
-            $this->User->SetStstus($curUser['id'],'noverefid');
-            $headers = 'From: admin@agatech.ru' . "\r\n" .
-//                        'Reply-To: support@agatech.ru' . "\r\n" .
-                    'X-Mailer: PHP/' . phpversion();
-            $Config = new ConfigModel();
-            $to = $Config->GetSetting('emailsend'); //'komdir@agatech.ru';
-            $subject = 'Сообщение для модератора.';
-            $message = 'У партнера с ID='.$curUser['id'].PHP_EOL;
-            $message .= 'ФИО парнера '.$curUser['firstname'] .' '.$curUser['lastname'].PHP_EOL;
-            $message .= 'Организация парнера '.$curUser['kompany'] .' ИНН '.$curUser['inn'].PHP_EOL;
-            $message .= 'закончились чеки! проверьте статус';
-            rr_mail($to, $subject, $message, $headers);
+        if($curUser['role'] == 300){
+            $cmodel = new CheckModel();
+            $UserCheckCount = (int)($curUser['kountchek']-$cmodel->CheckCount($curUser['id']));
+            if($UserCheckCount<=0){
+                $this->User->SetStstus($curUser['id'],'noverefid');
+                $headers = 'From: admin@agatech.ru' . "\r\n" .
+    //                        'Reply-To: support@agatech.ru' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+                $Config = new ConfigModel();
+                $to = $Config->GetSetting('emailsend'); //'komdir@agatech.ru';
+                $subject = 'Сообщение для модератора.';
+                $message = 'У партнера с ID='.$curUser['id'].PHP_EOL;
+                $message .= 'ФИО парнера '.$curUser['firstname'] .' '.$curUser['lastname'].PHP_EOL;
+                $message .= 'Организация парнера '.$curUser['kompany'] .' ИНН '.$curUser['inn'].PHP_EOL;
+                $message .= 'закончились чеки! проверьте статус';
+//                rr_mail($to, $subject, $message, $headers);
+            }
+            $this->View->checkcount = $UserCheckCount;
         }
-        $this->View->checkcount = $UserCheckCount;
+        
 //        dd($this->View->checkcount);
         $this->View->AddCss('/public/css/style_personalAccount.css');
         $this->View->AddCss('/public/css/style.min.css');
@@ -292,7 +299,7 @@ class LkController extends Controller {
                 ['id' => '4', 'parent' => '0', 'name' => 'Статистика по чекам', 'src' => '/lk/checkspartner', 'class' => 'fas fa-home'],
                 ['id' => '4', 'parent' => '0', 'name' => 'Карта партнёров', 'src' => '/lk/map', 'class' => 'far fa-file'],
 //                ['id' => '5', 'parent' => '0', 'name' => 'СТАТИСТИКА ПО ЧЕКАМ', 'src' => '/lk/chekstat', 'class' => 'fas fa-calculator'],
-                ['id' => '6', 'parent' => '0', 'name' => 'ПОБЕДИТЕЛИ', 'src' => '/lk/statistic', 'class' => 'fas fa-calculator'],
+//                ['id' => '6', 'parent' => '0', 'name' => 'ПОБЕДИТЕЛИ', 'src' => '/lk/statistic', 'class' => 'fas fa-calculator'],
 //                ['id' => '7', 'parent' => '0', 'name' => 'ПАКЕТЫ ЧЕКОВ', 'src' => '/lk/cheks', 'class' => 'fas fa-calculator'],
 //                ['id' => '8', 'parent' => '0', 'name' => 'АКЦИИ', 'src' => '/lk/akci', 'class' => 'fas fa-calculator'],
 //                ['id' => '9', 'parent' => '0', 'name' => 'УЧАСТНИКИ','src'=>'/lk/users','class'=>'fas fa-calculator'],

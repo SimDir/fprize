@@ -102,10 +102,10 @@
     
             <div class="personalAccount-header__content-tarrifs">
                 <?php if($this->userrole == 300){ ?>
-                <span class="header__content-tarrifs__name">Ваш тариф:<br>
-                    <span>“СТАРТ”</span>
+                <span class="header__content-tarrifs__name">интернет-сервис:<br>
+                    <span>“Призовая молния”</span>
                 </span>
-                <span class="header__content-tarrifs__period">Срок действия: <span>1 мес.</span> 1000 чеков</span>
+                <!--<span class="header__content-tarrifs__period">Срок действия: <span>1 мес.</span> 1000 чеков</span>-->
                 <?php }?>
             </div>
             <!-- /.personalAccount-header__content-tarrifs -->
@@ -178,7 +178,7 @@
         data: {
             Menu: [],
             isActive:[],
-            activeItem: 0
+            activeItem:<{mnuindex}>
         },
         created() {
             window.onpopstate = (event) => {

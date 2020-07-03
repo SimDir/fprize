@@ -194,7 +194,7 @@ class UserModel extends Model {
         //пароль нельзя хранить в открытом виде, 
         //мы его шифруем при помощи функции password_hash для php > 5.6
         $user->import($Data);
-        //$user->role = 100;
+        $user->role = 300;
 
         $user->registredatetime = date('Y-m-d H:i:s');
 

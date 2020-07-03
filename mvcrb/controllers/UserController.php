@@ -26,6 +26,7 @@ class UserController extends Controller {
     }
 
     public function IndexAction($id=null) {
+        Session::init();
         $UserVars = $this->User->GetCurrentUser();
         if ($UserVars['role'] == 0) {
             return mvcrb::Redirect('/user/login/');
@@ -45,7 +46,7 @@ class UserController extends Controller {
     }
 
     public function LoginAction() {
-        if ($this->User->GetCurrentUser()['role'] > 0) {
+        if ($this->User->GetCurrentUser()['role'] >= 100) {
             return mvcrb::Redirect('/lk/');
         }
         $this->View->title = 'Вход пользователя';
@@ -161,6 +162,8 @@ class UserController extends Controller {
     public function ApitestAction($param) {
         $User = $this->User;
         $SendUserId = $User->GetUserID((int)$param);
+        $uKKm = new KkmModel();
+        $SendUserId['kkmdata']=$uKKm->getUserKkm($SendUserId['id']);
         return $this->sendOplanet($SendUserId);
     }
     private function sendOplanet($partnerData) {
@@ -250,6 +253,10 @@ class UserController extends Controller {
                 $partnerData = json_decode($this->REQUEST,true);
                 unset($partnerData['id']);
                 $partnerId = $User->ChangeDataUser($userId,$partnerData);
+                $SendUserId = $User->GetUserID($userId);
+                $uKKm = new KkmModel();
+                $SendUserId['kkmdata']=$uKKm->getUserKkm($SendUserId['id']);
+                $this->sendOplanet($SendUserId);
                 return ['success'=>$partnerId];
             case 'addkkm':
                 $cu = $User->GetCurrentUser();

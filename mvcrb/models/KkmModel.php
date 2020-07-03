@@ -54,7 +54,7 @@ class KkmModel extends Model {
             return ['Error' => 'not data to add'];
         $Ret = $this->findAll($this->TableName, '(fn = :fn)', [':fn' => $Data['fn']]);
         if ($Ret) {
-            return ['Error' => 'kkm is added'];
+            return ['Error' => 'ошибка: ККМ уже добавлена ранее'];
         }
         $User = $this->load( 'user' ,$UserId);
         
@@ -62,12 +62,12 @@ class KkmModel extends Model {
 //        $Table->import($Data);
         $Table->address = $Data['address'];
         $Table->fn = (string)$Data['fn'];
-        
+        $Table->desc = $Data['desc'];
         $Table->name = $Data['name'];
         $Table->createdatetime = date('Y-m-d H:i:s');
         $User->ownKkmList[] = $Table;
         $this->store($User);
-        return ['success'=>'check ID add is '.$this->store($Table)];
+        return ['success'=>'ККМ успешно добавлена под номером ID '.$this->store($Table)];
     }
     
     public function Del($id = null) {
