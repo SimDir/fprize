@@ -333,7 +333,7 @@ input {
     border: 1px solid #fff;
     border-radius: .3em;
     font-family: "Museo Sans 900";
-    font-size: 1.7em;
+    font-size: 1.5em;
     line-height: 1em;
     padding: 0 1em;
     text-transform: uppercase;
@@ -903,7 +903,7 @@ ymaps [class$="balloon__close-button"] {
     }
     .partners-navigation button, .clients-navigation button {
         height: 50px;
-        font-size: 1.55em;
+        font-size: 1.35em;
     }
     .partners-navigation__img_wrap {
         margin-top: 2.8em;
@@ -1032,7 +1032,7 @@ ymaps [class$="balloon__close-button"] {
     }
     .partners-navigation button, .clients-navigation button {
         height: 45px;
-        font-size: 1.4em;
+        font-size: 1.2em;
     }
     .partners-navigation__img_wrap {
         margin-top: 2.6em;
@@ -1160,7 +1160,7 @@ ymaps [class$="balloon__close-button"] {
     }
     .partners-navigation button, .clients-navigation button {
         height: 35px;
-        font-size: 1.3em;
+        font-size: 1.1em;
     }
     .partners-navigation__img_wrap {
         margin-top: 2.2em;
@@ -1289,7 +1289,7 @@ ymaps [class$="balloon__close-button"] {
     }
     .partners-navigation button, .clients-navigation button {
         height: 30px;
-        font-size: 1.2em;
+        font-size: 1.0em;
     }
     .partners-navigation__img_wrap {
         margin-top: 2em;
@@ -1414,7 +1414,7 @@ ymaps [class$="balloon__close-button"] {
     }
     .partners-navigation button, .clients-navigation button {
         height: 25px;
-        font-size: 1em;
+        font-size: 0.8em;
     }
     .partners-navigation__img_wrap {
         margin-top: 1.8em;

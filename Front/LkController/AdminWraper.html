@@ -1,78 +1,78 @@
 <!-- Modal -->
 <div class="modal fade" id="FeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-     aria-hidden="true">
+aria-hidden="true">
 
-    <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+<div class="modal-dialog modal-dialog-centered" role="document">
 
 
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="exampleModalLongTitle">Техническая поддержка</h2>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="feedback">
-                <form class="text-center" @submit="SendFeedback" action="/index/feedback">
-                    <label>Причина вашего обращения?</label>
-                    <select v-model="subst" class="browser-default custom-select mb-4 rounded-0">
-                        <option value="" disabled>Укажите</option>
-                        <option value="Обратная связь" selected>Обратная связь</option>
-                        <option value="Ошибка в личном кабинете">Ошибка в личном кабинете</option>
-                        <option value="Ошибка приложения">Ошибка приложения</option>
-                        <option value="Другое">Другое...</option>
-                    </select>
-                    <!-- Message -->
-                    <div class="form-group">
-                        <textarea :disabled="subst===''" v-model="message.message" class="form-control rounded-0"
-                                  id="exampleFormControlTextarea2" rows="6" placeholder="Ваше сообщение"></textarea>
-                    </div>
-                    <!-- Send button :disabled="!BtnSend" -->
-                    <button :disabled="message.message===''" class="btn modal__btn btn-secondary"
-                            type="submit">Отправить</button>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="exampleModalLongTitle">Техническая поддержка</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="feedback">
+            <form class="text-center" @submit="SendFeedback" action="/index/feedback">
+                <label>Причина вашего обращения?</label>
+                <select v-model="subst" class="browser-default custom-select mb-4 rounded-0">
+                    <option value="" disabled>Укажите</option>
+                    <option value="Обратная связь" selected>Обратная связь</option>
+                    <option value="Ошибка в личном кабинете">Ошибка в личном кабинете</option>
+                    <option value="Ошибка приложения">Ошибка приложения</option>
+                    <option value="Другое">Другое...</option>
+                </select>
+                <!-- Message -->
+                <div class="form-group">
+                    <textarea :disabled="subst===''" v-model="message.message" class="form-control rounded-0"
+                    id="exampleFormControlTextarea2" rows="6" placeholder="Ваше сообщение"></textarea>
+                </div>
+                <!-- Send button :disabled="!BtnSend" -->
+                <button :disabled="message.message===''" class="btn modal__btn btn-secondary"
+                type="submit">Отправить</button>
 
-                </form>
-                <!-- Default form contact -->
-            </div>
-            <script type="text/javascript">
-                var feedback = new Vue({
-                    el: '#feedback',
-                    data: {
-                        message: {fio: '<{ username }>', phone: '<{ userphone }>', email: '<{ useremail }>', message: ''},
-                        BtnSend: false,
-                        msgSend: false,
-                        subst: ''
-                    },
-                    methods: {
-                        SendFeedback(e) {
-                            e.preventDefault();
-                            this.message.message = 'Тема сообщения <b>' + this.subst + '</b><br>\n\n' + this.message.message;
-                            fetch('/index/feedback', {
-                                mode: 'cors',
-                                method: 'POST',
-                                body: JSON.stringify(this.message)
-                            })
-                                    .then((response) => {
-                                        if (response.ok) {
-                                            return response.json();
-                                        }
-                                        throw new Error('Network response was not ok');
-                                    })
-                                    .then((json) => {
-                                        this.message = {fio: '', phone: '', email: '', message: ''};
-                                        this.msgSend = true;
-                                        MsgBox('Ваше сообщение успешно отправлено.');
-                                        $('#FeedbackModal').modal('hide');
-                                        console.log(json);
-                                    })
-                                    .catch((error) => {
-                                        console.log('FormLogin', error);
-                                    });
-                        }
+            </form>
+            <!-- Default form contact -->
+        </div>
+        <script type="text/javascript">
+            var feedback = new Vue({
+                el: '#feedback',
+                data: {
+                    message: {fio: '<{ username }>', phone: '<{ userphone }>', email: '<{ useremail }>', message: ''},
+                    BtnSend: false,
+                    msgSend: false,
+                    subst: ''
+                },
+                methods: {
+                    SendFeedback(e) {
+                        e.preventDefault();
+                        this.message.message = 'Тема сообщения <b>' + this.subst + '</b><br>\n\n' + this.message.message;
+                        fetch('/index/feedback', {
+                            mode: 'cors',
+                            method: 'POST',
+                            body: JSON.stringify(this.message)
+                        })
+                        .then((response) => {
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Network response was not ok');
+                        })
+                        .then((json) => {
+                            this.message = {fio: '', phone: '', email: '', message: ''};
+                            this.msgSend = true;
+                            MsgBox('Ваше сообщение успешно отправлено.');
+                            $('#FeedbackModal').modal('hide');
+                            console.log(json);
+                        })
+                        .catch((error) => {
+                            console.log('FormLogin', error);
+                        });
                     }
-                });
-            </script>
+                }
+            });
+        </script>
             <!--            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                 <button type="button" class="btn btn-primary">Отправить</button>
@@ -83,7 +83,7 @@
 
 
 <header class="personalAccount-header">
-    <div class="personalAccount-header__container">
+    <div class="personalAccount-header__container" style="max-width: 100%;">
         <a href="/" class="personalAccount-header__img--wrap">
             <img src="/public/img/personalAccount/logo.png" alt="logo">
         </a>
@@ -99,7 +99,7 @@
                 <!-- /.header__content-info__username -->
             </div>
             <!-- /.personalAccount-header__content-info -->
-    
+
             <div class="personalAccount-header__content-tarrifs">
                 <?php if($this->userrole == 300){ ?>
                 <span class="header__content-tarrifs__name">интернет-сервис:<br>
@@ -109,7 +109,7 @@
                 <?php }?>
             </div>
             <!-- /.personalAccount-header__content-tarrifs -->
-    
+
             <div class="personalAccount-header__content-count">
                 <div class="personalAccount-header__content-count__left">
                     <?php if($this->userrole == 300){ ?>
@@ -123,14 +123,14 @@
                 <!--             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                      Техническая поддержка
                  </button>-->
-                <!-- /.personalAccount-header__content-count__left -->
-                <button class="personalAccount-header__content-count__btn" data-toggle="modal"
-                        data-target="#FeedbackModal">Техническая поддержка</button>
-            </div>
-            <!-- /.personalAccount-header__content-count -->
-        </div>
-        <!-- /.personalAccount-header__content -->
-        <div class="personalAccount-header__exit">
+                 <!-- /.personalAccount-header__content-count__left -->
+                 <button class="personalAccount-header__content-count__btn" data-toggle="modal"
+                 data-target="#FeedbackModal">Техническая поддержка</button>
+             </div>
+             <!-- /.personalAccount-header__content-count -->
+         </div>
+         <!-- /.personalAccount-header__content -->
+         <div class="personalAccount-header__exit">
             <a href="/user/logout">Выход</a>
         </div>
         <!-- /.personalAccount-header__exit -->
@@ -141,23 +141,23 @@
 <main class="personalAccount-main">
     <!--<div class="container-fluid">-->
 
-    <aside id="AdminMenu" class="<{ MnuCssClass }>">
-        <div class="lk-burger">
-            <span class="lk-burger__item lk-burger__item-1"></span>
-            <span class="lk-burger__item lk-burger__item-2"></span>
-            <span class="lk-burger__item lk-burger__item-3"></span>
-        </div>
-        <button v-for="(item, i ) in Menu" @click.prevent="SetContent(item.src,i)" :key="i" :class="{ active: i === activeItem}">{{item.name}}</button>
-        <?php if($this->userrole == 300){ ?>
-        <button @click.prevent="dwdldoc">Скачать договор</button>
-        <?php }?>
-        <?php if($this->userrole == 100){ ?>
-        <div class="partners-navigation__img_wrap">
-            <a target="_blank" href="https://play.google.com/store/apps/details?id=com.oplanet.lightning&hl=ru">
-                <img class="partners-navigation__img" src="/public/img/footer/android-big.png" alt="android">
-            </a>
-            <a target="_blank"
-               href="https://apps.apple.com/ru/app/%D0%BF%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%BB%D0%BD%D0%B8%D1%8F/id1459626313">
+        <aside id="AdminMenu" class="<{ MnuCssClass }>" style="max-width: 15%; max-height: 100%;">
+            <div class="lk-burger">
+                <span class="lk-burger__item lk-burger__item-1"></span>
+                <span class="lk-burger__item lk-burger__item-2"></span>
+                <span class="lk-burger__item lk-burger__item-3"></span>
+            </div>
+            <button v-for="(item, i ) in Menu" @click.prevent="SetContent(item.src,i)" :key="i" :class="{ active: i === activeItem}" class="btn btn-block m-1 p-1">{{item.name}}</button>
+            <?php if($this->userrole == 300){ ?>
+            <button @click.prevent="dwdldoc" class="btn btn-block m-1 p-1">Скачать договор</button>
+            <?php }?>
+            <?php if($this->userrole == 100){ ?>
+            <div class="partners-navigation__img_wrap">
+                <a target="_blank" href="https://play.google.com/store/apps/details?id=com.oplanet.lightning&hl=ru">
+                    <img class="partners-navigation__img" src="/public/img/footer/android-big.png" alt="android">
+                </a>
+                <a target="_blank"
+                href="https://apps.apple.com/ru/app/%D0%BF%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%BB%D0%BD%D0%B8%D1%8F/id1459626313">
                 <img class="partners-navigation__img" src="/public/img/footer/apple-big.png" alt="apple">
             </a>
         </div>
@@ -165,36 +165,36 @@
         <!--            <a  href="/lk/qrkodreder">
                 qrider
             </a>-->
-    </aside>
-    <section class="personalAccount-content <{ ContentCssClass }>" id="admincontent">
-        <{ admincontent }>
-    </section>
-    <!--</div>-->
-</main>
+        </aside>
+        <section class="personalAccount-content <{ ContentCssClass }> m-0" id="admincontent" style="padding-left: 15%; max-width: 100%; max-height: 100%;">
+            <{ admincontent }>
+        </section>
+        <!--</div>-->
+    </main>
 
-<script>
-    var AdminMenu = new Vue({
-        el: '#AdminMenu',
-        data: {
-            Menu: [],
-            isActive:[],
-            activeItem:<{mnuindex}>
-        },
-        created() {
-            window.onpopstate = (event) => {
-                if (event.state != null) {
-                    this.SetContent(event.state);
-                }
+   <script>
+        var AdminMenu = new Vue({
+            el: '#AdminMenu',
+            data: {
+                Menu: [],
+                isActive:[],
+                activeItem:<{mnuindex}>
+            },
+            created() {
+                window.onpopstate = (event) => {
+                    if (event.state != null) {
+                        this.SetContent(event.state);
+                    }
                 //                console.log(event.state);
             };
         },
         beforeCreate() {
             document.addEventListener("DOMContentLoaded", this.ready);
             fetch('/lk/getmenu/?AJAX=1')
-                    .then(res => res.json())
-                    .then(res => {
-                        this.Menu = res;
-                    });
+            .then(res => res.json())
+            .then(res => {
+                this.Menu = res;
+            });
         },
         methods: {
             dwdldoc() {
@@ -211,14 +211,14 @@
                     cache: 'no-cache',
                     credentials: 'same-origin'
                 })
-                        .then(res => res.json())
-                        .then(res => {
+                .then(res => res.json())
+                .then(res => {
 
-                            element.innerHTML = res.Content;
+                    element.innerHTML = res.Content;
 
-                            $(document).ready(() => {
-                                execBodyScripts(element);
-                                element.style.display = "block";
+                    $(document).ready(() => {
+                        execBodyScripts(element);
+                        element.style.display = "block";
                                 //                        console.log("exec_body_scripts(rel)");
                             });
                             //                    console.log(res);

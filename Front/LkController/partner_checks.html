@@ -1,10 +1,12 @@
 <div id="Checks">
     <!--<div class="edge-header bg-dark"></div>-->
-
+    <div class="content-title--wrap">
+        <h6 class="content-title">Информация по чекам</h6>
+    </div>
 
     <!--Навигатор пагинатор-->
     <div class="chekstat-statistic">
-        <h5 class="chekstat-statistic__count">У вас {{Count}} Чеков</h5>
+        <h4 class="chekstat-statistic__count">У вас {{Count}} Чеков</h4>
         <div> 
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -100,7 +102,7 @@
             <h2 v-if='!loads'>Подождите идет загрузка данных</h2>
         </div>
         <div v-else class="not-checks-lk">
-            Увас нет чеков
+            У вас нет чеков
         </div>
     </div>
 </div>
