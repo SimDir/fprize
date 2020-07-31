@@ -1,109 +1,108 @@
-<div id="partner">
-    <div class="content-title--wrap">
-        <h6 class="content-title">Ваша организация "{{ CurrentUser.kompany }}" 
-            <b class="text-success" v-if="CurrentUser.status==='verefid'">Проверен активен</b>
-            <b class="text-warning" v-if="CurrentUser.status==='noverefid'">Не проверен и не активен</b>
-            <b class="text-danger" v-if="CurrentUser.status==='bloked'">Заблокирован</b>
-        </h6>
-        <span>{{ msg }}</span>
-    </div>
-    <!--  
-    <div class="content-dataChange">
-        
-        <button @click="state=0" type="button" class="btn btn-secondary">Личные данные</button>
-        <button @click="state=1" type="button" class="btn btn-secondary">Список ваших ККМ</button>
-        <button @click="state=2" type="button" class="btn btn-secondary">Добавить ККМ</button>
-    </div>-->
-    <div v-if="state==0" class="content-dataChange">
-        <div class="content-dataChange__titles">
-            <span>Наименование</span>
-            <span>ИНН</span>
-            <span>КПП</span>
-            <span>ОГРН или ОГРНИП</span>
-            <span>Юридический адрес</span>
-            <span>Почтовый адрес</span>
-            <span>Телефон</span>
-            <span>Расчетный счет</span>
-            <span>Корреспондентский счет</span>
-            <span>БИК банка</span>
-            <span>Банк</span>
-            <span>E-mail</span>
-            <span>Директор</span>
+<div id="partner" class="p-1 m-1">
+    <div class="container">
+        <div class="content-title--wrap text-center mt-4">
+            <h6 class="content-title">Наименование: "{{ CurrentUser.kompany }}" 
+                <hr> 
+                cтатус: 
+                <b class="text-success" v-if="CurrentUser.status==='verefid'">Проверен активен</b>
+                <b class="text-warning" v-if="CurrentUser.status==='noverefid'">Не проверен и не активен</b>
+                <b class="text-danger" v-if="CurrentUser.status==='bloked'">Заблокирован</b>
+            </h6>
+            <span>{{ msg }}</span>
         </div>
-        <!-- /.content-dataChange__titles -->
-        <form @submit="SaveIm" class="content-dataChange__form">
-            <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
-            <input v-model="CurrentUser.inn" :minlength="10" :maxlength="12" type="text" placeholder="7731347089" required>
-            <input v-model="CurrentUser.kpp" :minlength="9" :maxlength="9" type="text" placeholder="7731347089">
-            <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="15" type="text" placeholder="1177746126040" required>
-            <input v-model="CurrentUser.juraddress" type="text" placeholder="Ленина 9" required>
-            <input v-model="CurrentUser.postaddress" type="text" placeholder="Ленина 9">
-            <input v-model="CurrentUser.phone" type="tel" placeholder="+7(999) 999 99 99" required>
-            <input v-model="CurrentUser.schet" :minlength="20" :maxlength="20" type="text" placeholder="40817810099910004312" required>
-            <input v-model="CurrentUser.corschet" :minlength="20" :maxlength="20" type="text" placeholder="30101643600000000957" required>
-            <input v-model="CurrentUser.bik" :minlength="9" :maxlength="9" type="text" placeholder="044583972">
-            <input v-model="CurrentUser.bankname" type="text" placeholder="Сбербанк" required>
-            <input v-model="CurrentUser.email" minlength="5" type="email" placeholder="example@email.com" required>
-            <select v-model="CurrentUser.bosstype" name="" id="" required>
-                <option value="ip">ИП</option>
-                <option value="boss">Директор</option>
-                <option value="bigboss">Ген. директор</option>
-            </select>
-            <input v-model="CurrentUser.bossname" type="text" placeholder="Красильников Константин Сергеевич" required>
-            <input type="submit" value="Сохранить">
-        </form>
-    </div>
-    <div v-if="state==1" class="content-dataChange">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Адрес</th>
-                    <th scope="col">Имя</th>
-                    <th scope="col">Номер ККМ</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in KkmList">
-                    <th scope="row">
-                        <button @click="setEditKkm(item)" type="button" title="Изменить" class="btn btn-primary"><i class="far fa-edit"></i></button>
-                        <button @click="DelKkm(item.id)" type="button" title="Удалить" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                    </th>
-                    <td>{{ item.address }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.fn }}</td>
-                </tr>
-                
-            </tbody>
-        </table>
-        
-    </div>
-    <div v-if="state==2" class="content-dataChange">
-        <div class="content-dataChange__titles">
-            <span>Адрес установки ККМ</span>
-            <span>номер фискального накопителя</span>
-            <span>Название точки продаж</span>
+
+        <div v-if="state==0" class="content-dataChange">
+            <div class="content-dataChange__titles m-0 p-0 text-left">
+                <span>Наименование:</span>
+                <span>ИНН:</span>
+                <span>КПП:</span>
+                <span>ОГРН или ОГРНИП:</span>
+                <span>Юридический адрес:</span>
+                <span>Почтовый адрес:</span>
+                <span>Телефон:</span>
+                <span>Расчетный счет:</span>
+                <span>Корреспондентский счет:</span>
+                <span>БИК:</span>
+                <span>Банк:</span>
+                <span>E-mail:</span>
+                <span>Руководитель:</span>
+            </div>
+            <!-- /.content-dataChange__titles -->
+            <form @submit="SaveIm" class="content-dataChange__form">
+                <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
+                <input v-model="CurrentUser.inn" :minlength="10" :maxlength="12" type="text" placeholder="7731347089" required>
+                <input v-model="CurrentUser.kpp" :minlength="9" :maxlength="9" type="text" placeholder="7731347089">
+                <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="15" type="text" placeholder="1177746126040" required>
+                <input v-model="CurrentUser.juraddress" type="text" placeholder="Ленина 9" required>
+                <input v-model="CurrentUser.postaddress" type="text" placeholder="Ленина 9">
+                <input v-model="CurrentUser.phone" type="tel" placeholder="+7(999) 999 99 99" required>
+                <input v-model="CurrentUser.schet" :minlength="20" :maxlength="20" type="text" placeholder="40817810099910004312" required>
+                <input v-model="CurrentUser.corschet" :minlength="20" :maxlength="20" type="text" placeholder="30101643600000000957" required>
+                <input v-model="CurrentUser.bik" :minlength="9" :maxlength="9" type="text" placeholder="044583972">
+                <input v-model="CurrentUser.bankname" type="text" placeholder="Сбербанк" required>
+                <input v-model="CurrentUser.email" minlength="5" type="email" placeholder="example@email.com" required>
+                <select v-model="CurrentUser.bosstype" name="" id="" required>
+                    <option value="ip">ИП</option>
+                    <option value="boss">Директор</option>
+                    <option value="bigboss">Генеральный директор</option>
+                </select>
+                <input v-model="CurrentUser.bossname" type="text" placeholder="Красильников Константин Сергеевич" required>
+                <input type="submit" value="Сохранить">
+            </form>
         </div>
-        <form @submit="AddKKM" class="content-dataChange__form">
-            <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
-            <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
-            <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
-            <input type="submit" value="Добавить ККМ">
-        </form>
-    </div>
-    
-    <div v-if="state==3" class="content-dataChange">
-        <div class="content-dataChange__titles">
-            <span>Адрес установки ККМ</span>
-            <span>номер фискального накопителя</span>
-            <span>Название точки продаж</span>
+
+        <div v-if="state==1" class="content-dataChange">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Номер ККМ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in KkmList">
+                        <th scope="row">
+                            <button @click="setEditKkm(item)" type="button" title="Изменить" class="btn btn-primary"><i class="far fa-edit"></i></button>
+                            <button @click="DelKkm(item.id)" type="button" title="Удалить" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                        </th>
+                        <td>{{ item.address }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.fn }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
         </div>
-        <form @submit="SaveKKM" class="content-dataChange__form">
-            <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
-            <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
-            <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
-            <input type="submit" value="Сохранить ККМ">
-        </form>
+        <div v-if="state==2" class="content-dataChange">
+            <div class="content-dataChange__titles">
+                <span>Адрес установки ККМ</span>
+                <span>номер фискального накопителя</span>
+                <span>Название точки продаж</span>
+            </div>
+            <form @submit="AddKKM" class="content-dataChange__form">
+                <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
+                <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
+                <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
+                <input type="submit" value="Добавить ККМ">
+            </form>
+        </div>
+
+        <div v-if="state==3" class="content-dataChange">
+            <div class="content-dataChange__titles">
+                <span>Адрес установки ККМ</span>
+                <span>номер фискального накопителя</span>
+                <span>Название точки продаж</span>
+            </div>
+            <form @submit="SaveKKM" class="content-dataChange__form">
+                <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
+                <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
+                <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
+                <input type="submit" value="Сохранить ККМ">
+            </form>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -112,184 +111,184 @@
         data: {
             errors: false, usertype: "<{usertype}>",error:'',msg:'',state:0,
             CurrentUser: {email: "",
-                phone: "",
-                usertype: "",
-                inn: ""
-            },
-            KKM:{address:'',fn:'',name:''},KkmList:[]
+            phone: "",
+            usertype: "",
+            inn: ""
         },
-        created() {
-            this.UserGetIm();
-        },
-        watch: {
-            state(val) {
-                if(val==1){
-                    this.LoadKKM();
+        KKM:{address:'',fn:'',name:''},KkmList:[]
+    },
+    created() {
+        this.UserGetIm();
+    },
+    watch: {
+        state(val) {
+            if(val==1){
+                this.LoadKKM();
 //                    console.log('Foo Changed! ' + val);
-                }else if(val==2) {
-                    this.KKM = {address:'',fn:'',name:''};
-                }
+}else if(val==2) {
+    this.KKM = {address:'',fn:'',name:''};
+}
 
-              
-            },
-            msg(){
-                setTimeout(() => {
-                    this.msg = '';
-                }, 5000);
+
+},
+msg(){
+    setTimeout(() => {
+        this.msg = '';
+    }, 5000);
+}
+},
+methods: {
+    UserGetIm() {
+        fetch('/user/api/get', {
+            mode: 'cors',
+            method: 'POST'
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
             }
-        },
-        methods: {
-            UserGetIm() {
-                fetch('/user/api/get', {
-                    mode: 'cors',
-                    method: 'POST'
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    this.CurrentUser = json;
+            throw new Error('Network response was not ok');
+        })
+        .then((json) => {
+            this.CurrentUser = json;
 //                    console.log(this.CurrentUser);
-                })
-                .catch((error) => {
-                    this.msg = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            SaveIm(e){
-                e.preventDefault();
-                fetch('/user/api/save', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.CurrentUser)
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    MsgBox('Сохранено успешно');
-                    this.msg = 'Сохранено успешно';
-                    
-                    console.log(json);
-                })
-                .catch((error) => {
-                    this.msg = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            AddKKM(e){
-                e.preventDefault();
-                fetch('/user/api/addkkm', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.KKM)
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    if(json.hasOwnProperty('success')){
-                        MsgBox(json.success);
-                        this.msg=json.success;
-                    }else{
-                        this.msg=json.Error;
-                        console.log(json);
-                    }
-                })
-                .catch((error) => {
-                    this.msg = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            SaveKKM(e){
-                e.preventDefault();
-                fetch('/user/api/savekkm', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.KKM)
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    if(json.hasOwnProperty('success')){
-                        MsgBox(json.success);
-                        this.msg=json.success;
-                    }else{
-                        this.msg=json.Error;
-                        console.log(json);
-                    }
-                    
-                })
-                .catch((error) => {
-                    this.errors = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            LoadKKM(){
-                fetch('/user/api/getkkm', {
-                    mode: 'cors',
-                    method: 'POST'
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    this.KkmList = json;
-                    console.log(json);
-                })
-                .catch((error) => {
-                    this.errors = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            DelKkm(id){
-                fetch('/user/api/delkkm', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify({kkmid:id})
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    if(json.hasOwnProperty('success')){
-                        MsgBox(json.success);
-                        this.msg=json.success;
-                        this.LoadKKM();
-                    }else{
-                        this.msg=json.Error;
-                        console.log(json);
-                    }
-                    
-                })
-                .catch((error) => {
-                    this.msg = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            setEditKkm(item){
-                this.KKM = item;
-                this.state = 3;
+})
+        .catch((error) => {
+            this.msg = error;
+            console.log('FormLogin', error);
+        });
+    },
+    SaveIm(e){
+        e.preventDefault();
+        fetch('/user/api/save', {
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify(this.CurrentUser)
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
             }
-        }
-    });
+            throw new Error('Network response was not ok');
+        })
+        .then((json) => {
+            MsgBox('Сохранено успешно');
+            this.msg = 'Сохранено успешно';
+
+            console.log(json);
+        })
+        .catch((error) => {
+            this.msg = error;
+            console.log('FormLogin', error);
+        });
+    },
+    AddKKM(e){
+        e.preventDefault();
+        fetch('/user/api/addkkm', {
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify(this.KKM)
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok');
+        })
+        .then((json) => {
+            if(json.hasOwnProperty('success')){
+                MsgBox(json.success);
+                this.msg=json.success;
+            }else{
+                this.msg=json.Error;
+                console.log(json);
+            }
+        })
+        .catch((error) => {
+            this.msg = error;
+            console.log('FormLogin', error);
+        });
+    },
+    SaveKKM(e){
+        e.preventDefault();
+        fetch('/user/api/savekkm', {
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify(this.KKM)
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok');
+        })
+        .then((json) => {
+            if(json.hasOwnProperty('success')){
+                MsgBox(json.success);
+                this.msg=json.success;
+            }else{
+                this.msg=json.Error;
+                console.log(json);
+            }
+
+        })
+        .catch((error) => {
+            this.errors = error;
+            console.log('FormLogin', error);
+        });
+    },
+    LoadKKM(){
+        fetch('/user/api/getkkm', {
+            mode: 'cors',
+            method: 'POST'
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok');
+        })
+        .then((json) => {
+            this.KkmList = json;
+            console.log(json);
+        })
+        .catch((error) => {
+            this.errors = error;
+            console.log('FormLogin', error);
+        });
+    },
+    DelKkm(id){
+        fetch('/user/api/delkkm', {
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify({kkmid:id})
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok');
+        })
+        .then((json) => {
+            if(json.hasOwnProperty('success')){
+                MsgBox(json.success);
+                this.msg=json.success;
+                this.LoadKKM();
+            }else{
+                this.msg=json.Error;
+                console.log(json);
+            }
+
+        })
+        .catch((error) => {
+            this.msg = error;
+            console.log('FormLogin', error);
+        });
+    },
+    setEditKkm(item){
+        this.KKM = item;
+        this.state = 3;
+    }
+}
+});
 </script>

@@ -1,18 +1,19 @@
 <!-- Modal -->
-<div class="modal fade" id="FeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="container">
+<div class="modal" id="FeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
 aria-hidden="true">
 
 <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
 <div class="modal-dialog modal-dialog-centered" role="document">
 
-
-    <div class="modal-content">
+    <div class="modal-content" style="background-color: silver;">
         <div class="modal-header">
             <h2 class="modal-title" id="exampleModalLongTitle">Техническая поддержка</h2>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+
         <div class="modal-body" id="feedback">
             <form class="text-center" @submit="SendFeedback" action="/index/feedback">
                 <label>Причина вашего обращения?</label>
@@ -29,7 +30,7 @@ aria-hidden="true">
                     id="exampleFormControlTextarea2" rows="6" placeholder="Ваше сообщение"></textarea>
                 </div>
                 <!-- Send button :disabled="!BtnSend" -->
-                <button :disabled="message.message===''" class="btn modal__btn btn-secondary"
+                <button :disabled="message.message===''" class="btn btn-outline-secondary"
                 type="submit">Отправить</button>
 
             </form>
@@ -73,118 +74,91 @@ aria-hidden="true">
                 }
             });
         </script>
-            <!--            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Отправить</button>
-            </div>-->
+
         </div>
     </div>
 </div>
+</div>
 
-
-<header class="personalAccount-header">
-    <div class="personalAccount-header__container" style="max-width: 100%;">
-        <a href="/" class="personalAccount-header__img--wrap">
-            <img src="/public/img/personalAccount/logo.png" alt="logo">
-        </a>
-        <!-- /.personalAccount-header__img--wrap -->
-        <div class="personalAccount-header__content">
-            <div class="personalAccount-header__content-info">
-                <!--<span class="header__content-info__data">21.12.2020 г.  /  12:48</span>-->
-                <span class="header__content-info__username">Добрый день<br>
-                    <span>
-                        <{ username }>
-                    </span>
-                </span>
-                <!-- /.header__content-info__username -->
-            </div>
-            <!-- /.personalAccount-header__content-info -->
-
-            <div class="personalAccount-header__content-tarrifs">
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/"><img src="/public/img/personalAccount/logo.png" alt="logo" style="width: 75%;"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="p-1">
+            <p>
+                <span class="header__content-info__username">Добрый день, 
+                    <span> <{ username }> </span> 
+                </span> 
+            </p>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <p class="p-1">
+                <?php if($this->userrole == 300){ ?>
+                <span class="header__content-count__left-title">Остаток чеков, шт:<br></span>
+                <span class="header__content-count__left-num"> <{ checkcount }> </span>
+                <?php }?>
+            </p>
+            <p class="p-1">                
                 <?php if($this->userrole == 300){ ?>
                 <span class="header__content-tarrifs__name">интернет-сервис:<br>
                     <span>“Призовая молния”</span>
                 </span>
-                <!--<span class="header__content-tarrifs__period">Срок действия: <span>1 мес.</span> 1000 чеков</span>-->
                 <?php }?>
-            </div>
-            <!-- /.personalAccount-header__content-tarrifs -->
+            </p>
+            <div id="AdminMenu">
+                <ul class="navbar-nav mx-auto p-1 m-1">
 
-            <div class="personalAccount-header__content-count">
-                <div class="personalAccount-header__content-count__left">
+                    <li v-for="(item, i ) in Menu" @click.prevent="SetContent(item.src,i)" :key="i" :class="{ active: i === activeItem}" class="nav-link text-center">
+                        <a> {{item.name}} </a>
+                    </li>
                     <?php if($this->userrole == 300){ ?>
-                    <span class="header__content-count__left-title">Остаток<br>чеков, шт:</span>
-                    <span class="header__content-count__left-num">
-                        <{ checkcount }>
-                    </span>
+                    <li @click.prevent="dwdldoc" class="nav-link text-center" style="border-radius: 5px;">
+                        <a>Скачать договор</a>
+                    </li>
                     <?php }?>
+                    <?php if($this->userrole == 100){ ?>
+                    <li class="nav-link m-1 p-1"><a target="_blank" href="https://play.google.com/store/apps/details?id=com.oplanet.lightning&hl=ru">
+                        <img class="partners-navigation__img" src="/public/img/footer/android-big.png" alt="android" style="max-width: 150px;"></a>
+                    </li>
+                    <li class="nav-link m-1 p-1"> <a target="_blank" href="https://apps.apple.com/ru/app/%D0%BF%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%BB%D0%BD%D0%B8%D1%8F/id1459626313">
+                        <img class="partners-navigation__img" src="/public/img/footer/apple-big.png" alt="apple" style="max-width: 150px;"></a>
+                    </li>
                 </div>
-                <!-- Button trigger modal -->
-                <!--             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                     Техническая поддержка
-                 </button>-->
-                 <!-- /.personalAccount-header__content-count__left -->
-                 <button class="personalAccount-header__content-count__btn" data-toggle="modal"
-                 data-target="#FeedbackModal">Техническая поддержка</button>
-             </div>
-             <!-- /.personalAccount-header__content-count -->
-         </div>
-         <!-- /.personalAccount-header__content -->
-         <div class="personalAccount-header__exit">
-            <a href="/user/logout">Выход</a>
+                <?php }?>
+            </ul>
         </div>
-        <!-- /.personalAccount-header__exit -->
     </div>
-    
+
+    <button class="personalAccount-header__content-count__btn" data-toggle="modal" data-target="#FeedbackModal">Техническая поддержка</button>
+    <div class="personalAccount-header__exit p-3">
+        <a href="/user/logout">Выход</a>
+    </div>
+
+</div>
+</nav>
 </header>
 
-<main class="personalAccount-main">
-    <!--<div class="container-fluid">-->
-
-        <aside id="AdminMenu" class="<{ MnuCssClass }>" style="max-width: 15%; max-height: 100%;">
-            <div class="lk-burger">
-                <span class="lk-burger__item lk-burger__item-1"></span>
-                <span class="lk-burger__item lk-burger__item-2"></span>
-                <span class="lk-burger__item lk-burger__item-3"></span>
-            </div>
-            <button v-for="(item, i ) in Menu" @click.prevent="SetContent(item.src,i)" :key="i" :class="{ active: i === activeItem}" class="btn btn-block m-1 p-1">{{item.name}}</button>
-            <?php if($this->userrole == 300){ ?>
-            <button @click.prevent="dwdldoc" class="btn btn-block m-1 p-1">Скачать договор</button>
-            <?php }?>
-            <?php if($this->userrole == 100){ ?>
-            <div class="partners-navigation__img_wrap">
-                <a target="_blank" href="https://play.google.com/store/apps/details?id=com.oplanet.lightning&hl=ru">
-                    <img class="partners-navigation__img" src="/public/img/footer/android-big.png" alt="android">
-                </a>
-                <a target="_blank"
-                href="https://apps.apple.com/ru/app/%D0%BF%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%BB%D0%BD%D0%B8%D1%8F/id1459626313">
-                <img class="partners-navigation__img" src="/public/img/footer/apple-big.png" alt="apple">
-            </a>
-        </div>
-        <?php }?>
-        <!--            <a  href="/lk/qrkodreder">
-                qrider
-            </a>-->
-        </aside>
-        <section class="personalAccount-content <{ ContentCssClass }> m-0" id="admincontent" style="padding-left: 15%; max-width: 100%; max-height: 100%;">
+<main class="personalAccount-main p-0 m-0">
+    <div class="container-fluid" style="background-color: #D3D3D3;">
+        <div id="admincontent" class="<{ ContentCssClass }> mx-auto text-center" style="height: 900px; padding: 0; margin: 0;">
             <{ admincontent }>
-        </section>
-        <!--</div>-->
-    </main>
+        </div>
+    </div>
+</main>
 
-   <script>
-        var AdminMenu = new Vue({
-            el: '#AdminMenu',
-            data: {
-                Menu: [],
-                isActive:[],
-                activeItem:<{mnuindex}>
-            },
-            created() {
-                window.onpopstate = (event) => {
-                    if (event.state != null) {
-                        this.SetContent(event.state);
-                    }
+<script>
+    var AdminMenu = new Vue({
+        el: '#AdminMenu',
+        data: {
+            Menu: [],
+            isActive:[],
+            activeItem:<{mnuindex}>
+        },
+        created() {
+            window.onpopstate = (event) => {
+                if (event.state != null) {
+                    this.SetContent(event.state);
+                }
                 //                console.log(event.state);
             };
         },
@@ -232,11 +206,3 @@ aria-hidden="true">
 
 </script>
 
-<script>
-    let burgerLK = document.querySelector('.lk-burger');
-    let adminMenu = document.querySelector('#AdminMenu');
-    burgerLK.onclick = function () {
-        this.classList.toggle('lk-burger__active')
-        adminMenu.classList.toggle('AdminMenu_active');
-    };
-</script>

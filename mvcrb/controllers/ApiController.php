@@ -117,7 +117,7 @@ class ApiController extends Controller{
 //        } else {
 //            $User = new UserModel();
 //        }
-        $User = new UserModel();
+        $User = new ClientModel();
         $PostData = json_decode($this->REQUEST,true);
         switch ($func) {
             case 'GetAccessToken':

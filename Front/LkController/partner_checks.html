@@ -1,112 +1,101 @@
 <div id="Checks">
+    <div class="container">
     <!--<div class="edge-header bg-dark"></div>-->
     <div class="content-title--wrap">
         <h6 class="content-title">Информация по чекам</h6>
     </div>
 
-    <!--Навигатор пагинатор-->
-    <div class="chekstat-statistic">
-        <h4 class="chekstat-statistic__count">У вас {{Count}} Чеков</h4>
-        <div> 
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text chekstat-statistic-purple-item" id="basic-addon1">Показать</span>
-                </div>
-                <select class="browser-default custom-select chekstat-statistic-purple-input" v-model.number="perPage" @change.prevent="setPage(1)">
-<!--                    <option value="3">3</option>
-                    <option value="6">6</option>-->
-                    <option value="10">10</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                    <option value="300">300</option>
-                    <option value="500">500</option>
-                    <option value="1000">1000</option>
-                </select>
-                <div class="input-group-append">
-                    <span class="input-group-text chekstat-statistic-purple-item" id="basic-addon1">строк</span>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="input-group" style="width: 190px;">
-                <!--                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">На</span>
-                </div>-->
-                <input type="number" class="browser-default form-control chekstat-statistic-purple-input" v-model.number="currentPage" @change.prevent="setPage(currentPage)">
-                <!--<select class="browser-default custom-select" v-model.number="currentPage" @change.prevent="setPage(currentPage)">-->
-                <!--<option v-for="item in paginator.count" :value="item">{{item}}</option>-->
-                <!--</select>-->
-                <div class="input-group-append">
-                    <span class="input-group-text chekstat-statistic-purple-item" id="basic-addon1"> из {{paginator.count}}</span>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic example">
-                <div class="btn-group mr-2" role="group">
-                    <button type="button" class="btn btn-purple-lk chekstat-statistic__btn" @click.prevent="setPage(1)"><i class="fas fa-angle-double-left"></i></button>
-                    <button type="button" class="btn btn-purple-lk chekstat-statistic__btn" @click.prevent="setPage(currentPage-1)"><i class="fas fa-angle-left"></i></button>
-                </div>
-                <div class="btn-group mr-2" role="group">
-                    <div v-for="p in paginator.pages">
-                        <button type="button" class="btn btn-purple-lk-main" v-if="currentPage == p" @click.prevent="setPage(p)">{{ p }}</button>
-                        <button type="button" class="btn btn-default" v-else @click.prevent="setPage(p)">{{ p }}</button>
+    <h2 class="">Чеков отсканированных на Ваших ККМ: {{Count}} шт.</h2>
+    <hr>
+    
+    <div class="container-fluid">
+        <!--Навигатор пагинатор-->
+        <div class="chekstat-statistic">
+
+            <div> 
+                <div class="input-group">
+
+                    <select class="m-0" v-model.number="perPage" @change.prevent="setPage(1)">
+                        <option value="1">1</option>
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+
+                    </select>
+                    <div class="input-group-append">
+                        <span class="m-1" id="basic-addon1">- количество отображаемых строк</span>
                     </div>
                 </div>
-                <div class="btn-group mr-2" role="group">
-                    <button type="button" class="btn btn-purple-lk chekstat-statistic__btn" @click.prevent="setPage(currentPage+1)"><i class="fas fa-angle-right"></i></button>
-                    <button type="button" class="btn btn-purple-lk chekstat-statistic__btn" @click.prevent="setPage(paginator.count)"><i class="fas fa-angle-double-right"></i></button>
+            </div>
+            <div>
+                <div class="input-group">
+
+                    <div>
+                        <span class="input-group-text chekstat-statistic-purple-item" id="basic-addon1"> Страница № <input style="width: 50%;" type="number" v-model.number="currentPage" @change.prevent="setPage(currentPage)"> / {{paginator.count}}</span>
+                    </div>
+
                 </div>
+            </div>
+            <div>
+                <div role="group" aria-label="Basic example">
+                    <div class="mr-1" role="group">
+                        <div class="row mx-auto">
+                            <button type="button" class="btn btn-sm btn-purple-lk chekstat-statistic__btn m-1 p-1" @click.prevent="setPage(1)"><i class="fas fa-angle-double-left"></i></button>
+                            <button type="button" class="btn btn-sm btn-purple-lk chekstat-statistic__btn m-1 p-1" @click.prevent="setPage(currentPage-1)"><i class="fas fa-angle-left"></i></button>
+                            <div v-for="p in paginator.pages">
+
+                                <button type="button" class="btn btn-purple-lk-main m-1 p-2" v-if="currentPage == p" @click.prevent="setPage(p)">{{ p }}</button>
+                                <button type="button" class="btn btn-default m-1 p-2" v-else @click.prevent="setPage(p)">{{ p }}</button>
+
+                            </div>
+                            <button type="button" class="btn btn-sm btn-purple-lk chekstat-statistic__btn m-1 p-1" @click.prevent="setPage(currentPage+1)"><i class="fas fa-angle-right"></i></button>
+                            <button type="button" class="btn btn-sm btn-purple-lk chekstat-statistic__btn m-1 p-1" @click.prevent="setPage(paginator.count)"><i class="fas fa-angle-double-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
-
     </div>
-    <div class="justify-content-center">
-        <div v-if="Data" class="cheks-lk" style="overflow-x: auto;">
+    <div class="container-fluid">
+        <div class="justify-content-center">
+            <div v-if="Data" class="cheks-lk" style="overflow-x: auto;">
 
-            <table class="table table-hover table-lk">
-                <thead>
-                    <tr>
-                        <!--<th>{{Count}} записей</th>-->
-                        <th style="cursor: pointer;" v-for="(item, index) in Data[0]" @click="sort(index)"><i class="fas fa-sort"></i> {{index}}</th>
-                        <!--<th scope="col" style="cursor: pointer;" @click="sort('id')"><i class="fas fa-sort"></i> ID</th>-->
-                        <!--<th>Инструменты</th>-->
-                    </tr>
-                </thead>
+                <table class="table table-hover table-lk">
+                    <thead>
+                        <tr>
 
-                <tbody v-if='loads'>
-
-                    <tr v-for="item in Data">
-                        <!--<th><a title="Проверить на валидность" class="text-info" :href="'/fns/get/code?'+item.qr" target="_blank"><i class="far fa-eye"></i></a></th>-->
-                        <!--                        <th>
-                            <button @click='ValidateCheck(item)' type="button" class="btn btn-warning">Проверить</button>
+                            <th style="cursor: pointer;" v-for="(item, index) in Data[0]" @click="sort(index)"><i class="fas fa-sort"></i> {{index}}</th>
                             
-                        </th>-->
-                        <th v-for="itemt in item" scope="row">{{itemt}}
+                        </tr>
+                    </thead>
 
-                        </th>
-                        <!--<th>{{item.id}}</th>-->
-                        <!--                        <td>
-                            <div class="d-flex justify-content-between">
-                                <a title="Изменить страницу" class="text-success" :href="'/admin/editor/tinymce/'+item.id"><i class="far fa-edit"></i></a>
-                                <a title="Показать страницу в отдельной страницу" class="text-info" :href="'/page/'+item.name" target="_blank"><i class="far fa-eye"></i></a>
-                                <a title="Удалить страницу навсегда" class="text-danger" @click="DelPage(item.id)"><i class="far fa-trash-alt"></i></a>
-                            </div>
-                        </td>-->
-                    </tr>
+                    <tbody v-if='loads'>
 
-                </tbody>
-            </table>
-            <h2 v-if='!loads'>Подождите идет загрузка данных</h2>
-        </div>
-        <div v-else class="not-checks-lk">
-            У вас нет чеков
+                        <tr v-for="item in Data">
+
+                            <th v-for="itemt in item" scope="row">{{itemt}}
+
+                            </th>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+                <h2 v-if='!loads'>Подождите идет загрузка данных</h2>
+            </div>
+            <div v-else class="not-checks-lk">
+                <h2 class="">У вас нет отсканированных чеков</h2>
+            </div>
         </div>
     </div>
 </div>
-
+</div>
 
 <script>
     var Checks = new Vue({
@@ -156,22 +145,22 @@
                 this.loads = false;
                 this.currentPage = p;
                 fetch('/user/api/getcheck/', {
-                        mode: 'cors',
-                        method: 'POST',
-                        body: JSON.stringify({
-                            start: (p - 1) * this.perPage,
-                            limit: this.perPage,
-                            data: this.currentSort,
-                            dir: this.currentSortDir
-                        })
+                    mode: 'cors',
+                    method: 'POST',
+                    body: JSON.stringify({
+                        start: (p - 1) * this.perPage,
+                        limit: this.perPage,
+                        data: this.currentSort,
+                        dir: this.currentSortDir
                     })
-                    .then(res => res.json())
-                    .then(res => {
-                        this.Data = res.data;
-                        this.Count = res.count;
-                        this.loads = true;
-                        console.log(res);
-                    });
+                })
+                .then(res => res.json())
+                .then(res => {
+                    this.Data = res.data;
+                    this.Count = res.count;
+                    this.loads = true;
+                    console.log(res);
+                });
             },
             sort(s) {
                 if (s === this.currentSort) {
@@ -205,13 +194,13 @@
             },
             ValidateCheck(item) {
                 fetch('/fns/get/code?' + item.qr, {
-                        mode: 'cors',
-                        method: 'POST',
-                        cache: 'no-cache',
-                        credentials: 'same-origin'
-                    })
-                    .then(res => res.json())
-                    .then(res => {
+                    mode: 'cors',
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin'
+                })
+                .then(res => res.json())
+                .then(res => {
                         //                    this.setPage(this.currentPage);
                         if (res.success) {
                             alert(res.success);

@@ -1,30 +1,34 @@
-<div id="admin">  
-    <div class="content-title--wrap">
-        <h6 class="content-title">Настройки</h6>
-        <span></span>
-    </div>
-    <div class="d-flex flex-wrap setting-lk--wrap">
-        <div class="form-group setting-lk-item">
-            <label>Время до начала розыгрыша</label>
-            <div class="input-group mb-3 ">
-                <input v-model="DataTime"
-                   type="datetime-local" class="form-control chekstat-statistic-purple-input" style="border: none;">
-                <div class="input-group-append">
-                    <button @click="SaveDateTime" type="button" class="setting-lk-btn" >Задать</button>
+<div id="admin">
+    <div class="container">
+        <div class="content-title--wrap">
+            <h6 class="content-title">Настройки</h6>
+            <span></span>
+        </div>
+
+        <div class="d-flex flex-wrap setting-lk--wrap">
+            <div class="form-group" style="background-color: white;">
+                <label>
+                    <h2 class="m-2 p-2">Установите дату начала розыгрыша JackPot:</h2>
+                </label>
+                <div class="input-group mb-3">
+                    <input v-model="DataTime" type="datetime-local" class="form-control m-4" style="border: none;">
+                    <div class="input-group-append">
+                        <button @click="SaveDateTime" type="button" class="setting-lk-btn m-4 br-0" style="border: none; border-radius: 5px;">Задать</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="form-group setting-lk-item">
-            <label>Почта для отправлений</label>
-            <div class="input-group mb-3 ">
-                <input v-model="EmailSend"
-                   type="email" class="form-control chekstat-statistic-purple-input" style="border: none;">
-                <div class="input-group-append">
-                    <button @click="SaveEmailSend" type="button" class="setting-lk-btn" >Задать</button>
+            <hr>
+            <div class="form-group" style="background-color: white;">
+                <label>
+                    <h2 class="m-2 p-2">Укажите e-mail модератора, для получения сообщений сервиса:</h2>
+                </label>
+                <div class="input-group mb-3 ">
+                    <input v-model="EmailSend" type="email" class="form-control m-4" style="border: none;">
+                    <div class="input-group-append">
+                        <button @click="SaveEmailSend" type="button" class="setting-lk-btn m-4 br-0" style="border: none; border-radius: 5px;">Задать</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
 <!--        <div class="form-group setting-lk-item">
             <label>Ключь от яндекс API</label>
@@ -49,6 +53,7 @@
         </div>-->
     </div>
 </div>
+</div>  
 
 <script type="text/javascript"> 
     var admin = new Vue({

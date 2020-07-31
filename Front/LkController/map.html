@@ -1,7 +1,7 @@
-    <div class="content-title--wrap">
+    <!-- <div class="content-title--wrap container">
         <h6 class="content-title m-4 ">Карта партнеров</h6>
         <span></span>
-    </div>
+    </div> -->
 <style>
     #YaMap {
        height: 100%;
@@ -14,7 +14,7 @@
 </style>
 
 
-    <div id="YaMap" class="container-fluids">
+    <div id="YaMap" class="container" style="height: 600px;">
         <yandex-map :settings="settings" @map-was-initialized="initHandler"
             :controls="['geolocationControl','rulerControl','typeSelector','zoomControl']"
             :coords="latlng"

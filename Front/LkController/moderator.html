@@ -2,185 +2,179 @@
     table thead th{
         cursor: pointer;
         /*background-color: #CCCCCC;*/
-        padding: 5px;
+        padding: 2px;
     }
     table tbody th{
-        padding: 5px;
+        padding: 2px;
     }
 </style>
 
 <div id="moderator">
-    <div class="content-title--wrap">
-        <h6 class="content-title">Управление партнерами</h6>
-        <span>{{ msg }}</span>
-    </div>
-    <div v-if="state==0" class="content-dataChange">
-        <div  class="ca">
-            <!--Card content-->
-            <div  class="d-flex flex-wrap justify-content-between">
-                <div class="p-1">
-                    <div class="input-group pt-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text btn-purple-lk" id="basic-addon1">Показать</span>
-                        </div>
-                        <select class="browser-default custom-select chekstat-statistic-purple-input" v-model.number="perPage" @change.prevent="setPage(1)">
-<!--                            <option value="3">3</option>
-                            <option value="6">6</option>-->
-                            <option value="10">10</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="500">500</option>
-                            <option value="1000">1000</option>
-                        </select>
-                        <div class="input-group-append">
-                            <span class="input-group-text btn-purple-lk" id="basic-addon1">строк</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="p-1">
-                    <div class="btn-group d-flex flex-wrap" role="group">
-                        <div class="btn-group mr-2" role="group">
-                            <button type="button" class="btn btn-purple-lk" @click.prevent="setPage(1)"><i class="fas fa-angle-double-left"></i></button>
-                            <button type="button" class="btn btn-purple-lk" @click.prevent="setPage(currentPage-1)"><i class="fas fa-angle-left"></i></button>
-                        </div>
-                        <div class="btn-group mr-2" role="group">
-                            <div v-for="p in paginator.pages">
-                                <button type="button" class="btn btn-purple-lk-main" v-if="currentPage == p" @click.prevent="setPage(p)">{{ p }}</button>
-                                <button type="button" class="btn btn-purple-lk-main bg-success" v-else @click.prevent="setPage(p)">{{ p }}</button>
+    <div class="container" style="background-color: silver;">
+        <div class="content-title--wrap">
+            <h6 class="content-title">Управление партнерами</h6>
+            <span>{{ msg }}</span>
+        </div>
+        <div v-if="state==0" class="content-dataChange">
+            <div  class="ca">
+                <!--Card content-->
+                <div  class="d-flex flex-wrap justify-content-between">
+                    <div class="p-1">
+                        <div class="input-group pt-2">
+                            <select class="browser-default custom-select chekstat-statistic-purple-input" v-model.number="perPage" @change.prevent="setPage(1)">
+                                <option value="10" style="font-size: 1em;">10</option>
+                                <option value="50" style="font-size: 1em;">50</option>
+                                <option value="100" style="font-size: 1em;">100</option>
+                                <option value="500" style="font-size: 1em;">500</option>
+                                <option value="1000" style="font-size: 1em;">1000</option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon1" style="font-size: 1em;">- количество отображаемых строк</span>
                             </div>
                         </div>
-                        <div class="btn-group mr-2" role="group">
-                            <button type="button" class="btn btn-purple-lk" @click.prevent="setPage(currentPage+1)"><i class="fas fa-angle-right"></i></button>
-                            <button type="button" class="btn btn-purple-lk" @click.prevent="setPage(paginator.count)"><i class="fas fa-angle-double-right"></i></button>
+
+                    </div>
+
+                    <div class="p-1">
+                        <div class="btn-group d-flex flex-wrap" role="group">
+                            <div class="btn-group mr-2" role="group">
+                                <button type="button" class="btn btn-purple-lk btn-lg p-2 m-0" @click.prevent="setPage(1)"><i class="fas fa-angle-double-left"></i></button>
+                                <button type="button" class="btn btn-purple-lk btn-lg p-2 m-0" @click.prevent="setPage(currentPage-1)"><i class="fas fa-angle-left"></i></button>
+                            </div>
+                            <div class="btn-group mr-2" role="group">
+                                <div v-for="p in paginator.pages">
+                                    <button type="button" class="btn btn-purple-lk-main" v-if="currentPage == p" @click.prevent="setPage(p)" style="border: none; border-radius: 5px;">
+                                        {{ p }}
+                                    </button>
+                                    <button type="button" class="btn btn-purple-lk-main bg-success" v-else @click.prevent="setPage(p)" style="border: none; border-radius: 5px;">
+                                        {{ p }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="btn-group mr-2" role="group">
+                                <button type="button" class="btn btn-purple-lk btn-lg p-2 m-0" @click.prevent="setPage(currentPage+1)"><i class="fas fa-angle-right"></i></button>
+                                <button type="button" class="btn btn-purple-lk btn-lg p-2 m-0" @click.prevent="setPage(paginator.count)"><i class="fas fa-angle-double-right"></i></button>
+                            </div>
                         </div>
+                    </div>
+
+
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between table-lk container p-2 m-0" >
+                    <div v-if="Data" class="cheks-lk" style="overflow-x: auto;">
+                        <table class="table table-hover bg-white">
+
+                            <thead>
+                                <tr>
+                                    <th scope="col" @click="sort('status')"><i class="fas fa-sort"></i> Статус</th>
+                                    <th scope="col" @click="sort('surname')"><i class="fas fa-sort"></i> Фамилия</th>
+                                    <th scope="col" @click="sort('email')"><i class="fas fa-sort"></i> E-mail</th>
+                                    <th scope="col" @click="sort('phone')"><i class="fas fa-sort"></i> Телефон</th>
+                                    <th scope="col" @click="sort('inn')"><i class="fas fa-sort"></i> ИНН</th>
+                                    <th>Инструменты</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="LoadingData">
+
+                                <tr v-for="(item, idx) in Data" :key="idx">
+                                    <th v-if="item.status==='verefid'" class="bg-success">Активен</th>
+                                    <th v-else-if="item.status==='bloked'" class="bg-danger">Не активеен</th>
+                                    <th v-else-if="item.status==='blue'" class="bg-info">Синий</th>
+                                    <th v-else class="bg-warning">Не проверен</th>
+                                    <td>{{item.surname}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.phone}}</td>
+                                    <td>{{item.inn}}</td>
+                                    <td>
+                                        <a title="Изменить пользователя" class="icon-teble-lk" @click="SetUserEdit(item)"><i class="fas fa-user-edit"></i>Изменить</a>
+                                        <hr>
+                                        <a title="Отправить модератору на почту данные этого пользователя" class="icon-teble-lk" @click="SendUser(item.id)"><i class="fas fa-location-arrow"></i>Отправить</a>
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-
             </div>
 
-            <div class="d-flex flex-wrap justify-content-between table-lk" >
 
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col" @click="sort('status')"><i class="fas fa-sort"></i> Статус</th>
-                                <th scope="col" @click="sort('surname')"><i class="fas fa-sort"></i> Фамилия</th>
-                                <th scope="col" @click="sort('firstname')"><i class="fas fa-sort"></i> Имя</th>
-                                <th scope="col" @click="sort('lastname')"><i class="fas fa-sort"></i> Отчество</th>
-                                <th scope="col" @click="sort('email')"><i class="fas fa-sort"></i> E-mail</th>
-                                <th scope="col" @click="sort('phone')"><i class="fas fa-sort"></i> Телефон</th>
-                                <th scope="col" @click="sort('registredatetime')"><i class="fas fa-sort"></i> Регистрация</th>
-                                <th scope="col" @click="sort('inn')"><i class="fas fa-sort"></i> ИНН</th>
-                                <th>Инструменты</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="LoadingData">
-
-                            <tr v-for="(item, idx) in Data" :key="idx">
-                                <th v-if="item.status==='verefid'" class="bg-success">Активен</th>
-                                <th v-else-if="item.status==='bloked'" class="bg-danger">Не активеен</th>
-                                <th v-else-if="item.status==='blue'" class="bg-info">Синий</th>
-                                <th v-else class="bg-warning">Не проверен</th>
-                                <td>{{item.surname}}</td>
-                                <td>{{item.firstname}}</td>
-                                <td>{{item.lastname}}</td>
-
-                                <td>{{item.email}}</td>
-                                <td>{{item.phone}}</td>
-                                <td>{{item.registredatetime}}</td>
-                                <td>{{item.inn}}</td>
-                                <td>
-                                    <div class="d-flex justify-content-between">
-                                        <a title="Изменить пользователя" class="icon-teble-lk" @click="SetUserEdit(item)"><i class="fas fa-user-edit"></i></a>
-                                        <a title="Отправить модератору на почту данные этого пользователя" class="icon-teble-lk" @click="SendUser(item.id)"><i class="fas fa-location-arrow"></i></a>
-                                        <!--<a title="Удалить пользователя на всегда" class="text-danger" @click="DelUser(item.id)"><i class="fas fa-user-times"></i></a>-->
-                                    </div>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-
-            </div>
 
         </div>
-        
-        
-        
-    </div>
-    
-    <div v-if="state==1" class="content-dataChange">
-        <div class="content-dataChange__titles">
-            <span>Фамилия</span>
-            <span>Имя</span>
-            <span>Отчество</span>
-            <span>Наименование</span>
-            <span>ИНН</span>
-            <span>КПП</span>
-            <span>ОГРН или ОГРНИП</span>
-            <span>Юридический адрес</span>
-            <span>Почтовый адрес</span>
-            <span>Телефон</span>
-            <span>Расчетный счет</span>
-            <span>Корреспондентский счет</span>
-            <span>БИК банка</span>
-            <span>Банк</span>
-            <span>E-mail</span>
-            <span>Колличество Чеков</span>
-            <span>Должность</span>
-            <span>Директор</span>
-            <span>Статус</span>
-            
-        </div>
-        <!-- /.content-dataChange__titles -->
-        <form @submit="SaveIm" class="content-dataChange__form">
-            <input v-model="CurrentUser.surname" type="text" placeholder="Красильников">
-            <input v-model="CurrentUser.firstname" type="text" placeholder="Константин">
-            <input v-model="CurrentUser.lastname" type="text" placeholder="Сергеевич">
-            <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
-            <input v-model="CurrentUser.inn" :minlength="10" :maxlength="10" type="text" placeholder="7731347089" required>
-            <input v-model="CurrentUser.kpp" :minlength="9" :maxlength="9" type="text" placeholder="7731347089">
-            <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="15" type="text" placeholder="1177746126040">
-            <input v-model="CurrentUser.juraddress" type="text" placeholder="Ленина 9" required>
-            <input v-model="CurrentUser.postaddress" type="text" placeholder="Ленина 9">
-            <input v-model="CurrentUser.phone" :maxlength="13" pattern="(\+?\d[- .]*){7,13}" type="tel" placeholder="+7(999) 999 99 99" required>
-            <input v-model="CurrentUser.schet" :minlength="20" :maxlength="20" type="text" placeholder="40817810099910004312" required>
-            <input v-model="CurrentUser.corschet" :minlength="20" :maxlength="20" type="text" placeholder="30101643600000000957" required>
-            <input v-model="CurrentUser.bik" :minlength="9" :maxlength="9" type="text" placeholder="044583972">
-            <input v-model="CurrentUser.bankname" type="text" placeholder="Сбербанк" required>
-            <input v-model="CurrentUser.email" minlength="5" type="email" placeholder="example@email.com" required>
-            
-            
-            <div class="input-group">
-                <input class="form-control" v-model="CurrentUser.kountchek" minlength="3" type="number" placeholder="50000" required>
-                <div class="input-group-append">
-                    <button @click="addChek" type="button" class="input-group-text">Добавить чеков</button>
-                    <!--<div class="input-group-text" id="btnGroupAddon">@</div>-->
+        <div class="container">
+            <div v-if="state==1" class="content-dataChange">
+                <div class="content-dataChange__titles">
+                    <span>Фамилия</span>
+                    <span>Имя</span>
+                    <span>Отчество</span>
+                    <span>Наименование</span>
+                    <span>ИНН</span>
+                    <span>КПП</span>
+                    <span>ОГРН или ОГРНИП</span>
+                    <span>Юридический адрес</span>
+                    <span>Почтовый адрес</span>
+                    <span>Телефон</span>
+                    <span>Расчетный счет</span>
+                    <span>Корреспондентский счет</span>
+                    <span>БИК банка</span>
+                    <span>Банк</span>
+                    <span>E-mail</span>
+                    <span>Колличество Чеков</span>
+                    <span>Должность</span>
+                    <span>Директор</span>
+                    <span>Статус</span>
+
                 </div>
-                
+                <!-- /.content-dataChange__titles -->
+                <form @submit="SaveIm" class="content-dataChange__form">
+                    <input v-model="CurrentUser.surname" type="text" placeholder="Красильников">
+                    <input v-model="CurrentUser.firstname" type="text" placeholder="Константин">
+                    <input v-model="CurrentUser.lastname" type="text" placeholder="Сергеевич">
+                    <input v-model="CurrentUser.kompany" type="text" placeholder="ООО Компания" required>
+                    <input v-model="CurrentUser.inn" :minlength="10" :maxlength="10" type="text" placeholder="7731347089" required>
+                    <input v-model="CurrentUser.kpp" :minlength="9" :maxlength="9" type="text" placeholder="7731347089">
+                    <input v-model="CurrentUser.ogrn" :minlength="13" :maxlength="15" type="text" placeholder="1177746126040">
+                    <input v-model="CurrentUser.juraddress" type="text" placeholder="Ленина 9" required>
+                    <input v-model="CurrentUser.postaddress" type="text" placeholder="Ленина 9">
+                    <input v-model="CurrentUser.phone" :maxlength="13" pattern="(\+?\d[- .]*){7,13}" type="tel" placeholder="+7(999) 999 99 99" required>
+                    <input v-model="CurrentUser.schet" :minlength="20" :maxlength="20" type="text" placeholder="40817810099910004312" required>
+                    <input v-model="CurrentUser.corschet" :minlength="20" :maxlength="20" type="text" placeholder="30101643600000000957" required>
+                    <input v-model="CurrentUser.bik" :minlength="9" :maxlength="9" type="text" placeholder="044583972">
+                    <input v-model="CurrentUser.bankname" type="text" placeholder="Сбербанк" required>
+                    <input v-model="CurrentUser.email" minlength="5" type="email" placeholder="example@email.com" required>
+
+
+                    <div class="input-group">
+                        <input class="form-control" v-model="CurrentUser.kountchek" minlength="3" type="number" placeholder="50000" required>
+                        <div class="input-group-append">
+                            <button @click="addChek" type="button" class="input-group-text">Добавить чеков</button>
+                            <!--<div class="input-group-text" id="btnGroupAddon">@</div>-->
+                        </div>
+
+                    </div>
+                    <select v-model="CurrentUser.bosstype" name="" id="" required>
+                        <option value="ip">ИП</option>
+                        <option value="boss">Директор</option>
+                        <option value="bigboss">Ген. директор</option>
+                    </select>
+                    <input v-model="CurrentUser.bossname" type="text" placeholder="Красильников Константин Сергеевич" required>
+                    <select v-model="CurrentUser.status" name="" id="" required>
+                        <option value="bloked">Заблокирован</option>
+                        <option value="noverefid">Не проверен</option>
+                        <option value="verefid">Одобрен</option>
+                        <!--<option value="blue">Синий</option>-->
+                    </select>
+                    <input type="submit" value="Сохранить">
+
+                    <input @click="state=0" type="button" value="Назад">
+                </form>
             </div>
-            <select v-model="CurrentUser.bosstype" name="" id="" required>
-                <option value="ip">ИП</option>
-                <option value="boss">Директор</option>
-                <option value="bigboss">Ген. директор</option>
-            </select>
-            <input v-model="CurrentUser.bossname" type="text" placeholder="Красильников Константин Сергеевич" required>
-            <select v-model="CurrentUser.status" name="" id="" required>
-                <option value="bloked">Заблокирован</option>
-                <option value="noverefid">Не проверен</option>
-                <option value="verefid">Одобрен</option>
-                <!--<option value="blue">Синий</option>-->
-            </select>
-            <input type="submit" value="Сохранить">
-            
-            <input @click="state=0" type="button" value="Назад">
-        </form>
+        </div>
     </div>
 </div>
-
 <script type="text/javascript">
     var moderator = new Vue({
         el: '#moderator',
@@ -200,92 +194,92 @@
                 this.CurrentUser.kountchek=cntc+addck;
                 alert("чеки добавлены!\r\nHе забудте сохранить!");
 //                console.log(cntc+addck);
-            },
-            setPage(p) {
-                this.LoadingData = false;
-                if (p > this.paginator.count)
-                    p = this.paginator.count;
-                if (p < 1)
-                    p = 1;
+},
+setPage(p) {
+    this.LoadingData = false;
+    if (p > this.paginator.count)
+        p = this.paginator.count;
+    if (p < 1)
+        p = 1;
 
-                this.currentPage = p;
-                fetch('/user/api/getpartner', {
-                    mode: 'cors',
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    body: JSON.stringify({start: (p - 1) * this.perPage, limit: this.perPage, data: this.currentSort, dir: this.currentSortDir})
-                })
-                .then(res => res.json())
-                .then(res => {
-                    this.Data = res.data;
-                    this.Count = res.count;
-                    this.LoadingData = true;
+    this.currentPage = p;
+    fetch('/user/api/getpartner', {
+        mode: 'cors',
+        method: 'POST',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        body: JSON.stringify({start: (p - 1) * this.perPage, limit: this.perPage, data: this.currentSort, dir: this.currentSortDir})
+    })
+    .then(res => res.json())
+    .then(res => {
+        this.Data = res.data;
+        this.Count = res.count;
+        this.LoadingData = true;
 //                    console.log(res);
-                });
-            },
-            SetUserEdit(User) {
-                this.CurrentUser = User;
-                this.id = User.id;
-                this.state = 1;
-            },
-            SaveIm(e){
-                e.preventDefault();
-                fetch('/user/api/savepartner', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.CurrentUser)
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    MsgBox('Сохранено успешно');
-                    this.msg = 'Сохранено успешно';
-                    setTimeout(() => {
-                        this.msg = '';
-                    }, 5000);
-                    console.log(json);
-                })
-                .catch((error) => {
-                    this.msg = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            DelUser(id) {
-                fetch('/user/api/delete', {
-                    mode: 'cors',
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    body: JSON.stringify({UserID: id})
-                })
-                .then(res => res.json())
-                .then(res => {
-//                    console.log(res);
-                    this.setPage(1);
-                }).catch((e) => this.errors = 'Запрос серверу отправлен но ответ вернулся ошибочный! ' + e);
-
-            },
-            SendUser(id) {
-                fetch('/user/api/sendmailbyparner', {
-                    mode: 'cors',
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    body: JSON.stringify({UserID: id})
-                })
-                .then(res => res.json())
-                .then(res => {
-                    MsgBox('Успешно');
-                    console.log(res);
-//                    this.setPage(1);
-                }).catch((e) => this.errors = 'Запрос серверу отправлен но ответ вернулся ошибочный! ' + e);
-
-            }
+});
+},
+SetUserEdit(User) {
+    this.CurrentUser = User;
+    this.id = User.id;
+    this.state = 1;
+},
+SaveIm(e){
+    e.preventDefault();
+    fetch('/user/api/savepartner', {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify(this.CurrentUser)
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
         }
+        throw new Error('Network response was not ok');
+    })
+    .then((json) => {
+        MsgBox('Сохранено успешно');
+        this.msg = 'Сохранено успешно';
+        setTimeout(() => {
+            this.msg = '';
+        }, 5000);
+        console.log(json);
+    })
+    .catch((error) => {
+        this.msg = error;
+        console.log('FormLogin', error);
     });
+},
+DelUser(id) {
+    fetch('/user/api/delete', {
+        mode: 'cors',
+        method: 'POST',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        body: JSON.stringify({UserID: id})
+    })
+    .then(res => res.json())
+    .then(res => {
+//                    console.log(res);
+this.setPage(1);
+}).catch((e) => this.errors = 'Запрос серверу отправлен но ответ вернулся ошибочный! ' + e);
+
+},
+SendUser(id) {
+    fetch('/user/api/sendmailbyparner', {
+        mode: 'cors',
+        method: 'POST',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        body: JSON.stringify({UserID: id})
+    })
+    .then(res => res.json())
+    .then(res => {
+        MsgBox('Успешно');
+        console.log(res);
+//                    this.setPage(1);
+}).catch((e) => this.errors = 'Запрос серверу отправлен но ответ вернулся ошибочный! ' + e);
+
+}
+}
+});
 </script>

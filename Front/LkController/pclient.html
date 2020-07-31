@@ -1,34 +1,36 @@
 <div id="client">
-    <div class="content-title--wrap">
-        <h6 class="content-title">Ваши персональные данные</h6>
-        <span></span>
-    </div>
-    <!-- /.content-title--wrap -->
-    <div class="content-dataChange">
-        <div class="content-dataChange__titles">
-            <span>Фамилия</span>
-            <span>Имя</span>
-            <span>Отчество</span>
-            <span>Телефон</span>
-            <span>e-mail</span>
-            <span>Укажите Ваш пол</span>
-            <span>Дата рождения</span>
+    <div class="container">
+        <div class="content-title--wrap">
+            <h6 class="content-title">Ваши персональные данные</h6>
+            <span></span>
         </div>
-        <!-- /.content-dataChange__titles -->
-        <form @submit="SaveIm" class="content-dataChange__form">
-            <input v-model="CurrentUser.surname" type="text" placeholder="Красильников">
-            <input v-model="CurrentUser.firstname" type="text" placeholder="Константин">
-            <input v-model="CurrentUser.lastname" type="text" placeholder="Сергеевич">
-            <input v-model="CurrentUser.phone" type="tel" placeholder="+7(999) 999 99 99">
-            <input v-model="CurrentUser.email" type="email" placeholder="example@email.com">
-            <select v-model="CurrentUser.sex" name="" id="">
-                <option value="male">Мужской</option>
-                <option value="female">Женский</option>
-            </select>
-            <input v-model="CurrentUser.birthday" type="date">
-            <input type="submit" value="Сохранить">
-        </form>
-        <!-- /.content-dataChange__form -->
+        <!-- /.content-title--wrap -->
+        <div class="content-dataChange">
+            <div class="content-dataChange__titles">
+                <span>Фамилия:</span>
+                <span>Имя:</span>
+                <span>Отчество:</span>
+                <span>Телефон:</span>
+                <span>e-mail:</span>
+                <span>Укажите Ваш пол:</span>
+                <span>Дата рождения:</span>
+            </div>
+            <!-- /.content-dataChange__titles -->
+            <form @submit="SaveIm" class="content-dataChange__form">
+                <input v-model="CurrentUser.surname" type="text" placeholder="Красильников">
+                <input v-model="CurrentUser.firstname" type="text" placeholder="Константин">
+                <input v-model="CurrentUser.lastname" type="text" placeholder="Сергеевич">
+                <input v-model="CurrentUser.phone" type="tel" placeholder="+7(999) 999 99 99">
+                <input v-model="CurrentUser.email" type="email" placeholder="example@email.com">
+                <select v-model="CurrentUser.sex" name="" id="">
+                    <option value="male">Мужской</option>
+                    <option value="female">Женский</option>
+                </select>
+                <input v-model="CurrentUser.birthday" type="date">
+                <input type="submit" value="Сохранить">
+            </form>
+            <!-- /.content-dataChange__form -->
+        </div>
     </div>
 </div>
 <!-- /.content-dataChange -->
@@ -38,57 +40,57 @@
         data: {
             errors: false, usertype: "<{usertype}>", error: '',
             CurrentUser: {email: "",
-                phone: "",
-                usertype: "",
-                inn: ""
-            }
-        },
-        created() {
-            this.UserGetIm();
-        },
-        methods: {
-            UserGetIm() {
-                fetch('/user/api/get', {
-                    mode: 'cors',
-                    method: 'POST'
-                })
-                        .then((response) => {
-                            if (response.ok) {
-                                return response.json();
-                            }
-                            throw new Error('Network response was not ok');
-                        })
-                        .then((json) => {
-                            this.CurrentUser = json;
-                            console.log(this.CurrentUser);
-                        })
-                        .catch((error) => {
-                            this.errors = error;
-                            console.log('FormLogin', error);
-                        });
-            },
-            SaveIm(e) {
-                e.preventDefault();
-                fetch('/user/api/save', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.CurrentUser)
-                })
-                        .then((response) => {
-                            if (response.ok) {
-                                return response.json();
-                            }
-                            throw new Error('Network response was not ok');
-                        })
-                        .then((json) => {
-                            MsgBox('Сохранено успешно');
-                            console.log(json);
-                        })
-                        .catch((error) => {
-                            this.errors = error;
-                            console.log('FormLogin', error);
-                        });
-            }
+            phone: "",
+            usertype: "",
+            inn: ""
         }
-    });
+    },
+    created() {
+        this.UserGetIm();
+    },
+    methods: {
+        UserGetIm() {
+            fetch('/user/api/get', {
+                mode: 'cors',
+                method: 'POST'
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok');
+            })
+            .then((json) => {
+                this.CurrentUser = json;
+                console.log(this.CurrentUser);
+            })
+            .catch((error) => {
+                this.errors = error;
+                console.log('FormLogin', error);
+            });
+        },
+        SaveIm(e) {
+            e.preventDefault();
+            fetch('/user/api/save', {
+                mode: 'cors',
+                method: 'POST',
+                body: JSON.stringify(this.CurrentUser)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok');
+            })
+            .then((json) => {
+                MsgBox('Сохранено успешно');
+                console.log(json);
+            })
+            .catch((error) => {
+                this.errors = error;
+                console.log('FormLogin', error);
+            });
+        }
+    }
+});
 </script>

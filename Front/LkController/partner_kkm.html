@@ -1,278 +1,278 @@
 <style>
     #YaMap {
         /*height: 100%;*/
-        height: 400px;
+        height: 500px;
     }
     .ymap-container {
-        height: 400px;
+        height: 500px;
         /*height: 100%;*/
     }
 
 </style>
 <div id="partner">
-    <div class="content-title--wrap">
-        <h6 class="content-title">Ваши точки продаж</h6>
-        <span>{{ msg }}</span>
-    </div>
-  
-    <div class="content-dataChange">
-        
-        <!--<button @click="state=0" type="button" class="btn btn-secondary">Личные данные</button>-->
-        <button @click="state=1" type="button" class="btn btn-purple-lk btn-kkm">Список ваших ККМ</button>
-        <button @click="state=2" type="button" class="btn btn-purple-lk btn-kkm">Добавить ККМ</button>
-    </div>
-    <div v-if="state==1" class="content-dataChange">
-        <table class="table table-lk">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Адрес</th>
-                    <th>Имя</th>
-                    <th>Номер ККМ</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in KkmList">
-                    <th scope="row table-row-lk-kkm">
-                        <button @click="setEditKkm(item)" type="button" title="Изменить" class="btn btn-purple-lk btn-kkm-table"><i class="far fa-edit"></i></button>
-                        <button @click="DelKkm(item.id)" type="button" title="Удалить" class="btn btn-yellow-lk btn-kkm-table"><i class="far fa-trash-alt"></i></button>
-                    </th>
-                    <td>{{ item.address }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.fn }}</td>
-                    
-                </tr>
-                
-            </tbody>
-        </table>
-        
-    </div>
-    <div v-if="state==2" class="content-dataChange">
-        <div class="content-dataChange__titles">
-            <span>Адрес установки ККМ</span>
-            <span>номер фискального накопителя</span>
-            <span>Название точки продаж</span>
+    <div class="container">
+        <div class="content-title--wrap">
+            <h6 class="content-title">Ваши точки продаж</h6>
+            <span>{{ msg }}</span>
         </div>
-        <form @submit="AddKKM" class="content-dataChange__form">
-            <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
-            <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
-            <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
-            <textarea v-model="KKM.desc" type="text" placeholder="Описание магазина" rows="10" required></textarea>
-            <input type="submit" value="Добавить ККМ">
-        </form>
-
     </div>
-    
-    <div v-if="state==3" class="content-dataChange">
-        <div class="content-dataChange__titles">
-            <span>Адрес установки ККМ</span>
-            <span>номер фискального накопителя</span>
-            <span>Название точки продаж</span>
-            <span>Описание точки отображаемое на карте</span>
+    <button @click="state=1" type="button" class="btn btn-outline-secondary">Список ваших ККМ</button>
+    <button @click="state=2" type="button" class="btn btn-outline-secondary">Добавить ККМ</button>
+    <hr>
+    <div class="row">
+        <div v-if="state==1" class="col-sm-12 content-dataChange">
+            <table align="center">
+                <thead>
+                    <tr>
+                        <th class="p-1 m-1" style="font-size: .9em; border: 1px solid black;">#</th>
+                        <th class="p-1 m-1" style="font-size: .9em; border: 1px solid black;">Адрес:</th>
+                        <th class="p-1 m-1" style="font-size: .9em; border: 1px solid black;">Название:</th>
+                        <th class="p-1 m-1" style="font-size: .9em; border: 1px solid black;">Номер ККМ:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in KkmList">
+                        <th scope="row table-row-lk-kkm" style="font-size: 0.5em; border: 1px solid black;">
+                            <button @click="setEditKkm(item)" type="button" title="Изменить" class="btn btn-purple-lk btn-kkm-table"><i class="far fa-edit"></i></button>
+                            <button @click="DelKkm(item.id)" type="button" title="Удалить" class="btn btn-yellow-lk btn-kkm-table"><i class="far fa-trash-alt"></i></button>
+                        </th>
+                        <td class="p-1 m-1" style="font-size: .9em; border: 1px solid black;">{{ item.address }}</td>
+                        <td class="p-1 m-1" style="font-size: .9em; border: 1px solid black;">{{ item.name }}</td>
+                        <td class="p-1 m-1" style="font-size: .7em; border: 1px solid black;">{{ item.fn }}</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
         </div>
-        <form @submit="SaveKKM" class="content-dataChange__form">
-            <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
-            <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
-            <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
-            <textarea v-model="KKM.desc" type="text" placeholder="Описание магазина" rows="10"></textarea>
-            <input type="submit" value="Сохранить ККМ">
-        </form>
 
-    </div>
-    <div v-show="state==3 || state==2" id="YaMap" class="container-fluid">
-        <yandex-map :settings="settings" @map-was-initialized="initHandler"
+        <div v-if="state==2" class="col-sm-5 text-left content-dataChange m-1">
+
+            <form @submit="AddKKM" class="content-dataChange__form mx-auto text-left">
+                <span style="font-size: .9em;">Адрес установки ККМ:</span>
+                <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
+                <span style="font-size: .9em;">Номер фискального накопителя:</span>
+                <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
+                <span style="font-size: .9em;">Название точки продаж:</span>
+                <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
+                <span style="font-size: .9em;">Краткое описание точки продаж:</span>
+                <textarea v-model="KKM.desc" type="text" placeholder="Описание магазина" rows="10" required></textarea>
+                <input type="submit" value="Добавить ККМ">
+            </form>
+        </div>
+
+        <div v-if="state==3" class="col-sm-5 text-left content-dataChange m-1">
+
+            <form @submit="SaveKKM" class="content-dataChange__form mx-auto text-left">
+                <span style="font-size: .9em;">Адрес установки ККМ:</span>
+                <input v-model="KKM.address" type="text" placeholder="г. Ульяновск ул. Ленина д.1" required>
+                <span style="font-size: .9em;">Номер фискального накопителя:</span>
+                <input v-model="KKM.fn" :minlength="10" :maxlength="16" type="text" placeholder="9286000100016473" required>
+                <span style="font-size: .9em;">Название точки продаж:</span>
+                <input v-model="KKM.name" type="text" placeholder="Мой магазин" required>
+                <span style="font-size: .9em;">Краткое описание точки продаж:</span>
+                <textarea v-model="KKM.desc" type="text" placeholder="Описание магазина" rows="10"></textarea>
+                <input type="submit" value="Сохранить ККМ">
+            </form>
+        </div>
+
+        <div v-show="state==3 || state==2" id="YaMap" class="col-sm-5">
+            <yandex-map :settings="settings" @map-was-initialized="initHandler"
             :controls="['geolocationControl','rulerControl','typeSelector','zoomControl']"
             :coords="latlng"
             zoom="14"
             @click="MapClick">
-            
+
             <ymap-marker
-                marker-id="123123"
-                :icon="{color: 'green', glyph: 'home'}"
-                :coords="latlng"></ymap-marker>
-        </yandex-map></div>
+            marker-id="123123"
+            :icon="{color: 'green', glyph: 'home'}"
+            :coords="latlng"></ymap-marker>
+        </yandex-map>
+    </div>
 </div>
+</div>
+
 <script type="text/javascript">
     var partner = new Vue({
         el: '#partner',
         data: {settings: {
-                lang: 'ru_RU',
-                apiKey: '<{ YaMapApiKey }>',
-                version: '2.1',
-                coordorder: 'latlong'
-            },latlng: [54.306784407107926,48.33117284497061],
-            map:{},
-            errors: false, usertype: "<{usertype}>",error:'',msg:'',state:1,
-            KKM:{address:'',fn:'',name:'',desc:''},KkmList:[]
-        },
-        created() {
-            this.LoadKKM();
-        },
-        watch: {
-            state(val) {
-                if(val==1){
-                    this.LoadKKM();
+            lang: 'ru_RU',
+            apiKey: '<{ YaMapApiKey }>',
+            version: '2.1',
+            coordorder: 'latlong'
+        },latlng: [54.306784407107926,48.33117284497061],
+        map:{},
+        errors: false, usertype: "<{usertype}>",error:'',msg:'',state:1,
+        KKM:{address:'',fn:'',name:'',desc:''},KkmList:[]
+    },
+    created() {
+        this.LoadKKM();
+    },
+    watch: {
+        state(val) {
+            if(val==1){
+                this.LoadKKM();
 //                    console.log('Foo Changed! ' + val);
-                }else if(val==2) {
-                    this.map.container.fitToViewport();
-                    this.KKM = {address:'',fn:'',name:''};
-                }
-                else if(val==3) {
-                    this.map.container.fitToViewport();
-                }
-                
-              
-            },
-            msg(){
-                setTimeout(() => {
-                    this.msg = '';
-                }, 5000);
-            }
-        },
-        methods: {
-            initHandler (map) {
-                this.map = map;
+}else if(val==2) {
+    this.map.container.fitToViewport();
+    this.KKM = {address:'',fn:'',name:''};
+}
+else if(val==3) {
+    this.map.container.fitToViewport();
+}
+
+
+},
+msg(){
+    setTimeout(() => {
+        this.msg = '';
+    }, 5000);
+}
+},
+methods: {
+    initHandler (map) {
+        this.map = map;
 //                console.log(map);
-            },
-            AddressChange(){
-                var geo = ymaps.geocode(this.KKM.address);
-                geo.then((res)=>{
-                var objs = res.geoObjects.toArray();
-                    this.latlng = objs[0].geometry.getCoordinates();
-                },
-                (err) => {
-                    console.log(err);
-                }
-                );
-            },
-            MapClick(e){
-                var coords = e.get('coords');
-                this.latlng=coords;
-                tmp = {
-                    id: 4,
-                    coords: coords,
-                    icon: {content: coords}};
+},
+AddressChange(){
+    var geo = ymaps.geocode(this.KKM.address);
+    geo.then((res)=>{
+        var objs = res.geoObjects.toArray();
+        this.latlng = objs[0].geometry.getCoordinates();
+    },
+    (err) => {
+        console.log(err);
+    }
+    );
+},
+MapClick(e){
+    var coords = e.get('coords');
+    this.latlng=coords;
+    tmp = {
+        id: 4,
+        coords: coords,
+        icon: {content: coords}};
 //                this.latlng=coords;
 //                this.markers.push(tmp);
-                        var geo = ymaps.geocode(coords);
-                        geo.then((res)=>{
-                            var firstGeoObject = res.geoObjects.get(0);
+var geo = ymaps.geocode(coords);
+geo.then((res)=>{
+    var firstGeoObject = res.geoObjects.get(0);
 //                            console.log(firstGeoObject.properties.get('text'));
-                            this.KKM.address=firstGeoObject.properties.get('text');
-                            },
-                            function (err) {
+this.KKM.address=firstGeoObject.properties.get('text');
+},
+function (err) {
                                 // Обработка ошибки.
                             }
-                        );
+                            );
 //                console.log(tmp);
-            },
-            AddKKM(e){
-                e.preventDefault();
-                fetch('/user/api/addkkm', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.KKM)
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    if(json.hasOwnProperty('success')){
-                        MsgBox(json.success);
-                        this.msg=json.success;
-                    }else{
-                        this.msg=json.Error;
-//                        console.log(json);
-                    }
-                })
-                .catch((error) => {
-                    this.msg = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            SaveKKM(e){
-                e.preventDefault();
-                fetch('/user/api/savekkm', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify(this.KKM)
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-//                    MsgBox('Cj[hfytyj');
-                    if(json.hasOwnProperty('success')){
-                        MsgBox(json.success);
-                        this.msg=json.success;
-                    }else{
-                        this.msg=json.Error;
-//                        console.log(json);
-                    }
-                    console.log(json);
-                })
-                .catch((error) => {
-                    this.errors = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            LoadKKM(){
-                fetch('/user/api/getkkm', {
-                    mode: 'cors',
-                    method: 'POST'
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    this.KkmList = json;
-//                    console.log(json);
-                })
-                .catch((error) => {
-                    this.errors = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            DelKkm(id){
-                fetch('/user/api/delkkm', {
-                    mode: 'cors',
-                    method: 'POST',
-                    body: JSON.stringify({kkmid:id})
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then((json) => {
-                    if(json.hasOwnProperty('success')){
-                        this.msg=json.success;
-                        this.LoadKKM();
-                    }else{
-                        this.msg=json.Error;
-                        console.log(json);
-                    }
-                    
-                })
-                .catch((error) => {
-                    this.msg = error;
-                    console.log('FormLogin', error);
-                });
-            },
-            setEditKkm(item){
-                this.KKM = item;
-                this.state = 3;
-            }
+},
+AddKKM(e){
+    e.preventDefault();
+    fetch('/user/api/addkkm', {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify(this.KKM)
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
         }
+        throw new Error('Network response was not ok');
+    })
+    .then((json) => {
+        if(json.hasOwnProperty('success')){
+            MsgBox(json.success);
+            this.msg=json.success;
+        }else{
+            this.msg=json.Error;
+//                        console.log(json);
+}
+})
+    .catch((error) => {
+        this.msg = error;
+        console.log('FormLogin', error);
     });
+},
+SaveKKM(e){
+    e.preventDefault();
+    fetch('/user/api/savekkm', {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify(this.KKM)
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok');
+    })
+    .then((json) => {
+//                    MsgBox('Cj[hfytyj');
+if(json.hasOwnProperty('success')){
+    MsgBox(json.success);
+    this.msg=json.success;
+}else{
+    this.msg=json.Error;
+//                        console.log(json);
+}
+console.log(json);
+})
+    .catch((error) => {
+        this.errors = error;
+        console.log('FormLogin', error);
+    });
+},
+LoadKKM(){
+    fetch('/user/api/getkkm', {
+        mode: 'cors',
+        method: 'POST'
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok');
+    })
+    .then((json) => {
+        this.KkmList = json;
+//                    console.log(json);
+})
+    .catch((error) => {
+        this.errors = error;
+        console.log('FormLogin', error);
+    });
+},
+DelKkm(id){
+    fetch('/user/api/delkkm', {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify({kkmid:id})
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok');
+    })
+    .then((json) => {
+        if(json.hasOwnProperty('success')){
+            this.msg=json.success;
+            this.LoadKKM();
+        }else{
+            this.msg=json.Error;
+            console.log(json);
+        }
+
+    })
+    .catch((error) => {
+        this.msg = error;
+        console.log('FormLogin', error);
+    });
+},
+setEditKkm(item){
+    this.KKM = item;
+    this.state = 3;
+}
+}
+});
 </script>
