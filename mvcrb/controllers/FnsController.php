@@ -41,11 +41,7 @@ class FnsController extends Controller{
         return $this->View->execute('index.html', TEMPLATE_DIR);
     }
     public function GetAction($qrs = null) {
-        $headers = ['Device-Id'=>'1488', 'Device-OS'=>'rusbeard mvc php'];
-        $client = new Client([
-            'auth' => ['+79021290036', '588807'],
-            'headers' =>$headers
-        ]);
+
         
         
 //        $response = $client->request('POST', 
@@ -71,10 +67,11 @@ class FnsController extends Controller{
         $i = '372';//<номер ФД>
         $fp = '205537033';//<номер ФДП>
         $n = '1';//<вид кассового чека
+        $qr=$qrs;
         if($qrs){
 //            $qr=$qrs;
             $requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
-//            $requestURI = str_replace('/fns/get/code?', '', $requestURI);
+            $requestURI = str_replace('/fns/get/code?', '', $requestURI);
             $qr=$requestURI;
 //            dd($requestURI);
         }else{
@@ -84,38 +81,90 @@ class FnsController extends Controller{
             ];
             //$qr='t=20200122T180800&s=500.00&fn=9280440300646561&i=23658&fp=854673406&n=1';
         }
+        //$chekMDL = new CheckModel();
+        //return $chekMDL->ValidateCheck($qr);
+        // 5f5f35450b851a7cd26086ec 5e2a8a510fd2caa326aebc7d
         preg_match("/t=(\w+)T/", $qr, $t);
         preg_match("/T(\w+)/", $qr, $T);
         preg_match("/s=(\w+.\w+)/", $qr, $s);
-        $s = str_replace('.', '', $s);
+        
+        $s = str_replace('.', '', $s[1]);
+//        dd($s);
         preg_match("/fn=(\w+)/", $qr, $fn);
         preg_match("/i=(\w+)/", $qr, $i);
         preg_match("/fp=(\w+)/", $qr, $fp);
         preg_match("/&n=(\w+)/", $qr, $n);
-//        dd($n);    
+            
         $t =$t[1];// Дата
         $T = $T[1];// Время
-        $s = $s[1];// Сумма
+        //$s = $s[1];// Сумма
         $fn = $fn[1];//<номер ФН>
         $i = $i[1];//<номер ФД>
         $fp = $fp[1];//<номер ФДП>
         $n = $n[1];//<вид кассового чека   
-            
-        $response = $client->request('GET', 
-            'https://proverkacheka.nalog.ru:9999/v1/ofds/*/inns/*/fss/'.$fn.'/operations/'.$n.'/tickets/'.$i.'?fiscalSign='.$fp.'&date='.$t.'T'.$T.'&sum='.$s, ['http_errors' => false]); 
-       
-//        $response = $client->request('GET',
-//                'https://proverkacheka.nalog.ru:9999/v1/inns/*/kkts/*/fss/'.$fn.'/tickets/'.$i.'?fiscalSign='.$fp.'&sendToEmail=no', ['http_errors' => false]);
+            // https://irkkt-mobile.nalog.ru:8888/v2/check/ticket?fsId=9282000100262631&operationType=1&documentId=47913&fiscalSign=1815349926&date=2020-09-15T13:55:00&sum=175
+        /**
+            fsId — ФН
+            operationType — тип операции (1 – приход, 2 – возврат прихода, 3 – расход, 4 – возврат расхода)
+            documentId — ФД
+            fiscalSign — ФП
+            date — дата покупки
+            sum — сумма чека (без разделителей)
+         * 
+         * https://github.com/DmitriyBobrovskiy/CheckReceiptSDK/issues/12
+         */
+        $uT =$t[0].$t[1].$t[2].$t[3].'-'.$t[4].$t[5].'-'.$t[6].$t[7].'T'. $T[0].$T[1].':'.$T[2].$T[3].':'.'00'; // 2020-09-15T13:55:00
         
+        $url = "https://irkkt-mobile.nalog.ru:8888/v2/check/ticket?fsId=$fn&operationType=$n&documentId=$i&fiscalSign=$fp&date=$uT&sum=$s";
+        $fnsRet = file_get_contents($url);
+        return ['aa'=>$fnsRet,'bb'=>$url];
+        $headers = ['Host' => 'irkkt-mobile.nalog.ru:8888',
+            'Accept'=>'*/*',
+            'Device-OS' => 'iOS',
+            'Device-Id'=>'7C82010F-16CC-446B-8F66-FC4080C66521',
+            'clientVersion'=>'2.9.0',
+            'Accept-Language'=>'ru-RU;q=1, en-US;q=0.9',
+            'User-Agent'=>'billchecker/2.9.0 (iPhone; iOS 13.6; Scale/2.00)',
+            'sessionId'=>''];
+        $auth = ['inn'=>'732716444961','client_secret'=>'IyvrAbKt9h/8p6a7QPh8gpkXYQ4=','password'=>'Stariktz@mail.ru1984'];
+        $client = new Client([
+            'auth' => $auth,
+            'headers' => $headers
+        ]);
+        $response = $client->request('POST', 
+            'https://irkkt-mobile.nalog.ru:8888/v2/mobile/users/lkfl/auth', ['json'=>$auth,'http_errors' => false]); 
+       
         $b = $response->getBody();
-//        return $b->getContents();
-        if($response->getStatusCode()==204){
-            return ['success'=> 'is valid'];
-        }
-        return ['error'=>$b->getContents(),
-//                'HeaderLine'=>$response->getHeaderLine('Content-Type'),
-                'StatusCode'=>$response->getStatusCode()
-                ];
+        
+//        $sessionId = $b->getContents();
+        $sessionId = json_decode($b->getContents(), true)['sessionId'];
+        $headers['sessionId']=$sessionId;
+//        dd($sessionId['sessionId']);
+        
+        $jsonQr=['qr'=>$qr];
+        $response = $client->request('POST', 
+            'https://irkkt-mobile.nalog.ru:8888/v2/ticket', ['json'=>$jsonQr,'headers' => $headers,'http_errors' => false]);
+        $b = $response->getBody();
+        
+        $ct = $b->getContents();
+        $status = json_decode($ct, true)['status'];
+//        if($status==2){
+//            return ['Success' => 'is valid'];
+//        }else{
+//            return ['Error FNS Server' => $ct,
+//                'StatusCode' => $response->getStatusCode()
+//            ];
+//        
+//        }
+        $response = $client->request('GET', 
+            'https://irkkt-mobile.nalog.ru:8888/v2/tickets/'.$ticket_id, ['json'=>$jsonQr,'headers' => $headers,'http_errors' => false]);
+        $b = $response->getBody();
+        return $b->getContents();
+
+//        return ['error'=>$b->getContents(),
+//                
+//                'StatusCode'=>$response->getStatusCode()
+//                ];
     }
     
     public function ChecksAction() {
@@ -136,5 +185,19 @@ class FnsController extends Controller{
             }
             return $CollCom;
         }return [];
+    }
+    public function TestAction($qr='') {
+//        $qr='t=20200122T180800&s=500.00&fn=9280440300646561&i=23658&fp=854673406&n=1';
+        if($qr){
+//            $qr=$qrs;
+            $requestURI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+            $requestURI = str_replace('/fns/test/', '', $requestURI);
+            $qr=$requestURI;
+//            dd($requestURI);
+        } else {
+            $qr='t=20200122T180800&s=500.00&fn=9280440300646561&i=23658&fp=854673406&n=1';
+        }
+        $cm = new CheckModel();
+        return $cm->ValidateCheck($qr);
     }
 }

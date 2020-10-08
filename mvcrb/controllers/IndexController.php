@@ -21,7 +21,7 @@ class IndexController extends Controller {
     public function IndexAction() {
 //        $MdlUser = new UserModel();
         $View = &$this->View;
-        $View->title = 'Молния продаж';
+        $View->title = 'Призовая молния';
 //        $user=$MdlUser->GetCurrentUser();
 //        dd($user);
 //        if($user['role']>=200){
@@ -36,7 +36,7 @@ class IndexController extends Controller {
     public function ClientAction() {
         $MdlUser = new UserModel();
         $View = &$this->View;
-        $View->title = 'Молния продаж';
+        $View->title = 'Призовая молния';
         $user=$MdlUser->GetCurrentUser();
 //        dd($user);
         if($user['role']>=0){
@@ -56,7 +56,7 @@ class IndexController extends Controller {
     public function PartnersAction() {
         $MdlUser = new UserModel();
         $View = &$this->View;
-        $View->title = 'Молния продаж';
+        $View->title = 'Призовая молния';
         $user=$MdlUser->GetCurrentUser();
 //        dd($user);
         $Config = new ConfigModel();
@@ -79,7 +79,7 @@ class IndexController extends Controller {
         $postdata=json_decode($this->REQUEST,true);
         
         $to = $Config->GetSetting('emailsend');//'komdir@agatech.ru';
-        $subject = 'Сообщение с формы сайта. молнию продаж';
+        $subject = 'Призовая молния. Заполнена форма на сайте.';
         $message = 'Новое сообщение от ФИО <b>'.$postdata['fio'].'</b> на сайте молния продаж.<br>Контактный телефон <b>'.$postdata['phone'].'</b><br>'. PHP_EOL;
         $message .= 'оставил свой маил адрес почты <b>' .$postdata['email'] .'</b> и написал вот такое сообщение '.PHP_EOL.PHP_EOL.'<h5>'.$postdata['message'].'</h5>';
         $headers = 'From: ' .$postdata['email'] . "\r\n" .

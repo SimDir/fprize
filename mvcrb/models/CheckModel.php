@@ -146,46 +146,68 @@ class CheckModel extends Model {
     }
     public function ValidateCheck($qr='') {
         return ['Success' => 'is valid'];
-        $t = '20200122'; // Дата
-        $T = '2057'; // Время
-        $s = '83950'; // Сумма
-        $fn = '9282440300479231'; //<номер ФН>
-        $i = '372'; //<номер ФД>
-        $fp = '205537033'; //<номер ФДП>
-        $n = '1'; //<вид кассового чека
-        preg_match("/t=(\w+)T/", $qr, $t);
-        preg_match("/T(\w+)/", $qr, $T);
-        preg_match("/s=(\w+.\w+)/", $qr, $s);
-        $s = str_replace('.', '', $s);
-        preg_match("/fn=(\w+)/", $qr, $fn);
-        preg_match("/i=(\w+)/", $qr, $i);
-        preg_match("/fp=(\w+)/", $qr, $fp);
-        preg_match("/&n=(\w+)/", $qr, $n);
-//        dd($n);    
-        $t = $t[1]; // Дата
-        $T = $T[1]; // Время
-        $s = $s[1]; // Сумма
-        $fn = $fn[1]; //<номер ФН>
-        $i = $i[1]; //<номер ФД>
-        $fp = $fp[1]; //<номер ФДП>
-        $n = $n[1]; //<вид кассового чека  
         
-        $headers = ['Device-Id' => '1488', 'Device-OS' => 'rusbeard mvc php'];
+        $headers = ['Host' => 'irkkt-mobile.nalog.ru:8888',
+            'Accept'=>'*/*',
+            'Device-OS' => 'iOS',
+            'Device-Id'=>'7C82010F-16CC-446B-8F66-FC4080C66521',
+            'clientVersion'=>'2.9.0',
+            'Accept-Language'=>'ru-RU;q=1, en-US;q=0.9',
+            'User-Agent'=>'billchecker/2.9.0 (iPhone; iOS 13.6; Scale/2.00)',
+            'sessionId'=>''];
+        
+        $auth = ['inn'=>'732716444961','client_secret'=>'IyvrAbKt9h/8p6a7QPh8gpkXYQ4=','password'=>'Stariktz@mail.ru1984'];
+        
         $client = new Client([
-            'auth' => ['+79021290036', '588807'],
+            'auth' => $auth,
             'headers' => $headers
         ]);
-        $response = $client->request('GET',
-                'https://proverkacheka.nalog.ru:9999/v1/ofds/*/inns/*/fss/' . $fn . '/operations/' . $n . '/tickets/' . $i . '?fiscalSign=' . $fp . '&date=' . $t . 'T' . $T . '&sum=' . $s, ['http_errors' => false]);
-    
-        
-        if ($response->getStatusCode() == 204) {
-            return ['Success' => 'is valid'];
-        }
+        $response = $client->request('POST', 
+            'https://irkkt-mobile.nalog.ru:8888/v2/mobile/users/lkfl/auth', ['json'=>$auth,'http_errors' => false]); 
+       
         $b = $response->getBody();
-        return ['Error FNS Server' => $b->getContents(),
-            'StatusCode' => $response->getStatusCode()
-        ];
+        $sessionId = json_decode($b->getContents(), true)['sessionId'];
+        $headers['sessionId']=$sessionId;
+        
+        $jsonQr=['qr'=>$qr];
+        usleep(100);
+        $response = $client->request('POST', 
+            'https://irkkt-mobile.nalog.ru:8888/v2/ticket', ['json'=>$jsonQr,'headers' => $headers,'http_errors' => false]);
+        $b = $response->getBody();
+        $ct = $b->getContents();
+        /////////////////////
+        //
+
+        
+//        dd($b->getContents());
+        $ticket_id = json_decode($ct, true)['id'];
+        $status = json_decode($ct, true);
+        
+//        dd($status);
+        
+        if($status['status']==2){
+            return ['Success' => 'is valid'];
+        }else{
+            usleep(1000);
+            $response = $client->request('GET', 
+                'https://irkkt-mobile.nalog.ru:8888/v2/tickets/'.$ticket_id, ['json'=>$jsonQr,'headers' => $headers,'http_errors' => false]);
+            $b = $response->getBody();
+            $desk = $b->getContents();
+            $status = json_decode($desk, true);
+//            foreach ($status as $key => $value) {
+//                dd($value);
+//            }
+            
+            if($status[0]['status']==2){
+                return ['Success' => 'is valid'];
+            }
+            return ['Error FNS Server' => $ct,
+                'qr code'=>$qr,
+                'FNS_Server_response'=>$status,
+                'StatusCode' => $response->getStatusCode()
+            ];
+        
+        }
     }
     public function GetWiners() {
 //        $client = new Client();
