@@ -53,7 +53,7 @@
                                     Имя участника
                                 </th>
                                 <th style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
-                                    Сумма
+                                    Приз
                                 </th>
                                 <th>
                                     Телефон
@@ -67,7 +67,7 @@
                                     {{ item.name }}
                                 </td>
                                 <td style="border-right: 1px solid #B2B2B2; border-left: 1px solid #B2B2B2;">
-                                    {{ item.winsum }}
+                                    <div v-if="item.wintext">{{ item.wintext }}</div> <div v-if="item.winsum!=='0.00'">{{ item.winsum }}</div>
                                 </td>
                                 <td style=" border-left: 1px solid #B2B2B2;">
                                     {{ item.fphone }}
@@ -112,13 +112,23 @@
                     this.getwiners();
                 },
                 methods: {
+
                     FilterWinersWeek(){
                 //e.preventDefault();
                 var now = new Date();
-                now.setDate(now.getDate() - 7);
+                if(isNaN(now)){
+                    alert('IOS Data Time Error');
+                    now = new Date();
+                }
+//                now.setDate(now.getDate().valueOf() - 7);
+                var subdata = new Date(now.getDate().valueOf());
+                subdata = subdata.setDate(now.getDate().valueOf() - 7);
                 var nd = now.valueOf();
+                nd = nd - subdata;
+//                console.log(nd,subdata);
                 let fp = _.filter(this.winners, (o) => {
-                    var fday = new Date(o.jswindate);
+                    var vrdt = o.jswindate;
+                    var fday = new Date(vrdt[0]+vrdt[1]+vrdt[2]+vrdt[3],vrdt[5]+vrdt[6],vrdt[8]+vrdt[9]);
 //                    console.log(fday,o.jswindate);
 if (fday.valueOf() > nd) { 
     return o;
@@ -127,6 +137,7 @@ if (fday.valueOf() > nd) {
                 });
                 //                this.posts =[];
                 this.posts = fp;
+                this.page =1;
             },
             FilterWinersNow(e){
                 e.preventDefault();

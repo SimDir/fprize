@@ -107,24 +107,34 @@ aria-hidden="true">
             </p>
             <div id="AdminMenu">
                 <ul class="navbar-nav mx-auto p-1 m-1">
-
+                    <?php if($this->userrole != 100){ ?>
                     <li v-for="(item, i ) in Menu" @click.prevent="SetContent(item.src,i)" :key="i" :class="{ active: i === activeItem}" class="nav-link text-center">
                         <a> {{item.name}} </a>
                     </li>
+                    <?php }?>
                     <?php if($this->userrole == 300){ ?>
                     <li @click.prevent="dwdldoc" class="nav-link text-center" style="border-radius: 5px;">
                         <a>Скачать договор</a>
                     </li>
                     <?php }?>
                     <?php if($this->userrole == 100){ ?>
-                    <li class="nav-link m-1 p-1"><a target="_blank" href="https://play.google.com/store/apps/details?id=com.oplanet.lightning&hl=ru">
+
+                    <li class="nav-link text-center active"><a @click.prevent="SetContent('/lk/statistic',1)"> СТАТИСТИКА РОЗЫГРЫШЕЙ </a></li>
+                    <li class="nav-link text-center"><a @click.prevent="SetContent('/lk/user',2)"> КАРТОЧКА УЧАСТНИКА </a></li>
+                    <li class="nav-link text-center"><a @click.prevent="SetContent('/lk/map',3)"> Партнёры на карте </a></li>
+                    <li class="nav-link text-center"><a @click.prevent="SetContent('/lk/helps',4)"> Правила участия </a></li>
+                    <li class="nav-link text-center"><a @click.prevent="SetContent('/lk/clientcheck',5)"> Ваши чеки </a></li> 
+
+                   
+<!--                    <li class="nav-link m-1 p-1"><a target="_blank" href="https://play.google.com/store/apps/details?id=com.oplanet.lightning&hl=ru">
                         <img class="partners-navigation__img" src="/public/img/footer/android-big.png" alt="android" style="max-width: 150px;"></a>
                     </li>
                     <li class="nav-link m-1 p-1"> <a target="_blank" href="https://apps.apple.com/ru/app/%D0%BF%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%BB%D0%BD%D0%B8%D1%8F/id1459626313">
                         <img class="partners-navigation__img" src="/public/img/footer/apple-big.png" alt="apple" style="max-width: 150px;"></a>
-                    </li>
+                    </li>-->
+                    <?php }?>
                 </div>
-                <?php }?>
+                
             </ul>
         </div>
     </div>

@@ -145,8 +145,56 @@ class CheckModel extends Model {
         return ['Success'=>$retTable];
     }
     public function ValidateCheck($qr='') {
-        return ['Success' => 'is valid'];
+//        return ['Success' => 'is valid'];
+        $t ='20200122';// Дата
+        $T = '2057';// Время
+        $s = '83950';// Сумма
+        $fn = '9282440300479231';//<номер ФН>
+        $i = '372';//<номер ФД>
+        $fp = '205537033';//<номер ФДП>
+        $n = '1';//<вид кассового чека
+        preg_match("/t=(\w+)T/", $qr, $t);
+        preg_match("/T(\w+)/", $qr, $T);
+        preg_match("/s=(\w+.\w+)/", $qr, $s);
         
+        $s = str_replace('.', '', $s[1]);
+//        dd($s);
+        preg_match("/fn=(\w+)/", $qr, $fn);
+        preg_match("/i=(\w+)/", $qr, $i);
+        preg_match("/fp=(\w+)/", $qr, $fp);
+        preg_match("/&n=(\w+)/", $qr, $n);
+            
+        $t =$t[1];// Дата
+        $T = $T[1];// Время
+        //$s = $s[1];// Сумма
+        $fn = $fn[1];//<номер ФН>
+        $i = $i[1];//<номер ФД>
+        $fp = $fp[1];//<номер ФДП>
+        $n = $n[1];//<вид кассового чека   
+            // https://irkkt-mobile.nalog.ru:8888/v2/check/ticket?fsId=9282000100262631&operationType=1&documentId=47913&fiscalSign=1815349926&date=2020-09-15T13:55:00&sum=175
+        /**
+            fsId — ФН
+            operationType — тип операции (1 – приход, 2 – возврат прихода, 3 – расход, 4 – возврат расхода)
+            documentId — ФД
+            fiscalSign — ФП
+            date — дата покупки
+            sum — сумма чека (без разделителей)
+         * 
+         * https://github.com/DmitriyBobrovskiy/CheckReceiptSDK/issues/12
+         */
+        $uT =$t[0].$t[1].$t[2].$t[3].'-'.$t[4].$t[5].'-'.$t[6].$t[7].'T'. $T[0].$T[1].':'.$T[2].$T[3].':'.'00'; // 2020-09-15T13:55:00
+        
+        $url = "https://irkkt-mobile.nalog.ru:8888/v2/check/ticket?fsId=$fn&operationType=$n&documentId=$i&fiscalSign=$fp&date=$uT&sum=$s";
+        $fnsRet = file_get_contents($url);
+        if($fnsRet!==false){
+            return ['Success' => 'is valid'];
+        }
+        return ['Error FNS Server' => $fnsRet,
+            'qr code'=>$qr,
+            'url'=>$url,
+            'fns_resp'=>$http_response_header
+        ];
+//////////////////////////////////////////////////////////////////
         $headers = ['Host' => 'irkkt-mobile.nalog.ru:8888',
             'Accept'=>'*/*',
             'Device-OS' => 'iOS',
@@ -217,7 +265,7 @@ class CheckModel extends Model {
 //        $ret = str_replace('ok:','',$b->getContents());
 //        
 //        $ret = json_decode($ret, true, 512, JSON_BIGINT_AS_STRING)["result"];
-//        $time = strtotime(date('Y-m-d'));
+        $time = strtotime(date('Y-m-d'));
         $final = date("Y-m-d", strtotime("-30 day", $time));
 //        $retC = file_get_contents('http://mylightning.ru/admin/m_request.php?reg=get&table=checks&win=1&windate:left='.$final.'&windate:right='.date('Y-m-d').'&ORDER=-windate&key='.$ret["key"].'&user='.$ret["id"]);
         
@@ -303,6 +351,8 @@ class CheckModel extends Model {
         $Table->jswindate = date('Y.m.d',strtotime ($param['windate']));
         $Table->createdatetime = date('Y-m-d H:i:s');
         $Table->fphone ='+7*****'.substr($param['phone'],-4);
+        $Table->wintext = $param['wintext'];
+        $Table->winimg = $param['winimg'];
         return $this->store($Table);
     }
     public function SetUserTakedCheck($qr='') {

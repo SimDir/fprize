@@ -12,23 +12,23 @@ defined('ROOT') OR die('No direct script access.');
 use GuzzleHttp\Client;
 
 class FnsController extends Controller{
-        public function __construct() {
-        parent::__construct();
-        $this->User = new UserModel();
-        if ($this->User->GetCurrentUser()['role'] < 100) {
-            if ($this->POST) {
-                if (!headers_sent()) {
-                    header("HTTP/1.1 403 Forbidden");
-                    header("Status: 403 Forbidden");
-                }
-                die('Forbidden: Asses denide');
-            } else {
-                Session::set('UserRedirect', mvcrb::$URI);
-                return mvcrb::Redirect('/user');
-            }
-        }
-        $this->View->title = 'Личиночный кабинет';
-    }
+//    public function __construct() {
+//        parent::__construct();
+//        $this->User = new UserModel();
+//        if ($this->User->GetCurrentUser()['role'] < 100) {
+//            if ($this->POST) {
+//                if (!headers_sent()) {
+//                    header("HTTP/1.1 403 Forbidden");
+//                    header("Status: 403 Forbidden");
+//                }
+//                die('Forbidden: Asses denide');
+//            } else {
+//                Session::set('UserRedirect', mvcrb::$URI);
+//                return mvcrb::Redirect('/user');
+//            }
+//        }
+//        $this->View->title = 'Личиночный кабинет';
+//    }
 
 //    public function IndexAction() {
 //        $this->View->title = 'Молния продаж - личный кабинет партнера';
@@ -81,8 +81,8 @@ class FnsController extends Controller{
             ];
             //$qr='t=20200122T180800&s=500.00&fn=9280440300646561&i=23658&fp=854673406&n=1';
         }
-        //$chekMDL = new CheckModel();
-        //return $chekMDL->ValidateCheck($qr);
+        $chekMDL = new CheckModel();
+        return $chekMDL->ValidateCheck($qr);
         // 5f5f35450b851a7cd26086ec 5e2a8a510fd2caa326aebc7d
         preg_match("/t=(\w+)T/", $qr, $t);
         preg_match("/T(\w+)/", $qr, $T);
@@ -117,7 +117,15 @@ class FnsController extends Controller{
         
         $url = "https://irkkt-mobile.nalog.ru:8888/v2/check/ticket?fsId=$fn&operationType=$n&documentId=$i&fiscalSign=$fp&date=$uT&sum=$s";
         $fnsRet = file_get_contents($url);
-        return ['aa'=>$fnsRet,'bb'=>$url];
+        if($fnsRet!==false){
+            return ['Success' => 'is valid'];
+        }
+//        var_dump($http_response_header);
+        return ['Error FNS Server' => $fnsRet,
+            'qr code'=>$qr,
+            'url'=>$url,
+            'fns_resp'=>$http_response_header
+        ];
         $headers = ['Host' => 'irkkt-mobile.nalog.ru:8888',
             'Accept'=>'*/*',
             'Device-OS' => 'iOS',
@@ -199,5 +207,9 @@ class FnsController extends Controller{
         }
         $cm = new CheckModel();
         return $cm->ValidateCheck($qr);
+    }
+    public function WinerAction($param=0) {
+        $Chek = new CheckModel();
+        return ['Success' => $Chek->AddWiners($Data['data'])];
     }
 }
