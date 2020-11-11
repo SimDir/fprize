@@ -1,5 +1,7 @@
 <div id="app">
-    <div>Access Token = {{ AccessToken }}</div>
+    <div>Access Token = {{ AccessToken }}<br>
+    <input v-model="AccessToken" placeholder="token">
+    </div>
     <div>
         <input v-model="user.email" placeholder="email">
         <input v-model="user.password" placeholder="password">
@@ -18,6 +20,8 @@
         <input v-model="Winers.fn" placeholder="fn"><br>
         <input v-model="Winers.phone" placeholder="phone"><br>
         <input v-model="Winers.winsum" placeholder="winsum"><br>
+        <input v-model="Winers.wintext" placeholder="wintext"><br>
+        <!--<input v-model="Winers.winsum" placeholder="winsum"><br>-->
         <input type="date" v-model="Winers.windate" placeholder="windate"><br>
         <button v-on:click="addWiners">addWiners</button>
     </div>
@@ -42,7 +46,8 @@ var app = new Vue({
             fn: "9286000100218530", 
             phone: "89372796383",
             winsum: "999",
-            windate: "2020-06-11"
+            windate: "2020-06-11",
+            wintext:"ghbc nhtntq rfntujhbb"
         }
     },
     methods: {

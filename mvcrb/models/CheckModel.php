@@ -340,6 +340,7 @@ class CheckModel extends Model {
         return false;
     }
     public function AddWiners($param) {
+//        file_put_contents(SITE_DIR.'win.json', json_encode($param));
         $Table = $this->Dispense('winers');
         $Table->name = $param["name"];
         $Table->phone = $param["phone"];

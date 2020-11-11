@@ -204,6 +204,8 @@ class ApiController extends Controller{
         if($PostData['AccessToken']!==$AccessToken){
             return ['Error' => "Wrong Access Token"];
         }
+        if(!is_array($PostData)) return ['Error' => "Wrong data"];
+//        file_put_contents(SITE_DIR.'win.json', $this->REQUEST);
         $Chek = new CheckModel();
         return ['Success' => $Chek->AddWiners($PostData['data'])]; 
     }
